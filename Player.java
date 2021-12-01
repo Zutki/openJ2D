@@ -46,18 +46,20 @@ public class Player {
     private void loadImage() {
         try {
             image = ImageIO.read(playerImage);
+            image = resize(image, World.BLOCK_SIZE, World.BLOCK_SIZE*2);
         } 
         catch (IOException exc) {
             System.out.println("Error opening player image: " + exc.getMessage());
         }
     }
-    private BufferedImage resizeImage(BufferedImage img, int width, int height) {
-        System.out.println("Hello");
-        Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
         Graphics2D g2d = dimg.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
+
         return dimg;
     }
 
