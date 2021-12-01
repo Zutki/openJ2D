@@ -5,7 +5,9 @@ import java.util.Random;
 import javax.swing.*;
 
 public class World extends JPanel /*implements ActionListener KeyListener*/ {
-    
+    // DEBUG MODE
+    private boolean debugMode = true;
+
     // Tick delay (ms)
     private final int TICK_DELAY = 25;
 
@@ -23,6 +25,7 @@ public class World extends JPanel /*implements ActionListener KeyListener*/ {
     // case we need access to it in another method
     private Timer timer;
     
+    // building the world
     public World() {
         // set the game world size
         setPreferredSize(new Dimension(BLOCK_SIZE * COLUMS, BLOCK_SIZE * ROWS));
@@ -42,5 +45,10 @@ public class World extends JPanel /*implements ActionListener KeyListener*/ {
         // draw our graphics
         player.draw(g, this);
         Toolkit.getDefaultToolkit().sync();
+
+        // DEBUG
+        if (debugMode) {
+            for (int row = 0; row < ROWS; row++) {
+                
     }
 }

@@ -31,7 +31,7 @@ public class Player {
         }
         health = 20;
         food = 20;
-        position = new Point(500, 500);
+        position = new Point(5, 5);
     }
     // player constructor for save files
     public Player(int[] inv, int h, int f, Point pos) {
@@ -52,6 +52,8 @@ public class Player {
             System.out.println("Error opening player image: " + exc.getMessage());
         }
     }
+
+    // credit: https://www.tabnine.com/code/java/methods/java.awt.image.BufferedImage/getScaledInstance
     private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -64,7 +66,7 @@ public class Player {
     }
 
     public void draw(Graphics g, ImageObserver observer) {
-        g.drawImage(image, position.x, position.y, observer);
+        g.drawImage(image, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
     }
 
     public Point getPos() {
