@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.awt.Image;
+import java.awt.Graphics2D;
 
 public class Player {
     
@@ -48,6 +50,15 @@ public class Player {
         catch (IOException exc) {
             System.out.println("Error opening player image: " + exc.getMessage());
         }
+    }
+    private BufferedImage resizeImage(BufferedImage img, int width, int height) {
+        System.out.println("Hello");
+        Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return dimg;
     }
 
     public void draw(Graphics g, ImageObserver observer) {
