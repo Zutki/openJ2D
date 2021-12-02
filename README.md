@@ -11,7 +11,7 @@ This project has no dependencies as all libraries used are part of the default J
 
 ## Project Main Goals:
 - [x] Movable Player 
-- [ ] World Generation debug mode
+- [x] World Generation debug mode
   - Draw a grid of all the squares on the world
 - [ ] World generation with varied blocks
 - [ ] World height generation with perlin noise
