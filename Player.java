@@ -69,6 +69,39 @@ public class Player {
         g.drawImage(image, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
     }
 
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_UP) {
+            position.translate(0, -1);
+        }
+        if (key == KeyEvent.VK_RIGHT) {
+            position.translate(1, 0);
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            position.translate(0, 1);
+        }
+        if (key == KeyEvent.VK_LEFT) {
+            position.translate(-1, 0);
+        }
+    }
+
+    // executed every tick
+    public void tick() {
+        // prevent the player from moving off the edge of the board sideways
+        if (position.x < 0) {
+            position.x = 0;
+        } else if (position.x >= World.COLUMNS) {
+            position.x = World.COLUMNS - 1;
+        }
+        // prevent the player from moving off the edge of the board vertically
+        if (position.y < 0) {
+            position.y = 0;
+        } else if (position.y >= World.ROWS) {
+            position.y = World.ROWS - 1;
+        }
+    }
+
     public Point getPos() {
         return position;
     }

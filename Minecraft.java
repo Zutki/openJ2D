@@ -10,7 +10,7 @@ class Minecraft {
         // also initialize the game loop
         World world = new World();
         window.add(world);
-        //window.addKeyListener(world);
+        window.addKeyListener(world);
 
         window.setResizable(false);
         window.pack();
