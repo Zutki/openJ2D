@@ -10,7 +10,7 @@ This project has no dependencies as all libraries used are part of the default J
 - Example github which has a lot of **very** useful info: [here](https://github.com/learncodebygaming/java_2d_game/blob/master/Board.java)
 
 ## Project Main Goals:
-- [ ] Movable Player
+- [x] Movable Player 
 - [ ] World Generation debug mode
   - Draw a grid of all the squares on the world
 - [ ] World generation with varied blocks
