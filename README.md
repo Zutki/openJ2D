@@ -16,6 +16,7 @@ This project has no dependencies as all libraries used are part of the default J
 - [ ] World generation with varied blocks
 - [ ] World height generation with perlin noise
 - [ ] Proper player image
+- [ ] sound: [here](https://stackoverflow.com/questions/577724/trouble-playing-wav-in-java/577926#577926)
 
 ## Project Main Goals:
 - [ ] readable code
