@@ -7,6 +7,7 @@ This project has no dependencies as all libraries used are part of the default J
 - Java version: 17 (openJDK)
 - Asset Credit: Mojang Studio
 - Using the Java Swing and AWT libraries
+- Example github which has a lot of **very** useful info: [here](https://github.com/learncodebygaming/java_2d_game/blob/master/Board.java)
 
 ## Project Main Goals:
 - [ ] Movable Player
