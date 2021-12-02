@@ -9,14 +9,17 @@ This project has no dependencies as all libraries used are part of the default J
 - Using the Java Swing and AWT libraries
 - Example github which has a lot of **very** useful info: [here](https://github.com/learncodebygaming/java_2d_game/blob/master/Board.java)
 
-## Project Main Goals:
+## TODO:
 - [x] Movable Player 
 - [x] World Generation debug mode
   - Draw a grid of all the squares on the world
 - [ ] World generation with varied blocks
 - [ ] World height generation with perlin noise
-- [ ] readable code
 - [ ] Proper player image
+
+## Project Main Goals:
+- [ ] readable code
+- [ ] resembles minecraft a tiny bit
 
 ## Project Stretch Goals:
 - [ ] No outside library usage
