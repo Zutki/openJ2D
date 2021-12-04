@@ -19,6 +19,8 @@ public class Player {
     
     // player data
     private int[] inventory = new int[9];
+    // TODO: Implement inventory class
+
     private int health;
     private int food;
     
