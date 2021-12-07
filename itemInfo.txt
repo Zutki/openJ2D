@@ -1,1 +1,2 @@
-"Dirt" : "assets/dirt.png"
+Dirt Block:assets/dirt.png
+Grass Block:assets/grass_block_side.png
