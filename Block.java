@@ -12,6 +12,7 @@ public class Block {
    private BufferedImage texture;
    private Point position;
    private int id;
+   private int dropItem;
 
    // TODO:
    //private final int hardness = 5;
@@ -20,8 +21,16 @@ public class Block {
     
    public Block(int block_id, Point pos) {
        position = pos;
+       id = block_id;
+       dropItem = block_id;
        
    }
+   public Block(int block_id, Point pos, int drop_item_id) {
+       id = block_id;
+       position = pos;
+       dropItem = drop_item_id;
+   }
+       
 
    public Point getPos() {
        return position;
@@ -34,6 +43,5 @@ public class Block {
    public void break() {
        // TODO:
        // remove self
-       // report to world that we dropped
    }
 }
