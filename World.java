@@ -23,6 +23,7 @@ public class World extends JPanel implements ActionListener, KeyListener {
     private static final long serialVersionUID = 490905409104883233L;
 
     private Player player;
+    private Block[][] blocks = new Block[ROWS][COLUMNS];
 
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
