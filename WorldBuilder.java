@@ -1,4 +1,5 @@
 import java.awt.Point;
+
 public class WorldBuilder {
     private Block[][] blockArray;
     private int terrainLevel;

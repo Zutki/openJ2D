@@ -45,16 +45,6 @@ public class World extends JPanel implements ActionListener, KeyListener {
         timer.start();
 
         // generate terrain
-        //for (int y = blocks.length-1; y > blocks.length-4; y--) {
-        //    for (int x = 0; x < blocks[y].length; x++) {
-        //        if (y == 9) {
-        //            blocks[y][x] = new Block(1, new Point(x, y));
-        //        }
-        //        else {
-        //            blocks[y][x] = new Block(0, new Point(x, y));
-        //        }
-        //    }
-        //}
         WorldBuilder wb = new WorldBuilder(blocks, 8);
         blocks = wb.buildWorld();
     }
