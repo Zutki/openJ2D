@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-public class World extends JPanel implements ActionListener, KeyListener {
+public class World extends JPanel implements ActionListener, KeyListener, MouseListener {
     // DEBUG MODE
     private boolean debugMode = true;
 
@@ -85,18 +85,41 @@ public class World extends JPanel implements ActionListener, KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // this is not used but must be defined as part of the KeyListener interface
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
         // react to key down events
         player.keyPressed(e);
     }
 
     @Override
+    public void mouseClicked(MouseEvent me) {
+        int screenX = me.getX();
+        int screenY = me.getY();
+        System.out.println("screen(X,Y) = " + screenX + "," + screenY);
+    }
+
+    // Required overrides
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // this is not used but must be defined as part of the KeyListener interface
+    }
+    @Override
     public void keyReleased(KeyEvent e) {
         // react to key up events
+    }
+    @Override
+    public void mousePressed(MouseEvent me) {
+        // required
+    }
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        // required
+    }
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        // required
+    }
+    @Override
+    public void mouseExited(MouseEvent me) {
+        // required
     }
 }

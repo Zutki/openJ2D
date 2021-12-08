@@ -21,6 +21,8 @@ public class WorldBuilder {
             }
         }
 
+        blockArray[5][5] = new Block(2, new Point(5,5));
+
         return blockArray;
     }
 
