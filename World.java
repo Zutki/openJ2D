@@ -16,6 +16,9 @@ public class World extends JPanel implements ActionListener, KeyListener {
     public static final int ROWS = 12;
     public static final int COLUMNS = 18;
 
+    // make the id for EVERY component to use
+    public static final Id itemIDS = new Id();
+
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
 

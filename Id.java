@@ -26,7 +26,6 @@ public class Id {
             // however, for some time being, it will be
             // {Item Name}:{Item image path}
             while (reader.hasNextLine()) {
-                String itemData = reader.nextLine();
                 // TODO: Fix this jank
                 // This is absolute jank,
                 // THIS IS ABSOLUTELY NOT HOW IT SHOULD BE DONE
@@ -35,6 +34,7 @@ public class Id {
                 // given up on being reasonable
                 // I am just gonna use jank :(
                 
+                String itemData = reader.nextLine();               
                 String itemName = itemData.substring(0, itemData.indexOf(":"));
                 // v--------v
                 // Dirt Block: ....
@@ -64,6 +64,20 @@ public class Id {
             System.out.println("File Error in reading itemInfo.txt");
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<String> getItemNames() {
+        return itemNames;
+    }
+    public ArrayList<BufferedImage> getItemImages() {
+        return itemImgs;
+    }
+
+    public String getItemNameByID(int id) {
+        return itemNames.get(id);
+    }
+    public BufferedImage getItemImageByID(int id) {
+        return itemImgs.get(id);
     }
 }
 

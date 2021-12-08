@@ -4,7 +4,7 @@ import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.imageio.ImageIO;
+import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.Graphics2D;
 
@@ -40,8 +40,8 @@ public class Block {
        position = pos;
    }
 
-   public void break() {
+   //public void break() {
        // TODO:
        // remove self
-   }
+   //}
 }
