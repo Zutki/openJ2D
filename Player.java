@@ -48,7 +48,7 @@ public class Player {
     private void loadImage() {
         try {
             image = ImageIO.read(playerImage);
-            image = resize(image, World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+            image = Tools.resize(image, World.BLOCK_SIZE, World.BLOCK_SIZE*2);
         } 
         catch (IOException exc) {
             System.out.println("Error opening player image: " + exc.getMessage());
@@ -56,16 +56,6 @@ public class Player {
     }
 
     // credit: https://www.tabnine.com/code/java/methods/java.awt.image.BufferedImage/getScaledInstance
-    private static BufferedImage resize(BufferedImage img, int newW, int newH) { 
-        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-
-        return dimg;
-    }
 
     public void draw(Graphics g, ImageObserver observer) {
         g.drawImage(image, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);

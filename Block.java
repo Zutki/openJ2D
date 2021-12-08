@@ -30,7 +30,13 @@ public class Block {
        position = pos;
        dropItem = drop_item_id;
    }
-       
+
+   public void drawBlock(Graphics g, ImageObserver observer) {
+        texture = World.itemIDS.getItemImageByID(id);
+        texture = Tools.resize(texture, World.BLOCK_SIZE, World.BLOCK_SIZE);
+
+        g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
+   }
 
    public Point getPos() {
        return position;
