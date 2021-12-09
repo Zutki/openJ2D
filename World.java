@@ -9,9 +9,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     private boolean debugMode = true;
 
     // Tick delay (ms)
-    private final int TICK_DELAY = 25;
+    private final int TICK_DELAY = 12;
 
-    // Controls the size of blocks
+    // Controls the size of blocks and the world
     public static final int BLOCK_SIZE = 70;
     public static final int ROWS = 12;
     public static final int COLUMNS = 18;
@@ -48,13 +48,29 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         WorldBuilder wb = new WorldBuilder(blocks, 8);
         blocks = wb.buildWorld();
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        player.tick();
-        repaint();
+    
+    // adds a block to the world
+    //
+    // if a block is already present where it is trying to add
+    // it will not add the block if there is a block already 
+    // present where it is trying to add
+    private void addBlock(Point pos, int id) {
+        if (blocks[pos.y][pos.x] == null) {
+            blocks[pos.y][pos.x] = new Block(id, pos);
+        }
     }
 
+    
+    // this function is executed every tick, tick is defined earlier in the code
+    // timer is the runner of this function
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        player.tick(); // player movement tick
+        repaint(); // redraw
+    }
+    
+    // this function is drawing the world
+    // this function is also called by repaint();
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -73,6 +89,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         }
 
         // DEBUG
+        // This draws a grid to represent all the block positions
         if (debugMode) {
             for (int row = 0; row < ROWS; row++) {
                 for (int col = 0; col < COLUMNS; col++) {
@@ -83,21 +100,36 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             }
         }
     }
-
+    
+    // reacts to a key being pressed
     @Override
     public void keyPressed(KeyEvent e) {
         // react to key down events
         player.keyPressed(e);
     }
-
+    
+    // reacts to a mouse button being pressed
     @Override
     public void mouseClicked(MouseEvent me) {
         int screenX = me.getX();
         int screenY = me.getY();
-        System.out.println("screen(X,Y) = " + screenX + "," + screenY);
+        
+        Point blockCl = new Point((int) Math.round((double) screenX / BLOCK_SIZE - 0.5), (int) Math.round((double) screenY / BLOCK_SIZE - 1));
+        
+        // add a block when the user left clicks
+        if (me.getButton() == MouseEvent.BUTTON1) {
+            addBlock(blockCl, 2);
+        }
+        // remove a block when the user right clicks
+        if (me.getButton() == MouseEvent.BUTTON3) {
+            blocks[blockCl.y][blockCl.x] = null;
+        }
+        //System.out.println("screen(X,Y) = " + Math.round((double) screenX / BLOCK_SIZE - 0.5) + "," + Math.round((double) screenY / BLOCK_SIZE - 1));
     }
 
     // Required overrides
+    // these aren't currently used but 
+    // are required because KeyEvent and MouseEvent are implements
     @Override
     public void keyTyped(KeyEvent e) {
         // this is not used but must be defined as part of the KeyListener interface
