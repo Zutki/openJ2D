@@ -49,6 +49,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         blocks = wb.buildWorld();
     }
 
+    private void addBlock(Point pos, int id) {
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         player.tick();
@@ -94,7 +97,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     public void mouseClicked(MouseEvent me) {
         int screenX = me.getX();
         int screenY = me.getY();
-        System.out.println("screen(X,Y) = " + screenX + "," + screenY);
+
+        Point blockCl = new Point((int) Math.round((double) screenX / BLOCK_SIZE - 0.5), (int) Math.round((double) screenY / BLOCK_SIZE - 1));
+        //System.out.println("screen(X,Y) = " + Math.round((double) screenX / BLOCK_SIZE - 0.5) + "," + Math.round((double) screenY / BLOCK_SIZE - 1));
     }
 
     // Required overrides
