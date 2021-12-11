@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class JSONReader {
     private File file;
-    private boolean fileEnd = false;
 
     private BufferedReader fi;
     private HashMap<String, Object> map;
@@ -33,10 +32,6 @@ public class JSONReader {
         interpretFile(file);
     }
 
-    public void setFile(File fi)
-    {
-        file = fi;
-    }
     public Object get(String key)
     {
         return map.get(key);
@@ -49,20 +44,21 @@ public class JSONReader {
      * @throws IOException if error occurs while reading in JSON file
      */
     private void interpretFile(File file)throws IOException {
-        StringBuilder strbldr = new StringBuilder();
+        StringBuilder key = new StringBuilder();
+        StringBuilder val = new StringBuilder();
         boolean isStr = false;
         boolean isKey = false;
         int c = 0;
-
+  
         // parsing the file
-        while (c != -1)
-        {
+        while (c != -1) {
             c = fi.read();
-            if (c == '"')
-            {
-                isStr = true;
-                
-            }
+            String s = Character.toString(c);
+
+            // if there is a key and value add it to the map
+            if (s.matches("\\s") && !key.isEmpty() && !val.isEmpty())
+                map.put(key.toString(), new JSONObject(val.toString()));
+            
         }
     }
 
