@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
-public class World extends JPanel implements ActionListener, KeyListener, MouseListener {
+public class World extends JPanel implements ActionListener, KeyListener, MouseListener, MouseWheelListener {
     // DEBUG MODE
     private boolean debugMode = true;
 
@@ -24,6 +24,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
     private Player player;
     private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
+    private Physics physics;
 
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
@@ -39,7 +40,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
         // make the player
         // for now only default
-        player = new Player();
+        physics = new Physics(blocks);
+        player = new Player(physics);
+        physics.setPlayer(player);
 
         timer = new Timer(TICK_DELAY, this);
         timer.start();
@@ -125,6 +128,11 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             blocks[blockCl.y][blockCl.x] = null;
         }
         //System.out.println("screen(X,Y) = " + Math.round((double) screenX / BLOCK_SIZE - 0.5) + "," + Math.round((double) screenY / BLOCK_SIZE - 1));
+    }
+    // react to mouse wheel
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        System.out.println(e.getWheelRotation());
     }
 
     // Required overrides

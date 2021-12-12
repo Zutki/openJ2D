@@ -16,6 +16,7 @@ public class Player {
     private BufferedImage image;
     // current player position
     private Point position;
+    private Physics phyx;
     
     // player data
     private int[] inventory = new int[9];
@@ -25,7 +26,8 @@ public class Player {
     private int food;
     
     // player default constructor
-    public Player() {
+    public Player(Physics _phyx) {
+        phyx = _phyx;
         loadImage();
         // set the players inventory as empty
         for (int i = 0; i < inventory.length; i++) {
@@ -62,18 +64,19 @@ public class Player {
     }
 
     public void keyPressed(KeyEvent e) {
+        System.out.println(position);
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_UP) {
+        if (key == KeyEvent.VK_UP && phyx.canMoveUp()) {
             position.translate(0, -1);
         }
-        if (key == KeyEvent.VK_RIGHT) {
+        if (key == KeyEvent.VK_RIGHT && phyx.canMoveRight()) {
             position.translate(1, 0);
         }
-        if (key == KeyEvent.VK_DOWN) {
+        if (key == KeyEvent.VK_DOWN && phyx.canMoveDown()) {
             position.translate(0, 1);
         }
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == KeyEvent.VK_LEFT && phyx.canMoveLeft()) {
             position.translate(-1, 0);
         }
     }

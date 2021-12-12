@@ -12,6 +12,7 @@ class Minecraft {
         window.add(world);
         window.addKeyListener(world);
         window.addMouseListener(world);
+        window.addMouseWheelListener(world);
 
         window.setResizable(false);
         window.pack();
