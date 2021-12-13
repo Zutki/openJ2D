@@ -11,9 +11,10 @@ import java.awt.Graphics2D;
 
 public class Player {
     
-    private final File playerImage = new File("assets/steve_.png"); 
+    private final File[] playerImages = {new File("assets/steve/SteveLeft.png"), new File("assets/steve/SteveFront.png"), new File("assets/steve/SteveRight.png")};
     // player image
     private BufferedImage image;
+    private BufferedImage images[] = new BufferedImage[3];
     // current player position
     private Point position;
     private Physics phyx;
@@ -27,8 +28,9 @@ public class Player {
     
     // player default constructor
     public Player(Physics _phyx) {
+        loadImages();
         phyx = _phyx;
-        loadImage();
+        loadImage(1);
         // set the players inventory as empty
         for (int i = 0; i < inventory.length; i++) {
             inventory[i] = 0;
@@ -39,7 +41,7 @@ public class Player {
     }
     // player constructor for save files
     public Player(int[] inv, int h, int f, Point pos) {
-        loadImage();
+        loadImage(1);
         inventory = inv;
         health = h;
         food = f;
@@ -47,14 +49,19 @@ public class Player {
     }
 
     // load player image
-    private void loadImage() {
-        try {
-            image = ImageIO.read(playerImage);
-            image = Tools.resize(image, World.BLOCK_SIZE, World.BLOCK_SIZE*2);
-        } 
-        catch (IOException exc) {
-            System.out.println("Error opening player image: " + exc.getMessage());
+    private void loadImages() {
+        for (int i = 0; i < images.length; i++) {
+            try {
+                images[i] = ImageIO.read(playerImages[i]);
+                images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+            } 
+            catch (IOException exc) {
+                System.out.println("Error opening player image: " + exc.getMessage());
+            }
         }
+    }
+    private void loadImage(int facing) {
+        image = images[facing];
     }
 
     // credit: https://www.tabnine.com/code/java/methods/java.awt.image.BufferedImage/getScaledInstance
@@ -66,16 +73,23 @@ public class Player {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_UP && phyx.canMoveUp()) {
+        if (key == KeyEvent.VK_UP && phyx.canMoveUp() && phyx.canJump()) {
             position.translate(0, -1);
+            phyx.resetCounter();
         }
         if (key == KeyEvent.VK_RIGHT && phyx.canMoveRight()) {
+            loadImage(0);
             position.translate(1, 0);
         }
         if (key == KeyEvent.VK_DOWN && phyx.canMoveDown()) {
             position.translate(0, 1);
+            phyx.resetCounter();
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            loadImage(1);
         }
         if (key == KeyEvent.VK_LEFT && phyx.canMoveLeft()) {
+            loadImage(2);
             position.translate(-1, 0);
         }
         //System.out.println(position);
@@ -99,5 +113,8 @@ public class Player {
 
     public Point getPos() {
         return position;
+    }
+    public void setPos(Point pos) {
+        position = pos;
     }
 }

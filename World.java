@@ -6,10 +6,10 @@ import javax.swing.*;
 
 public class World extends JPanel implements ActionListener, KeyListener, MouseListener, MouseWheelListener {
     // DEBUG MODE
-    private boolean debugMode = true;
+    private boolean debugMode = false;
 
     // Tick delay (ms)
-    private final int TICK_DELAY = 12;
+    public static final int TICK_DELAY = 12;
 
     // Controls the size of blocks and the world
     public static final int BLOCK_SIZE = 70;
@@ -68,7 +68,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // timer is the runner of this function
     @Override
     public void actionPerformed(ActionEvent e) {
-        //player.tick(); // player movement tick
+        physics.tick(); // physics tick
         repaint(); // redraw
     }
     
