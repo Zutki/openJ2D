@@ -121,7 +121,10 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         
         // add a block when the user left clicks
         if (me.getButton() == MouseEvent.BUTTON1) {
-            addBlock(blockCl, 2);
+            // check if the block the user is clicking on is the player
+            if (blockCl.equals(player.getPos()) == false && blockCl.equals(new Point(player.getPos().x, player.getPos().y+1)) == false) {
+                addBlock(blockCl, 2);
+            }
         }
         // remove a block when the user right clicks
         if (me.getButton() == MouseEvent.BUTTON3) {
