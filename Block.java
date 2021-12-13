@@ -23,17 +23,18 @@ public class Block {
        position = pos;
        id = block_id;
        dropItem = block_id;
+       texture = World.itemIDS.getItemImageByID(id);
        
    }
    public Block(int block_id, Point pos, int drop_item_id) {
        id = block_id;
        position = pos;
        dropItem = drop_item_id;
+       texture = World.itemIDS.getItemImageByID(id);
+       texture = Tools.resize(texture, World.BLOCK_SIZE, World.BLOCK_SIZE);
    }
 
    public void drawBlock(Graphics g, ImageObserver observer) {
-        texture = World.itemIDS.getItemImageByID(id);
-        texture = Tools.resize(texture, World.BLOCK_SIZE, World.BLOCK_SIZE);
 
         g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
    }

@@ -51,13 +51,13 @@ public class Id {
                 // get the image and add it to the list
                 File image = new File(itemImg);
                 try {
-                    itemImgs.add(ImageIO.read(image));
+                    itemImgs.add(Tools.resize(ImageIO.read(image), World.BLOCK_SIZE, World.BLOCK_SIZE));
                 }
                 catch (IOException exc) {
                     System.out.println("Error opening block image: "+exc.getMessage());
                 }
 
-
+                System.out.println();
             }
             reader.close();
         } catch (FileNotFoundException e) {

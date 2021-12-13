@@ -11,7 +11,7 @@ import java.awt.Graphics2D;
 
 public class Player {
     
-    private final File playerImage = new File("assets/carved_pumpkin.png"); 
+    private final File playerImage = new File("assets/steve_.png"); 
     // player image
     private BufferedImage image;
     // current player position
@@ -64,7 +64,6 @@ public class Player {
     }
 
     public void keyPressed(KeyEvent e) {
-        System.out.println(position);
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_UP && phyx.canMoveUp()) {
@@ -79,6 +78,7 @@ public class Player {
         if (key == KeyEvent.VK_LEFT && phyx.canMoveLeft()) {
             position.translate(-1, 0);
         }
+        //System.out.println(position);
     }
 
     // executed every tick
