@@ -82,20 +82,20 @@ public class Player {
     }
 
     // executed every tick
-    public void tick() {
-        // prevent the player from moving off the edge of the board sideways
-        if (position.x < 0) {
-            position.x = 0;
-        } else if (position.x >= World.COLUMNS) {
-            position.x = World.COLUMNS - 1;
-        }
-        // prevent the player from moving off the edge of the board vertically
-        if (position.y < 0) {
-            position.y = 0;
-        } else if (position.y >= World.ROWS) {
-            position.y = World.ROWS - 1;
-        }
-    }
+    //public void tick() {
+    //    // prevent the player from moving off the edge of the board sideways
+    //    if (position.x < 0) {
+    //        position.x = 0;
+    //    } else if (position.x >= World.COLUMNS) {
+    //        position.x = World.COLUMNS - 1;
+    //    }
+    //    // prevent the player from moving off the edge of the board vertically
+    //    if (position.y < 0) {
+    //        position.y = 0;
+    //    } else if (position.y >= World.ROWS) {
+    //        position.y = World.ROWS - 1;
+    //    }
+    //}
 
     public Point getPos() {
         return position;

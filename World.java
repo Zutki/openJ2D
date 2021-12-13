@@ -68,7 +68,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // timer is the runner of this function
     @Override
     public void actionPerformed(ActionEvent e) {
-        player.tick(); // player movement tick
+        //player.tick(); // player movement tick
         repaint(); // redraw
     }
     
