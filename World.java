@@ -25,6 +25,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     private Player player;
     private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
     private Physics physics;
+    
+    // load ui
+    private Ui ui;
 
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
@@ -37,6 +40,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         
         // set the world background color (sky)
         setBackground(new Color(123, 167, 237));
+
+        // initialize the UI
+        ui = new Ui();
 
         // make the player
         // for now only default
@@ -77,6 +83,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        
 
         // draw our graphics
         player.draw(g, this);
@@ -90,7 +97,19 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
                 }
             }
         }
+        // show an outline over the current block
 
+        // get the mouse position
+        Point mousePos = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointFromScreen(mousePos, this); // convert position from screen to local position
+        Point blockHovered = new Point((int) Math.round((double) mousePos.x / BLOCK_SIZE - 0.5), (int) Math.round((double) mousePos.y / BLOCK_SIZE - 0.5)); // get the hovered block
+        
+        ui.setHoveredBlock(blockHovered, g, this);
+
+
+
+        // load the UI on top of everything
+        ui.loadUI(g, this);
         // DEBUG
         // This draws a grid to represent all the block positions
         if (debugMode) {
@@ -135,7 +154,8 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // react to mouse wheel
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        System.out.println(e.getWheelRotation());
+        //System.out.println(e.getWheelRotation());
+        ui.moveSlot(e.getWheelRotation());
     }
 
     // Required overrides
