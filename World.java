@@ -45,8 +45,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         // initialize the inventory
         inv = new Inventory();
         inv.setItem(new Item(itemIDS, 2), 4);
+        inv.setItem(new Item(itemIDS, 0), 3);
         // initialize the UI
-        ui = new Ui();
+        ui = new Ui(inv);
 
         // make the player
         // for now only default
@@ -146,7 +147,10 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         if (me.getButton() == MouseEvent.BUTTON1) {
             // check if the block the user is clicking on is the player
             if (blockCl.equals(player.getPos()) == false && blockCl.equals(new Point(player.getPos().x, player.getPos().y+1)) == false) {
-                addBlock(blockCl, 2);
+                int itemId = ui.getSelectedItem().item_id;
+                if (itemId != -1) {
+                    addBlock(blockCl, itemId);
+                }
             }
         }
         // remove a block when the user right clicks

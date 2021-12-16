@@ -1,17 +1,14 @@
 import java.awt.Point;
-import java.util.Timer;
 
 public class Physics {
     private Block[][] blocks;
     private Player player;
-    private Timer timer;
     private int ticksToWait;
 
     // Constructor
     public Physics(Block[][] _blocks) {
         ticksToWait = 1000 / World.TICK_DELAY / 3;
         blocks = _blocks;
-        timer = new Timer();
     }
     // this is not part of the constructor but NEEDS to be called
     // else it will throw an error

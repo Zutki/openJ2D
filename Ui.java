@@ -12,7 +12,6 @@ public class Ui {
 
     private static final File hotbar = new File("assets/ui/hotbar.png");
     private static final File selected = new File("assets/ui/selected.png");
-    private static final File hoverBlock = new File("assets/stone.png");
     
     private BufferedImage hotbarImage;
     private BufferedImage selectedImage;
@@ -27,8 +26,12 @@ public class Ui {
 
     public Ui(Inventory _inv) {
        loadHotbar(); 
-       System.out.println(hotbarPos);
        inv = _inv;
+    }
+
+    // get the currently selected block
+    public Item getSelectedItem() {
+        return inv.getItem(selectedSlot);
     }
     
     // move up or down a slot by the mouse wheel (mwIn)
@@ -53,7 +56,12 @@ public class Ui {
                 selectedSlot += mwIn;
             }
         }
-        hoverBlockImg = Tools.makeImageTranslucent(inv.getItem(selectedSlot).image, 0.25f);
+        if (inv.getItem(selectedSlot).image != null) {
+            hoverBlockImg = Tools.makeImageTranslucent(inv.getItem(selectedSlot).image, 0.25f);
+        }
+        else {
+            hoverBlockImg = null;
+        }
     }
     
     // load the image for the hotbar
@@ -71,8 +79,6 @@ public class Ui {
         catch (IOException e) {
             System.out.println("Error loading UI image: "+e);
         }
-
-        // TODO: load the items in the hotbar
 
     }
     
@@ -96,6 +102,14 @@ public class Ui {
         // hotbar
         g.drawImage(hotbarImage, hotbarPos.x, hotbarPos.y, observer);
         g.drawImage(selectedImage, hotbarPos.x + HOTBAR_HEIGHT * selectedSlot, hotbarPos.y, observer);
+        
+        // items in hotbar
+        BufferedImage[] items = inv.getUiImages();
+        for (int i = 0; i < inv.getHotbar().length; i++) {
+            if (items[i] != null) {
+                g.drawImage(items[i], hotbarPos.x + HOTBAR_HEIGHT * i + Item.IMAGE_OFFSET/2, hotbarPos.y + Item.IMAGE_OFFSET/2, observer);
+            }
+        }
     }
 
 }
