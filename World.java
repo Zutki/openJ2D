@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Random;
 import javax.swing.*;
 
 public class World extends JPanel implements ActionListener, KeyListener, MouseListener, MouseWheelListener {
@@ -28,6 +26,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     
     // load ui
     private Ui ui;
+    
+    // load the inventory
+    private Inventory inv;
 
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
@@ -40,7 +41,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         
         // set the world background color (sky)
         setBackground(new Color(123, 167, 237));
-
+        
+        // initialize the inventory
+        inv = new Inventory(itemIDS);
         // initialize the UI
         ui = new Ui();
 
