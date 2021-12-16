@@ -43,7 +43,8 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         setBackground(new Color(123, 167, 237));
         
         // initialize the inventory
-        inv = new Inventory(itemIDS);
+        inv = new Inventory();
+        inv.setItem(new Item(itemIDS, 2), 4);
         // initialize the UI
         ui = new Ui();
 

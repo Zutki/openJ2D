@@ -1,7 +1,6 @@
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
@@ -21,24 +20,15 @@ public class Ui {
 
     private int selectedSlot = 0;
 
+    private Inventory inv;
+
     //private Point hotbarPos = new Point((World.ROWS / 2) World.BLOCK_SIZE), (World.COLUMNS - 1) * World.BLOCK_SIZE);
     private Point hotbarPos = new Point((World.COLUMNS * World.BLOCK_SIZE) / 2, 0);
 
-    public Ui() {
+    public Ui(Inventory _inv) {
        loadHotbar(); 
        System.out.println(hotbarPos);
-        
-
-       // TEMP CODE
-       // This will be replaced by a better implementation
-       // For now it stays as there is no way to select blocks
-       try {
-           hoverBlockImg = ImageIO.read(hoverBlock);
-           hoverBlockImg = Tools.resize(hoverBlockImg, World.BLOCK_SIZE, World.BLOCK_SIZE);
-       }
-       catch (IOException e)
-       {}
-       hoverBlockImg = Tools.makeImageTranslucent(hoverBlockImg, 0.25f);
+       inv = _inv;
     }
     
     // move up or down a slot by the mouse wheel (mwIn)
@@ -63,6 +53,7 @@ public class Ui {
                 selectedSlot += mwIn;
             }
         }
+        hoverBlockImg = Tools.makeImageTranslucent(inv.getItem(selectedSlot).image, 0.25f);
     }
     
     // load the image for the hotbar
@@ -80,6 +71,9 @@ public class Ui {
         catch (IOException e) {
             System.out.println("Error loading UI image: "+e);
         }
+
+        // TODO: load the items in the hotbar
+
     }
     
     // draw the block the mouse is currently hovering over at pos

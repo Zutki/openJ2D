@@ -1,11 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 public class Id {

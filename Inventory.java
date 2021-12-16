@@ -2,20 +2,18 @@ import java.awt.image.BufferedImage;
 
 public class Inventory {
     private Item[] hotbar = new Item[9];
-    private Id id;
     
     // NOTICE:
     // At this current stage in development the
     // inventory is only the hotbar
     // later down the line it will be expanded into a proper inventory system
-
-    public Inventory(Id _id) {
-        id = _id;
+    
+    public void setInventory(Item[] items) {
+        hotbar = items;
     }
 
-    public Inventory(Id _id, Item[] _hotbar) {
-        id = _id;
-        hotbar = _hotbar;
+    public void setItem(Item item, int index) {
+        hotbar[index] = item;
     }
     
     public BufferedImage[] getImages() {
@@ -33,8 +31,13 @@ public class Inventory {
         }
         return names;
     }
+
     public Item getItem(int index) {
         return hotbar[index];
+    }
+
+    public Item[] getHotbar() {
+        return hotbar;
     }
 
 }
