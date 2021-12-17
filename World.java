@@ -22,6 +22,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
     private Player player;
     private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
+    private Block[][] backBlocks = new Block[ROWS][COLUMNS]; // back panel blocks
     private Physics physics;
     
     // load ui
@@ -73,6 +74,13 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             blocks[pos.y][pos.x] = new Block(id, pos);
         }
     }
+    
+    // adds a background block to the world
+    private void addBackgroundBlock(Point pos, int id) {
+        if (backBlocks[pos.y][pos.x] == null) {
+            backBlocks[pos.y][pos.x] = new Block(id, pos);
+        }
+    }
 
     
     // this function is executed every tick, tick is defined earlier in the code
@@ -93,6 +101,16 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         // draw our graphics
         player.draw(g, this);
         Toolkit.getDefaultToolkit().sync();
+        
+        // draw background Blocks
+        for (Block[] row: backBlocks) {
+            for (Block block: row) {
+                if (block != null) {
+                    block.drawBlock(g, this);
+                }
+            }
+        }
+
 
         // draw terrain
         for (Block[] row: blocks) {
