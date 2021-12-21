@@ -9,7 +9,6 @@ import java.io.IOException;
 
 public class JSONReader {
     private File file;
-    private ArrayList<JSONObject> args;
 
     /**
      * Constructer for JSONReader. Parses file if given file is a JSON File.
@@ -24,47 +23,38 @@ public class JSONReader {
         String inName = in.getName().contains("/") ? in.getName() : "./" + in.getName();
         if (!in.exists())
             throw new IllegalArgumentException(String.format("File at path %s doesn't exist.", inName));
-        else if (!in.getName().matches(".json$"))
+        else if (!in.getName().matches(".*\\.json"))
             throw new IllegalArgumentException(String.format("File at path %s is not a JSON file", in.getName()));
-        else if (in.canRead())
-            throw new IllegalArgumentException(String.format("File at path %s cannot be read.", inName));
 
-        // read in the JSON File
         file = in;
-
-        // parse the file one line at a time
-        args = new ArrayList<JSONObject>();
-        interpretFile(file);
     }
 
     /**
-     * @return all objets in the JSON file
-     */
-    public JSONObject[] getObjects() {
-        return (JSONObject[]) args.toArray();
-    }
-
-    /**
-     * Parses the JSON file for its keys and values and stores them into a HashMap
-     * for public access
+     * Parses the .json file by creating a JSONObject of that file
      * 
-     * @param file JSON file being read in
-     * @throws IOException if error occurs while reading in JSON file
+     * @return <code>JSONObject</code>, the file
+     * @throws IOException if an error occured reading in the file.
      */
-    private void interpretFile(File file) throws IOException {
+    public JSONObject interpretFile() throws IOException {
         BufferedReader fi = new BufferedReader(new FileReader(file));
+
+        // removes all whitespaces from the file that's not inside quotes
         StringBuilder json = new StringBuilder();
-
-        String line = "";
+        String line = fi.readLine();
         while (line != null) {
-            line = fi.readLine();
-            line.replaceAll("\\s", "");
-            json.append(line);
-        }
-        makeObjects(json.toString());
-    }
+            boolean inQuotes = false;
+            for (int i = 0; i < line.length(); i++) {
+                String let = line.substring(i, i + 1);
+                if (let.equals("\""))
+                    inQuotes = !inQuotes;
 
-    private void makeObjects(String str) {
-        
+                if (inQuotes || let.matches("\\S"))
+                    json.append(let);
+            }
+            line = fi.readLine();
+        }
+
+        // the file is one object, so create a JSONObject with that 
+        return new JSONObject(file.getName(), json.substring(1, json.length() - 1));
     }
 }

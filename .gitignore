@@ -1,3 +1,4 @@
 *.class
 ./MinecraftTextureRip
 test.json
+.vscode
