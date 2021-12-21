@@ -32,11 +32,13 @@ public class JSONObject {
     }
 
     /**
-     * TODO: Algorithm for parsing the JSON string:
+     * Algorithm for parsing the JSON string:
      *      1. read in the key
      *          a. store all characters from string until colon is reached
      *      2. read until comma or eof
      *      3. parse the value and add both key and value to the hashmap
+     * Recursive algorithm because I hurt my head thinking of a non-recursive solution.
+     * I'm sure there's a faster way to parse this but my head hurts thinking about it.
      * @param content
      */
     private void parseContent(String content) {
@@ -53,7 +55,6 @@ public class JSONObject {
             map.put(key, interpretVal(val));
             parseContent(content.substring(indexComma + 1));
         }
-
     }
 
     /**
@@ -62,20 +63,20 @@ public class JSONObject {
      *         boolean, or null depending on the contents of dat.
      */
     private Object interpretVal(String dat) {
-        // all known datatypes: integer, double, boolean, null, and String
+        // all known basic datatypes for JSON files: integer, floating-point, boolean, null, and String
         Object o;
-        if (dat.matches("^\\d+"))
+        if (dat.matches("^\\d+")) // check for integer
             o = Integer.parseInt(dat);
-        else if (dat.matches("\\d*\\.\\d+"))
+        else if (dat.matches("\\d*\\.\\d+")) // check for floating-point number
             o = Double.parseDouble(dat);
-        else if (dat.equals("true"))
+        else if (dat.equals("true")) // check for boolean (true)
             o = true;
-        else if (dat.equals("false"))
+        else if (dat.equals("false")) // check for boolean (false)
             o = false;
-        else if (dat.equals("null"))
+        else if (dat.equals("null")) // check for null
             o = null;
-        else
-            o = dat.substring(1, dat.length() - 1);
+        else // by default just store the value as a string
+            o = dat.substring(dat.indexOf("\""), dat.lastIndexOf("\""));
         return o;
     }
 
