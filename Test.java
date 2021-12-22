@@ -1,11 +1,13 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import utils.*;
 class Test {
     public static void main(String[] args)throws IOException {
-        JSONReader reader = new JSONReader(new File("test.json"));
-        JSONObject res = reader.interpretFile();
-        System.out.println(res);
+        String test = "\"name\":\"jason\",\"age\":16.35,\"friends,and,family\":[\"charlie\",\"keila\",\"leila\"]";
+        String regex = "(,)(?=\")|(?:\\[(.*?)\\])";
+        System.out.println(Arrays.toString(test.split(regex)));
     }
 }

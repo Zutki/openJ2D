@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -8,8 +9,8 @@ import java.util.HashMap;
  * the JSON Files used in this project don't contain JSON objects.
  */
 public class JSONObject {
-    private String name;
-    private HashMap<String, Object> map;
+    private final String name;
+    private final HashMap<String, Object> map;
 
     public JSONObject(String name, String content) {
         this.name = name;
@@ -19,6 +20,7 @@ public class JSONObject {
 
     /**
      * Returns the value of given key in JSONObject
+     *
      * @param key the key to find the value of
      * @return the value from the key
      * @throws IllegalArgumentException if no such key can be found.
@@ -26,61 +28,63 @@ public class JSONObject {
     public Object get(String key) throws IllegalArgumentException {
         if (!map.containsKey(key))
             throw new IllegalArgumentException(
-                    String.format("Key %s was not found in JSONObject listed.\nHere are the keys available: %s", key,
-                            map.keySet()));
+                    String.format("Key \"%s\" was not found in JSONObject listed.\nHere are all the keys for %s: %s",
+                            key, name, map.keySet()));
         return map.get(key);
     }
 
     /**
      * Algorithm for parsing the JSON string:
-     *      1. read in the key
-     *          a. store all characters from string until colon is reached
-     *      2. read until comma or eof
-     *      3. parse the value and add both key and value to the hashmap
-     * Recursive algorithm because I hurt my head thinking of a non-recursive solution.
-     * I'm sure there's a faster way to parse this but my head hurts thinking about it.
-     * @param content
+     * 1. Split string by commas (outside of quotation marks) into array of key-pairs
+     * 2. Iterate through each pair:
+     *      a. add key & value pair to hashmap
+     *
+     * @param content JSON String that's going to be processed
      */
     private void parseContent(String content) {
-        int indexColon = content.indexOf(":");
-        int indexComma = content.indexOf(",");
-        String key = content.substring(1, indexColon - 1);
-        String val;
-        if (indexComma == -1) {
-            val = content.substring(indexColon + 1);
-            map.put(key, interpretVal(val));
-        }
-        else {
-            val = content.substring(indexColon + 1, indexComma);
-            map.put(key, interpretVal(val));
-            parseContent(content.substring(indexComma + 1));
+        String[] pairs = content.split("(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)");
+        for (String pair : pairs) {
+            int indexColon = pair.indexOf(":");
+            String key = pair.substring(0, indexColon).replace("\"","");
+            String val = pair.substring(indexColon + 1);
+            map.put(key, interpretVal(key, val));
         }
     }
 
     /**
-     * @param dat
+     * @param val String that's getting processed
      * @return <code>Object</code>, will be an instance of String, int, double,
-     *         boolean, or null depending on the contents of dat.
+     *         boolean, or null depending on the contents of val.
      */
-    private Object interpretVal(String dat) {
-        // all known basic datatypes for JSON files: integer, floating-point, boolean, null, and String
+    private Object interpretVal(String key, String val) {
+        // all known basic datatypes for JSON files: integer, floating-point, boolean,
+        // null, and String
         Object o;
-        if (dat.matches("^\\d+")) // check for integer
-            o = Integer.parseInt(dat);
-        else if (dat.matches("\\d*\\.\\d+")) // check for floating-point number
-            o = Double.parseDouble(dat);
-        else if (dat.equals("true")) // check for boolean (true)
+        if (val.matches("^\\d+")) // check for integer
+            o = Integer.parseInt(val);
+        else if (val.matches("\\d*\\.\\d+")) // check for floating-point number
+            o = Double.parseDouble(val);
+        else if (val.equals("true")) // check for boolean (true)
             o = true;
-        else if (dat.equals("false")) // check for boolean (false)
+        else if (val.equals("false")) // check for boolean (false)
             o = false;
-        else if (dat.equals("null")) // check for null
+        else if (val.equals("null")) // check for null
             o = null;
+        else if (val.matches("\\[.*]")) { // check for array
+            ArrayList<Object> list = new ArrayList<>();
+            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(","))
+                list.add(interpretVal(key, d));
+            o = list;
+        }
+        else if (val.matches("\\{.*}")) { // check for object
+            o = new JSONObject(key, val.substring(val.indexOf("{") + 1, val.lastIndexOf("}")));
+        }
         else // by default just store the value as a string
-            o = dat.substring(dat.indexOf("\""), dat.lastIndexOf("\""));
+            o = val.replace("\"", "");
         return o;
     }
 
     public String toString() {
-        return String.format("{%s:%s}", name, map.toString());
+        return String.format("%s", map.toString());
     }
 }

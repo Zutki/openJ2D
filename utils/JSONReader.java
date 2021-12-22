@@ -1,7 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -12,7 +10,7 @@ public class JSONReader {
 
     /**
      * Constructer for JSONReader. Parses file if given file is a JSON File.
-     * 
+     *
      * @param in the JSON File
      * @throws IOException              if any errors occur while reading in JSON
      *                                  File
@@ -31,7 +29,7 @@ public class JSONReader {
 
     /**
      * Parses the .json file by creating a JSONObject of that file
-     * 
+     *
      * @return <code>JSONObject</code>, the file
      * @throws IOException if an error occured reading in the file.
      */
@@ -54,7 +52,7 @@ public class JSONReader {
             line = fi.readLine();
         }
 
-        // the file is one object, so create a JSONObject with that 
-        return new JSONObject(file.getName(), json.substring(1, json.length() - 1));
+        // the file is one object, so create a JSONObject with that
+        return new JSONObject(file.getName(), json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
     }
 }
