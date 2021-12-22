@@ -33,6 +33,10 @@ public class JSONObject {
         return map.get(key);
     }
 
+    public ArrayList<String> getKeys() {
+        return new ArrayList<>(map.keySet());
+    }
+
     /**
      * Algorithm for parsing the JSON string:
      * 1. Split string by commas (outside of quotation marks) into array of key-pairs

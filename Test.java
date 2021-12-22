@@ -6,8 +6,10 @@ import java.util.Arrays;
 import utils.*;
 class Test {
     public static void main(String[] args)throws IOException {
-        String test = "\"name\":\"jason\",\"age\":16.35,\"friends,and,family\":[\"charlie\",\"keila\",\"leila\"]";
-        String regex = "(,)(?=\")|(?:\\[(.*?)\\])";
-        System.out.println(Arrays.toString(test.split(regex)));
+        JSONReader reader = new JSONReader(new File("itemInfo.json"));
+        JSONObject object = reader.interpretFile();
+        String dirtBlockPath = (String)object.get("Dirt Block");
+        System.out.println(dirtBlockPath);
+        System.out.println(object.getKeys());
     }
 }
