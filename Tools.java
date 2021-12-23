@@ -88,32 +88,40 @@ public class Tools {
             String encryptedString = (String) propertyValue.get("value");
             // System.out.println(encryptedString);
 
-            String decryptedString = new String(Base64.getDecoder().decode(encryptedString));
+            String decryptedString = new String(Base64.getDecoder().decode(encryptedString)).trim();
             // System.out.println(decryptedString);
 
             // create a JSONObject from decryptedString
             JSONObject decryptedJSON = JSONReader.interpretJSONString("root", new StringReader(decryptedString));
             // get textures -> skin -> url
-            JSONObject userTextures = (JSONObject) decryptedJSON.get("textures");
-            // System.out.println(userTextures);
 
-            // this is as far as I can get with my regex statement in JSONObject.java. I'm
-            // going to need to fix that regex in order for this to work...
-            // JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
-            // String skinURL = (String) userSkin.get("url");
-            // System.out.println(skinURL);
-
-            // actually i can do it with my buggy json class watch this
-            // it's probably worth fixing the bug in JSONObject.java though but this still
-            // works fine as-is.
-            System.out.println(userTextures);
-            if (userTextures.get("SKIN") instanceof String) {
-                String skinUrl = (String) userTextures.get("SKIN");
+            // hardcoding another solution
+            if (decryptedJSON.get("textures") instanceof String) {
+                String skinUrl = (String) decryptedJSON.get("textures");
                 minecraftSkin = ImageIO.read(new URL(skinUrl.substring(skinUrl.indexOf("http://"))));
             }
             else {
-                JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
-                minecraftSkin = ImageIO.read(new URL((String) userSkin.get("url")));
+                JSONObject userTextures = (JSONObject) decryptedJSON.get("textures");
+                // System.out.println(userTextures);
+    
+                // this is as far as I can get with my regex statement in JSONObject.java. I'm
+                // going to need to fix that regex in order for this to work...
+                // JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
+                // String skinURL = (String) userSkin.get("url");
+                // System.out.println(skinURL);
+    
+                // actually i can do it with my buggy json class watch this
+                // it's probably worth fixing the bug in JSONObject.java though but this still
+                // works fine as-is.
+                System.out.println(userTextures);
+                if (userTextures.get("SKIN") instanceof String) {
+                    String skinUrl = (String) userTextures.get("SKIN");
+                    minecraftSkin = ImageIO.read(new URL(skinUrl.substring(skinUrl.indexOf("http://"))));
+                }
+                else {
+                    JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
+                    minecraftSkin = ImageIO.read(new URL((String) userSkin.get("url")));
+                }
             }
         } catch (IOException e) {
             // this should be the only reason why a Minecraft skin wasn't fetched ⤵

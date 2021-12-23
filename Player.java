@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.io.File;
 
 public class Player {
-    private final BufferedImage PLAYER_SKIN = Tools.fetchMinecraftSkin("Technoblade");
+    private final BufferedImage PLAYER_SKIN = Tools.fetchMinecraftSkin("Ganyu");
     // maybe if computer can't connect to the internet? idk
     // private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
 
