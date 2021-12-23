@@ -4,12 +4,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class Player {
-    
-    private final File[] playerImages = {new File("assets/steve/SteveLeft.png"), new File("assets/steve/SteveFront.png"), new File("assets/steve/SteveRight.png")};
+    private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
+
     // player image
     private BufferedImage image;
     private BufferedImage images[] = new BufferedImage[3];
@@ -34,22 +32,16 @@ public class Player {
     }
 
     // load player image
-    private void loadImages() {
-        for (int i = 0; i < images.length; i++) {
-            try {
-                images[i] = ImageIO.read(playerImages[i]);
-                images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
-            } 
-            catch (IOException exc) {
-                System.out.println("Error opening player image: " + exc.getMessage());
-            }
-        }
-        images[2] = Tools.getPlayerFacingLeft(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
-        images[2] = Tools.resize(images[2], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+    private void loadImages() {    
+        images[0] = Tools.getPlayerFacingRight(playerImage);
+        images[1] = Tools.getPlayerFacingFront(playerImage);
+        images[2] = Tools.getPlayerFacingLeft(playerImage);
 
-        images[1] = Tools.getPlayerFacingFront(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
-        images[1] = Tools.resize(images[1], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+        for (int i = 0; i < images.length; i++) {
+            images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+        }
     }
+
     private void loadImage(int facing) {
         image = images[facing];
     }

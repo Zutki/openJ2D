@@ -137,5 +137,38 @@ public class Tools {
        BufferedImage head;
        BufferedImage arm;
        BufferedImage leg;
+
+       // load image
+       try {
+           bi = ImageIO.read(skinImage);
+       }
+       catch (IOException e) {
+           System.out.println(e);
+       }
+
+       // crop full image to get body parts
+       head = bi.getSubimage(0, 8, 8, 8);
+       arm = bi.getSubimage(40, 20, 4, 12);
+       leg = bi.getSubimage(0, 20, 4, 12);
+
+       //draw player
+       int height = 32;
+       int width = 16;
+
+       BufferedImage playerImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+       Graphics g2d = playerImg.createGraphics();
+
+       // head
+       g2d.drawImage(head, 4, 0, null);
+       
+       // arm
+       g2d.drawImage(arm, 6, 8, null);
+    
+       // leg
+       g2d.drawImage(leg, 6, 20, null);
+
+       // return image
+       g2d.dispose();
+       return playerImg;
    }
 }

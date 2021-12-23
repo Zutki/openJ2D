@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class World extends JPanel implements ActionListener, KeyListener, MouseListener, MouseWheelListener{
     // DEBUG MODE
-    private boolean debugMode = true;
+    private boolean debugMode = false;
 
     // Tick delay (ms)
     public static final int TICK_DELAY = 12;
