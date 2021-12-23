@@ -11,6 +11,8 @@ import java.util.HashMap;
 public class JSONObject {
     private final String name;
     private final HashMap<String, Object> map;
+    // TODO: fix the regex below; it doesn't work for nested curly brackets!
+    private final String JSON_COMMA_SPLITTER = "(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
 
     public JSONObject(String name, String content) {
         this.name = name;
@@ -46,7 +48,7 @@ public class JSONObject {
      * @param content JSON String that's going to be processed
      */
     private void parseContent(String content) {
-        String[] pairs = content.split("(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)");
+        String[] pairs = content.split(JSON_COMMA_SPLITTER);
         for (String pair : pairs) {
             int indexColon = pair.indexOf(":");
             String key = pair.substring(0, indexColon).replace("\"","");
@@ -76,7 +78,7 @@ public class JSONObject {
             o = null;
         else if (val.matches("\\[.*]")) { // check for array
             ArrayList<Object> list = new ArrayList<>();
-            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(","))
+            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(JSON_COMMA_SPLITTER))
                 list.add(interpretVal(key, d));
             o = list;
         }
