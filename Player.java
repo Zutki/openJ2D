@@ -44,6 +44,11 @@ public class Player {
                 System.out.println("Error opening player image: " + exc.getMessage());
             }
         }
+        images[0] = Tools.getPlayerFacingLeft(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
+        images[0] = Tools.resize(images[0], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+
+        images[1] = Tools.getPlayerFacingFront(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
+        images[1] = Tools.resize(images[1], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
     }
     private void loadImage(int facing) {
         image = images[facing];
@@ -58,22 +63,22 @@ public class Player {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_UP && phyx.canMoveUp() && phyx.canJump()) {
+        if ((key == KeyEvent.VK_UP || key == KeyEvent.VK_W) && phyx.canMoveUp() && phyx.canJump()) {
             position.translate(0, -1);
             phyx.resetCounter();
         }
-        if (key == KeyEvent.VK_RIGHT && phyx.canMoveRight()) {
+        if ((key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) && phyx.canMoveRight()) {
             loadImage(0);
             position.translate(1, 0);
         }
-        if (key == KeyEvent.VK_DOWN && phyx.canMoveDown()) {
+        if ((key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) && phyx.canMoveDown()) {
             position.translate(0, 1);
             phyx.resetCounter();
         }
-        if (key == KeyEvent.VK_DOWN) {
+        if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
             loadImage(1);
         }
-        if (key == KeyEvent.VK_LEFT && phyx.canMoveLeft()) {
+        if ((key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) && phyx.canMoveLeft()) {
             loadImage(2);
             position.translate(-1, 0);
         }
