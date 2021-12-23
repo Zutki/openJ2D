@@ -12,6 +12,9 @@ public class JSONObject {
     private final String name;
     private final HashMap<String, Object> map;
 
+    // TODO: fix the regex below; it doesn't work for nested curly brackets!
+    private final String JSON_COMMA_SPLITTER = "(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
+
     public JSONObject(String name, String content) {
         this.name = name;
         map = new HashMap<>();
@@ -46,7 +49,7 @@ public class JSONObject {
      * @param content JSON String that's going to be processed
      */
     private void parseContent(String content) {
-        String[] pairs = content.split("(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)");
+        String[] pairs = content.split(JSON_COMMA_SPLITTER);
         for (String pair : pairs) {
             int indexColon = pair.indexOf(":");
             String key = pair.substring(0, indexColon).replace("\"","");
@@ -61,11 +64,12 @@ public class JSONObject {
      *         boolean, or null depending on the contents of val.
      */
     private Object interpretVal(String key, String val) {
-        // all known basic datatypes for JSON files: integer, floating-point, boolean,
+        // all known basic datatypes for JSON files: integer*, floating-point, boolean,
+        // *will be parsed as a Long because JSON integers can be pretty big!
         // null, and String
         Object o;
         if (val.matches("^\\d+")) // check for integer
-            o = Integer.parseInt(val);
+            o = Long.parseLong(val);
         else if (val.matches("\\d*\\.\\d+")) // check for floating-point number
             o = Double.parseDouble(val);
         else if (val.equals("true")) // check for boolean (true)
@@ -76,7 +80,7 @@ public class JSONObject {
             o = null;
         else if (val.matches("\\[.*]")) { // check for array
             ArrayList<Object> list = new ArrayList<>();
-            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(","))
+            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(JSON_COMMA_SPLITTER))
                 list.add(interpretVal(key, d));
             o = list;
         }
