@@ -7,32 +7,41 @@ Last Updated: 12/16/21
 The World class is the controller of the game, it handels things to do with drawing the window size properly, and draws the world, almost everything in the game uses some aspect of this.
 
 ### Block
-The block class defines all the attributes of a block, it is ***used by World*** to create the world.
+The block class defines all the attributes of a block, it is ***used by [World](#world)*** to create the world.
 
 ### Id
-The ID class is a very important class, it is the main system that is ***used by blocks and inventory*** it implements the methods required to get the Image and Name of an item/block.
+The ID class is a very important class, it is the main system that is ***used by [Blocks](#block) and [Inventory](#inventory)*** it implements the methods required to get the Image and Name of an item/block.
 
 ### Minecraft
-The Minecraft class is mainly just an initiator class, it is not used by anything but runs the game, it ***provides the world*** with things like the Mouse Lisitener, the Key Lisitener, and Action Lisitioner. It also calls the world constructor.
+The Minecraft class is mainly just an initiator class, it is not used by anything but runs the game, it ***provides the [world](#world)*** with things like the Mouse Lisitener, the Key Lisitener, and Action Lisitioner. It also calls the world constructor.
 
 ### Player
 The player class defines all attributes of a player (health, inventory, hunger, image, and position)
-The player class also handels movement for the player. ***Called by world***
+The player class also handels movement for the player. ***Called by [World](#world)***
 
 ### Tools
 The tools class is not a class to be constructed, it is only a collection of tools that is used, mainly resize().
 
 ### WorldBuilder
-The worldbuilder class handels terrain generation. ***Called by World***
+The worldbuilder class handels terrain generation. ***Called by [World](#world)***
 
 ### Physics
-The physics class provides functions like gravity and collision detection ***called by World***
+The physics class provides functions like gravity and collision detection ***called by [World](#world)***
 
 ### Ui
-The Ui class provides the Ui drawing for the game, it renders things like the hotbar and currently hovered block. ***called by World***
+The Ui class provides the Ui drawing for the game, it renders things like the hotbar and currently hovered block. ***called by [World](#world)***
 
 ### Item
-The Item class provies the information and structure that items use, ***mainly used by Ui***
+The Item class provies the information and structure that items use, ***mainly used by [Ui](#ui)***
+
+### Inventory (WIP)
+The <u> Inventory </u> currently only houses a hotbar.
+
+### JSONReader
+The <u> JSONReader </u> class reads in a <b>.json</b> file and returns a <u>[JSONObject](#jsonobject)</u>. The philosophy behind the approach of this class is that the file itself is a key and the contents of the file its value. <b>Mainly used by [Id.java](#id) </b>
+
+### JSONObject
+The <u> JSONObject </u> is used by the <u> [JSONReader](#jsonreader) </u> class to interpret a .json file. <b> Mainly used by [Id.java](#id) </b>
 
 ---
 ## Methods of Classes
@@ -124,9 +133,50 @@ The Item class provies the information and structure that items use, ***mainly u
 
 ### Item
 - Constructors
-    - Item(Id id, int item_id) {
+    - Item(Id id, int item_id)
         - creates an item with values
     - Item()
         - creates an empty item (needed because of NullPointerException errors)
 - Methods
     - None: variables are accessed by {variable name}.{field} 
+
+### Inventory (WIP)
+- Constructors
+    - Inventory()
+        - creates a hotbar for the player
+- Methods
+    - boolean isSlotAvailable(Item _item)
+        - checks if slot in inventory contains no items
+    - void setInventory(Item[] items)
+        - sets the hotbar to an array of Items
+    - void setItem(Item item, int index)
+        - sets the hotbar at the index to the given item
+    - BufferedImage[] getUiImages()
+        - returns an array of UiImages for each slot in the hotbar
+    - BufferedImage[] getImages()
+        - returns an array of Images for each slot in the hotbar
+    - String[] getNames()
+        - returns the names for each slot in the hotbar
+    - Item getItem(int index)
+        - returns an item of the hotbar inside of the index
+    - Item[] getHotbar()
+        - returns the hotbar
+
+### JSONReader
+- Constructors
+    - JSONReader(File in)
+        - checks if given file is a valid .json file, and then sets its PIV to that given file
+- Methods
+    - JSONObject interpretFile() throws IOException
+        - parses the given file and returns a JSONObject of parsed file.
+
+### JSONObject
+- Constructors
+    - JSONObject(String key, String value)
+        - a .json object contains a key and a value. By default the key is the file name, and the value is the contents of the file.
+        - will parse the given key and value provided
+- Methods
+    - Object get(String key) throws IllegalArgumentException
+        - Keys a value from given key, and throws IllegalArgumentException if there are no such keys
+    - ArrayList<String> getKeys()
+        - Returns a list of all available keys from the JSONObject

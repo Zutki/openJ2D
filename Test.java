@@ -21,5 +21,9 @@ class Test {
         BufferedImage skin = Tools.fetchMinecraftSkin("marshie_maid");
         System.out.println(skin);
         
+        JSONReader reader = new JSONReader(new File("test.json"));
+        JSONObject object = reader.interpretFile();
+        
+        System.out.println(object);
     }
 }

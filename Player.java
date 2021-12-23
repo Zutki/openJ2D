@@ -4,12 +4,10 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class Player {
-    
-    private final File[] playerImages = {new File("assets/steve/SteveLeft.png"), new File("assets/steve/SteveFront.png"), new File("assets/steve/SteveRight.png")};
+    private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
+
     // player image
     private BufferedImage image;
     private BufferedImage images[] = new BufferedImage[3];
@@ -34,17 +32,16 @@ public class Player {
     }
 
     // load player image
-    private void loadImages() {
+    private void loadImages() {    
+        images[0] = Tools.getPlayerFacingRight(playerImage);
+        images[1] = Tools.getPlayerFacingFront(playerImage);
+        images[2] = Tools.getPlayerFacingLeft(playerImage);
+
         for (int i = 0; i < images.length; i++) {
-            try {
-                images[i] = ImageIO.read(playerImages[i]);
-                images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
-            } 
-            catch (IOException exc) {
-                System.out.println("Error opening player image: " + exc.getMessage());
-            }
+            images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
         }
     }
+
     private void loadImage(int facing) {
         image = images[facing];
     }
@@ -58,22 +55,22 @@ public class Player {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_UP && phyx.canMoveUp() && phyx.canJump()) {
+        if ((key == KeyEvent.VK_UP || key == KeyEvent.VK_W) && phyx.canMoveUp() && phyx.canJump()) {
             position.translate(0, -1);
             phyx.resetCounter();
         }
-        if (key == KeyEvent.VK_RIGHT && phyx.canMoveRight()) {
+        if ((key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) && phyx.canMoveRight()) {
             loadImage(0);
             position.translate(1, 0);
         }
-        if (key == KeyEvent.VK_DOWN && phyx.canMoveDown()) {
+        if ((key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) && phyx.canMoveDown()) {
             position.translate(0, 1);
             phyx.resetCounter();
         }
-        if (key == KeyEvent.VK_DOWN) {
+        if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) {
             loadImage(1);
         }
-        if (key == KeyEvent.VK_LEFT && phyx.canMoveLeft()) {
+        if ((key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) && phyx.canMoveLeft()) {
             loadImage(2);
             position.translate(-1, 0);
         }
