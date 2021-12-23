@@ -112,22 +112,30 @@ public class Tools {
         
        // draw the player
        int height = 32;
-       int width = 8;
+       int width = 16;
 
        BufferedImage playerImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
        Graphics2D g2d = playerImg.createGraphics();
 
        // head
-       g2d.drawImage(head, 0, 0, null);
+       g2d.drawImage(head, 4, 0, null);
 
        // arm
-       g2d.drawImage(arm, 4, 8, null);
+       g2d.drawImage(arm, 6, 8, null);
 
        // leg
-       g2d.drawImage(leg, 12, 12, null);
+       g2d.drawImage(leg, 6, 20, null);
 
        // return image
        g2d.dispose();
        return playerImg;
+   }
+
+   public static BufferedImage getPlayerFacingRight(File skinImage) {
+       // define parts of the image
+       BufferedImage bi = null;
+       BufferedImage head;
+       BufferedImage arm;
+       BufferedImage leg;
    }
 }

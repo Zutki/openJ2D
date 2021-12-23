@@ -44,8 +44,8 @@ public class Player {
                 System.out.println("Error opening player image: " + exc.getMessage());
             }
         }
-        images[0] = Tools.getPlayerFacingLeft(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
-        images[0] = Tools.resize(images[0], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+        images[2] = Tools.getPlayerFacingLeft(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
+        images[2] = Tools.resize(images[2], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
 
         images[1] = Tools.getPlayerFacingFront(new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png"));
         images[1] = Tools.resize(images[1], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
