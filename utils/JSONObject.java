@@ -11,8 +11,6 @@ import java.util.HashMap;
 public class JSONObject {
     private final String name;
     private final HashMap<String, Object> map;
-    // TODO: fix the regex below; it doesn't work for nested curly brackets!
-    private final String JSON_COMMA_SPLITTER = "(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
 
     // TODO: fix the regex below; it doesn't work for nested curly brackets!
     private final String JSON_COMMA_SPLITTER = "(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";

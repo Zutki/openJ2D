@@ -6,7 +6,9 @@ import java.awt.Point;
 import java.io.File;
 
 public class Player {
-    private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
+    private final BufferedImage PLAYER_SKIN = Tools.fetchMinecraftSkin("Technoblade");
+    // maybe if computer can't connect to the internet? idk
+    // private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
 
     // player image
     private BufferedImage image;
@@ -33,9 +35,9 @@ public class Player {
 
     // load player image
     private void loadImages() {    
-        images[0] = Tools.getPlayerFacingRight(playerImage);
-        images[1] = Tools.getPlayerFacingFront(playerImage);
-        images[2] = Tools.getPlayerFacingLeft(playerImage);
+        images[0] = Tools.getPlayerFacingRight(PLAYER_SKIN);
+        images[1] = Tools.getPlayerFacingFront(PLAYER_SKIN);
+        images[2] = Tools.getPlayerFacingLeft(PLAYER_SKIN);
 
         for (int i = 0; i < images.length; i++) {
             images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);

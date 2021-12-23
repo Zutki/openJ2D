@@ -57,10 +57,10 @@ public class JSONReader {
         return new JSONObject(file.getName(), json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
     }
 
-    public static JSONObject interpretJSONString (String fileName, Reader inputStream)throws IOException {
+    public static JSONObject interpretJSONString(String fileName, Reader inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(inputStream);
         StringBuilder json = new StringBuilder();
-        
+
         String line = reader.readLine();
         while (line != null) {
             boolean inQuotes = false;
