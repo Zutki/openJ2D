@@ -51,7 +51,8 @@ public class JSONReader {
             }
             line = fi.readLine();
         }
-        // parsing the file stripped of unnecessary whitespace
-        return new JSONObject(file.getName(), json.toString());
+
+        // the file is one object, so create a JSONObject with that
+        return new JSONObject(file.getName(), json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
     }
 }

@@ -12,10 +12,10 @@ public class JSONObject {
     private final String name;
     private final HashMap<String, Object> map;
 
-    public JSONObject(String key, String value) {
-        this.name = key;
+    public JSONObject(String name, String content) {
+        this.name = name;
         map = new HashMap<>();
-        parseContent(value);
+        parseContent(content);
     }
 
     /**
@@ -46,18 +46,13 @@ public class JSONObject {
      * @param content JSON String that's going to be processed
      */
     private void parseContent(String content) {
-        // check if root level is a object
-        if (content.charAt(0) == '{' && content.charAt(content.length() - 1) == '}') {
-            String[] pairs = content.split("(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)");
-            for (String pair : pairs) {
-                int indexColon = pair.indexOf(":");
-                String key = pair.substring(0, indexColon).replace("\"","");
-                String val = pair.substring(indexColon + 1);
-                map.put(key, interpretVal(key, val));
-            }
+        String[] pairs = content.split("(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)");
+        for (String pair : pairs) {
+            int indexColon = pair.indexOf(":");
+            String key = pair.substring(0, indexColon).replace("\"","");
+            String val = pair.substring(indexColon + 1);
+            map.put(key, interpretVal(key, val));
         }
-        else // the key = file and value = content inside it
-            map.put(name, interpretVal(name, content));
     }
 
     /**
@@ -68,29 +63,29 @@ public class JSONObject {
     private Object interpretVal(String key, String val) {
         // all known basic datatypes for JSON files: integer, floating-point, boolean,
         // null, and String
-        Object obj;
+        Object o;
         if (val.matches("^\\d+")) // check for integer
-            obj = Integer.parseInt(val);
+            o = Integer.parseInt(val);
         else if (val.matches("\\d*\\.\\d+")) // check for floating-point number
-            obj = Double.parseDouble(val);
+            o = Double.parseDouble(val);
         else if (val.equals("true")) // check for boolean (true)
-            obj = true;
+            o = true;
         else if (val.equals("false")) // check for boolean (false)
-            obj = false;
+            o = false;
         else if (val.equals("null")) // check for null
-            obj = null;
+            o = null;
         else if (val.matches("\\[.*]")) { // check for array
             ArrayList<Object> list = new ArrayList<>();
-            for (String el : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(","))
-                list.add(interpretVal(key, el));
-            obj = list;
+            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(","))
+                list.add(interpretVal(key, d));
+            o = list;
         }
         else if (val.matches("\\{.*}")) { // check for object
-            obj = new JSONObject(key, val.substring(val.indexOf("{") + 1, val.lastIndexOf("}")));
+            o = new JSONObject(key, val.substring(val.indexOf("{") + 1, val.lastIndexOf("}")));
         }
         else // by default just store the value as a string
-            obj = val.replace("\"", "");
-        return obj;
+            o = val.replace("\"", "");
+        return o;
     }
 
     public String toString() {

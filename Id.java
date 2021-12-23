@@ -30,7 +30,7 @@ public class Id {
                 System.out.printf("Name: %s\nItem Image Path: %s\n\n", imageName, obj.get(imageName));
             }
         } catch (IOException e) {
-            System.out.println("File Error in reading itemInfo.txt");
+            System.out.println("File Error in reading itemInfo.json");
             e.printStackTrace();
         }
     }
