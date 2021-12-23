@@ -1,9 +1,10 @@
 package utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
 
 public class JSONReader {
     private File file;
@@ -54,5 +55,27 @@ public class JSONReader {
 
         // the file is one object, so create a JSONObject with that
         return new JSONObject(file.getName(), json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
+    }
+
+    public static JSONObject interpretJSONString (String fileName, Reader inputStream)throws IOException {
+        BufferedReader reader = new BufferedReader(inputStream);
+        StringBuilder json = new StringBuilder();
+        
+        String line = reader.readLine();
+        while (line != null) {
+            boolean inQuotes = false;
+            for (int i = 0; i < line.length(); i++) {
+                String let = line.substring(i, i + 1);
+                if (let.equals("\""))
+                    inQuotes = !inQuotes;
+
+                if (inQuotes || let.matches("\\S"))
+                    json.append(let);
+            }
+            line = reader.readLine();
+        }
+
+        // the file is one object, so create a JSONObject with that
+        return new JSONObject(fileName, json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
     }
 }
