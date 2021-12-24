@@ -54,7 +54,7 @@ public class JSONReader {
         }
 
         // the file is one object, so create a JSONObject with that
-        return new JSONObject(file.getName(), json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
+        return new JSONObject(file.getName(), json.toString());
     }
 
     public static JSONObject interpretJSONString(String fileName, Reader inputStream) throws IOException {
@@ -76,6 +76,6 @@ public class JSONReader {
         }
 
         // the file is one object, so create a JSONObject with that
-        return new JSONObject(fileName, json.substring(json.indexOf("{") + 1, json.lastIndexOf("}")));
+        return new JSONObject(fileName, json.toString());
     }
 }

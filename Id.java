@@ -8,26 +8,25 @@ import utils.JSONObject;
 import utils.JSONReader;
 
 public class Id {
-    // Syncronized Lists
-    private ArrayList<String> itemNames;
-    private ArrayList<BufferedImage> itemImgs;
+    private final int NAMES = 0;
+    private final int IMAGES = 1;
+    private Object[][] itemData; // row 0 = String[] itemNames, row 1 = BufferedImage[] itemImgss
 
     public Id() {
         try {
             JSONReader reader = new JSONReader(new File("itemInfo.json"));
             JSONObject obj = reader.interpretFile();
 
-            // initializing itemNames and itemImgs
-            itemNames = obj.getKeys();
-            itemImgs = new ArrayList<>();
+            ArrayList<JSONObject> blocks = (ArrayList<JSONObject>) obj.get("itemInfo.json");
+            itemData = new Object[2][blocks.size()];
 
-            // filling itemImgs with images from itemInfo.json
-            for (String imageName : obj.getKeys()) {
-                File image = new File((String)obj.get(imageName));
-                itemImgs.add(Tools.resize(ImageIO.read(image), World.BLOCK_SIZE, World.BLOCK_SIZE));
-
-                // debug statement
-                System.out.printf("Name: %s\nItem Image Path: %s\n\n", imageName, obj.get(imageName));
+            for (JSONObject block : blocks) {
+                long id = (long) block.get("id");
+                int index = (int) id;
+                String name = (String) block.get("name");
+                String path = (String) block.get("path");
+                itemData[NAMES][index] = (String) block.get("name");
+                itemData[IMAGES][index] = Tools.resize(ImageIO.read(new File(path)), World.BLOCK_SIZE, World.BLOCK_SIZE);     
             }
         } catch (IOException e) {
             System.out.println("File Error in reading itemInfo.json");
@@ -35,18 +34,18 @@ public class Id {
         }
     }
 
-    public ArrayList<String> getItemNames() {
-        return itemNames;
+    public String[] getItemNames() {
+        return (String[]) itemData[NAMES];
     }
-    public ArrayList<BufferedImage> getItemImages() {
-        return itemImgs;
+    public BufferedImage[] getItemImages() {
+        return (BufferedImage[]) itemData[IMAGES];
     }
 
     public String getItemNameByID(int id) {
-        return itemNames.get(id);
+        return (String) itemData[NAMES][id];
     }
     public BufferedImage getItemImageByID(int id) {
-        return itemImgs.get(id);
+        return (BufferedImage) itemData[IMAGES][id];
     }
 }
 

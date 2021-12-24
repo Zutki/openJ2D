@@ -18,12 +18,12 @@ import utils.*;
 
 class Test {
     public static void main(String[] args) throws IOException {
-        BufferedImage skin = Tools.fetchMinecraftSkin("Ganyu");
-        System.out.println(skin);
-
-        JSONReader reader = new JSONReader(new File("test.json"));
+        JSONReader reader = new JSONReader(new File("itemInfo.json"));
         JSONObject object = reader.interpretFile();
-
-        System.out.println(object.get("textures"));
+        
+        ArrayList<JSONObject> list = (ArrayList<JSONObject>) object.get("itemInfo.json");
+        JSONObject obj1 = (JSONObject) list.get(0);
+        System.out.println(obj1.get("id"));
+        
     }
 }

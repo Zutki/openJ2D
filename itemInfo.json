@@ -1,14 +1,57 @@
-{
-    "Dirt Block": "assets/dirt.png",
-    "Grass Block": "assets/grass_block_side.png",
-    "Stone": "assets/stone.png",
-    "Oak Planks": "assets/oak_planks.png",
-    "Birch Planks": "assets/birch_planks.png",
-    "Spruce Planks": "assets/spruce_planks.png",
-    "Acacia Planks": "assets/acacia_planks.png",
-    "Jungle Planks": "assets/jungle_planks.png",
-    "Dark Oak Planks": "assets/dark_oak_planks.png",
-    "Crimson Planks": "assets/crimson_planks.png",
-    "Warped Planks": "assets/warped_planks.png"
-
-}
+[
+    {
+        "name" : "Dirt Block",
+        "path" : "assets/dirt.png",
+        "id" : 0
+    },
+    {
+        "name" : "Grass Block",
+        "path" : "assets/grass_block_side.png",
+        "id" : 1
+    },
+    {
+        "name" : "Stone",
+        "path" : "assets/stone.png",
+        "id" : 2
+    },
+    {
+        "name" : "Oak Planks",
+        "path" : "assets/oak_planks.png",
+        "id" : 3
+    },
+    {
+        "name" : "Birch Planks",
+        "path" : "assets/birch_planks.png",
+        "id" : 4
+    },
+    {
+        "name" : "Spruce Planks",
+        "path" : "assets/spruce_planks.png",
+        "id" : 5
+    },
+    {
+        "name" : "Acacia Planks",
+        "path" : "assets/acacia_planks.png",
+        "id" : 6
+    },
+    {
+        "name" : "Jungle Planks",
+        "path" : "assets/jungle_planks.png",
+        "id" : 7
+    },
+    {
+        "name" : "Dark Oak Planks",
+        "path" : "assets/dark_oak_planks.png",
+        "id" : 8
+    },
+    {
+        "name" : "Crimson Planks",
+        "path" : "assets/crimson_planks.png",
+        "id" : 9
+    },
+    {
+        "name" : "Warped Planks",
+        "path" : "assets/warped_planks.png",
+        "id" : 10
+    }
+]

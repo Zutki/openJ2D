@@ -11,9 +11,8 @@ import java.util.HashMap;
 public class JSONObject {
     private final String name;
     private final HashMap<String, Object> map;
-
-    // TODO: fix the regex below; it doesn't work for nested curly brackets!
-    private final String JSON_COMMA_SPLITTER = "(,)(?=\")(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
+    // splits JSON by its outermost commas
+    private final String JSON_COMMA_SPLITTER = "(,)(?=\")*(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
 
     public JSONObject(String name, String content) {
         this.name = name;
@@ -49,13 +48,17 @@ public class JSONObject {
      * @param content JSON String that's going to be processed
      */
     private void parseContent(String content) {
-        String[] pairs = content.split(JSON_COMMA_SPLITTER);
-        for (String pair : pairs) {
-            int indexColon = pair.indexOf(":");
-            String key = pair.substring(0, indexColon).replace("\"","");
-            String val = pair.substring(indexColon + 1);
-            map.put(key, interpretVal(key, val));
+        if (content.charAt(0) == '{' && content.charAt(content.length() - 1) == '}') {
+            String[] pairs = content.substring(1, content.length() - 1).split(JSON_COMMA_SPLITTER);
+            for (String pair : pairs) {
+                int indexColon = pair.indexOf(":");
+                String key = pair.substring(0, indexColon).replace("\"","");
+                String val = pair.substring(indexColon + 1);
+                map.put(key, interpretVal(key, val));
+            }
         }
+        else
+            map.put(name, interpretVal(name, content));
     }
 
     /**
@@ -80,12 +83,18 @@ public class JSONObject {
             o = null;
         else if (val.matches("\\[.*]")) { // check for array
             ArrayList<Object> list = new ArrayList<>();
-            for (String d : val.substring(val.indexOf('[') + 1, val.lastIndexOf(']')).split(JSON_COMMA_SPLITTER))
+            // debugging purposes (84 -> 87)
+            // String str = val.substring(1, val.length() - 1);
+            // String[] arr = str.split(JSON_COMMA_SPLITTER);
+            // for (String string : arr)
+            //     System.out.println(string);
+
+            for (String d : val.substring(1, val.length() - 1).split(JSON_COMMA_SPLITTER))
                 list.add(interpretVal(key, d));
             o = list;
         }
         else if (val.matches("\\{.*}")) { // check for object
-            o = new JSONObject(key, val.substring(val.indexOf("{") + 1, val.lastIndexOf("}")));
+            o = new JSONObject(key, val);
         }
         else // by default just store the value as a string
             o = val.replace("\"", "");
