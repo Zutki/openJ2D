@@ -26,7 +26,9 @@ public class Id {
                 String name = (String) block.get("name");
                 String path = (String) block.get("path");
                 itemData[NAMES][index] = (String) block.get("name");
-                itemData[IMAGES][index] = Tools.resize(ImageIO.read(new File(path)), World.BLOCK_SIZE, World.BLOCK_SIZE);     
+                itemData[IMAGES][index] = Tools.resize(ImageIO.read(new File(path)), World.BLOCK_SIZE, World.BLOCK_SIZE);
+                // debug statement
+                System.out.printf("%s (id: %d) located at path: %s\n", name, id, path);
             }
         } catch (IOException e) {
             System.out.println("File Error in reading itemInfo.json");
