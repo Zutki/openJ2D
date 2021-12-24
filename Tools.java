@@ -54,7 +54,7 @@ public class Tools {
      * - https://www.baeldung.com/java-http-request
      * -
      * https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3
-     * 
+     *
      * @param username the username to the Minecraft skin of
      * @return <code>BufferedImage</code> the Minecraft skin of the username
      * @throws IllegalArgumentException if username cannot be found within database
@@ -103,17 +103,17 @@ public class Tools {
             else {
                 JSONObject userTextures = (JSONObject) decryptedJSON.get("textures");
                 // System.out.println(userTextures);
-    
+
                 // this is as far as I can get with my regex statement in JSONObject.java. I'm
                 // going to need to fix that regex in order for this to work...
                 // JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
                 // String skinURL = (String) userSkin.get("url");
                 // System.out.println(skinURL);
-    
+
                 // actually i can do it with my buggy json class watch this
                 // it's probably worth fixing the bug in JSONObject.java though but this still
                 // works fine as-is.
-                System.out.println(userTextures);
+                //System.out.println(userTextures);
                 if (userTextures.get("SKIN") instanceof String) {
                     String skinUrl = (String) userTextures.get("SKIN");
                     minecraftSkin = ImageIO.read(new URL(skinUrl.substring(skinUrl.indexOf("http://"))));

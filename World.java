@@ -36,7 +36,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     private Timer timer;
     
     // building the world
-    public World() {
+    public World(String username) {
         // set the game world size
         setPreferredSize(new Dimension(BLOCK_SIZE * COLUMNS, BLOCK_SIZE * ROWS));
         
@@ -53,7 +53,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         // make the player
         // for now only default
         physics = new Physics(blocks);
-        player = new Player(physics);
+        player = new Player(physics, username);
         physics.setPlayer(player);
 
         timer = new Timer(TICK_DELAY, this);

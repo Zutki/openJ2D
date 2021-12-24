@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Player {
-    private final BufferedImage PLAYER_SKIN = Tools.fetchMinecraftSkin("Ganyu");
-    // maybe if computer can't connect to the internet? idk
-    // private File playerImage = new File("assets/steve/2021_12_21_blue-christmas-boy-19566197.png");
+    private File playerImage = new File("assets/steve/steve.png");
 
     // player image
     private BufferedImage image;
@@ -22,8 +22,16 @@ public class Player {
     // TODO: Implement inventory class
 
     // player default constructor
-    public Player(Physics _phyx) {
-        loadImages();
+    public Player(Physics _phyx, String username) {
+        // skin loading
+        if (username != "") {
+            BufferedImage playerSkin = Tools.fetchMinecraftSkin(username);
+            loadImages(playerSkin);
+        }
+        else {
+            loadImage();
+        }
+
         phyx = _phyx;
         loadImage(1);
         // set the players inventory as empty
@@ -32,12 +40,30 @@ public class Player {
         }
         position = new Point(5, 5);
     }
+    
+    // load default player images
+    private void loadImage() {
+        BufferedImage skin = null;
+        try {
+            skin = ImageIO.read(playerImage);
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+        images[0] = Tools.getPlayerFacingRight(skin);
+        images[1] = Tools.getPlayerFacingFront(skin);
+        images[2] = Tools.getPlayerFacingLeft(skin);
+        
+        for (int i = 0; i < images.length; i++) {
+            images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
+        }
+    }
 
-    // load player image
-    private void loadImages() {    
-        images[0] = Tools.getPlayerFacingRight(PLAYER_SKIN);
-        images[1] = Tools.getPlayerFacingFront(PLAYER_SKIN);
-        images[2] = Tools.getPlayerFacingLeft(PLAYER_SKIN);
+    // load player image from bufferedImage
+    private void loadImages(BufferedImage playerSkin) {    
+        images[0] = Tools.getPlayerFacingRight(playerSkin);
+        images[1] = Tools.getPlayerFacingFront(playerSkin);
+        images[2] = Tools.getPlayerFacingLeft(playerSkin);
 
         for (int i = 0; i < images.length; i++) {
             images[i] = Tools.resize(images[i], World.BLOCK_SIZE, World.BLOCK_SIZE*2);
