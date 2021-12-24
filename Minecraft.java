@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 class Minecraft {
-    private static String username = ""; // empty string means no username, game will assume default skin
+    private static String username = "Ssundee"; // empty string means no username, game will assume default skin
 
     private static void initWindow(String _username) {
         JFrame window = new JFrame("Minecraft 2D");
