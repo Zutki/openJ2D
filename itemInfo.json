@@ -1,5 +1,14 @@
 {
     "Dirt Block": "assets/dirt.png",
     "Grass Block": "assets/grass_block_side.png",
-    "Stone": "assets/stone.png"
+    "Stone": "assets/stone.png",
+    "Oak Planks": "assets/oak_planks.png",
+    "Birch Planks": "assets/birch_planks.png",
+    "Spruce Planks": "assets/spruce_planks.png",
+    "Acacia Planks": "assets/acacia_planks.png",
+    "Jungle Planks": "assets/jungle_planks.png",
+    "Dark Oak Planks": "assets/dark_oak_planks.png",
+    "Crimson Planks": "assets/crimson_planks.png",
+    "Warped Planks": "assets/warped_planks.png"
+
 }

@@ -2,11 +2,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.awt.Image;
-import java.awt.Graphics2D;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 
 public class Block {
    private BufferedImage texture;
@@ -26,12 +23,19 @@ public class Block {
        texture = World.itemIDS.getItemImageByID(id);
        
    }
-   public Block(int block_id, Point pos, int drop_item_id) {
-       id = block_id;
+    
+   public Block(int block_id, Point pos, float brightness) {
        position = pos;
-       dropItem = drop_item_id;
+       id = block_id;
+       dropItem = block_id;
        texture = World.itemIDS.getItemImageByID(id);
-       texture = Tools.resize(texture, World.BLOCK_SIZE, World.BLOCK_SIZE);
+
+       float[] elements = {brightness};
+       Kernel kernel = new Kernel(1, 1, elements);
+       ConvolveOp op = new ConvolveOp(kernel);
+       BufferedImage temp = new BufferedImage(texture.getWidth(), texture.getHeight(), texture.getType());
+       op.filter(texture, temp);
+       texture = temp;
    }
 
    public void drawBlock(Graphics g, ImageObserver observer) {
@@ -46,9 +50,4 @@ public class Block {
    public void setPos(Point pos) {
        position = pos;
    }
-
-   //public void break() {
-       // TODO:
-       // remove self
-   //}
 }

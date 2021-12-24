@@ -78,7 +78,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // adds a background block to the world
     private void addBackgroundBlock(Point pos, int id) {
         if (backBlocks[pos.y][pos.x] == null) {
-            backBlocks[pos.y][pos.x] = new Block(id, pos);
+            backBlocks[pos.y][pos.x] = new Block(id, pos, 0.85f);
         }
     }
 
@@ -97,9 +97,6 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-
-        // draw our graphics
-        player.draw(g, this);
         Toolkit.getDefaultToolkit().sync();
         
         // draw background Blocks
@@ -111,6 +108,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             }
         }
 
+        player.draw(g, this);
 
         // draw terrain
         for (Block[] row: blocks) {
@@ -162,7 +160,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         Point blockCl = new Point((int) Math.round((double) screenX / BLOCK_SIZE - 0.5), (int) Math.round((double) screenY / BLOCK_SIZE - 1));
         
         // add a block when the user left clicks
-        if (me.getButton() == MouseEvent.BUTTON1) {
+        // if the user is holding alt while clicking then ignore this statement
+        if (me.getButton() == MouseEvent.BUTTON1 &&
+                !((me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0)) {
             // check if the block the user is clicking on is the player
             if (blockCl.equals(player.getPos()) == false && blockCl.equals(new Point(player.getPos().x, player.getPos().y+1)) == false) {
                 int itemId = ui.getSelectedItem().item_id;
@@ -171,9 +171,25 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
                 }
             }
         }
-        // remove a block when the user right clicks
-        if (me.getButton() == MouseEvent.BUTTON3) {
+        
+        // add a block to the background, these blocks are not considered in physics
+        else if (me.getButton() == MouseEvent.BUTTON1 &&
+                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
+            int itemId = ui.getSelectedItem().item_id;
+            if (itemId != -1) {
+                addBackgroundBlock(blockCl, itemId);
+            }
+        }
+
+        // remove a block when the user right clicks and is not holding alt
+        if (me.getButton() == MouseEvent.BUTTON3 && 
+                !((me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0)) {
             blocks[blockCl.y][blockCl.x] = null;
+        }
+        // remove a block from the background
+        else if (me.getButton() == MouseEvent.BUTTON3 && 
+                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
+            backBlocks[blockCl.y][blockCl.x] = null;
         }
         //System.out.println("screen(X,Y) = " + Math.round((double) screenX / BLOCK_SIZE - 0.5) + "," + Math.round((double) screenY / BLOCK_SIZE - 1));
     }
