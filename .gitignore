@@ -1,9 +1,16 @@
+# Excluded File Types #
+#######################
 *.class
 *.jar
+*.iml
 
-./MinecraftTextureRip
+# Excluded Files #
+##################
 test.json
+Test.java
+
+# Excluded Directories #
+########################
+./MinecraftTextureRip
 .vscode
 .idea
-*.iml
-Test.java
