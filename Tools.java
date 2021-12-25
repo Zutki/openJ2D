@@ -118,11 +118,11 @@ public class Tools {
                 skinURL = (String) userSkin.get("url");
             }
             // debug statement
-            System.out.printf("Skin url for username \"%s\": %s", username, skinURL);
+            System.out.printf("Skin url for username \"%s\": %s\n", username, skinURL);
             minecraftSkin = ImageIO.read(new URL(skinURL));
         } catch (IOException e) {
             // this should be the only reason why a Minecraft skin wasn't fetched ⤵
-            System.out.printf("\"%s\" was not found on the Minecraft database.\n%s\n\n", username, e.toString());
+            System.out.printf("\"%s\" was not found on the Minecraft database.\n%s\n\n", username, e);
         }
         return minecraftSkin;
     }

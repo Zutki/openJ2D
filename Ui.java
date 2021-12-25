@@ -19,10 +19,10 @@ public class Ui {
 
     private int selectedSlot = 0;
 
-    private Inventory inv;
+    private final Inventory inv;
 
     //private Point hotbarPos = new Point((World.ROWS / 2) World.BLOCK_SIZE), (World.COLUMNS - 1) * World.BLOCK_SIZE);
-    private Point hotbarPos = new Point((World.COLUMNS * World.BLOCK_SIZE) / 2, 0);
+    private final Point hotbarPos = new Point((World.COLUMNS * World.BLOCK_SIZE) / 2, 0);
 
     public Ui(Inventory _inv) {
        loadHotbar(); 

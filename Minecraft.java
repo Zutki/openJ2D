@@ -34,8 +34,8 @@ class Minecraft {
         if (args.length == 1) {
             System.out.println("""
                     Invalid argument
-                    List of available arguments and flags
-                    -u/--username {USERNAME}  -  gets the skin of the username supplied uses it in-game
+                    List of available arguments and flags:
+                    \t-u/--username {USERNAME}  -  gets the skin of the username supplied uses it in-game
                     \tIf this flag is not supplied the game will use the default steve skin""");
         }
 

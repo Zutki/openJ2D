@@ -7,8 +7,8 @@ import java.awt.Color;
 public class Block {
    private BufferedImage texture;
    private Point position;
-   private int id;
-   private int dropItem;
+   private final int id;
+   private final int dropItem;
 
    // TODO:
    //private final int hardness = 5;

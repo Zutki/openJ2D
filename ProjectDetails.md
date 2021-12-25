@@ -4,7 +4,7 @@ Last Updated: 12/16/21
 
 ## Classes
 ### World
-The World class is the controller of the game, it handels things to do with drawing the window size properly, and draws the world, almost everything in the game uses some aspect of this.
+The World class is the controller of the game, it handles things to do with drawing the window size properly, and draws the world, almost everything in the game uses some aspect of this.
 
 ### Block
 The block class defines all the attributes of a block, it is ***used by [World](#world)*** to create the world.
@@ -17,13 +17,13 @@ The Minecraft class is mainly just an initiator class, it is not used by anythin
 
 ### Player
 The player class defines all attributes of a player (health, inventory, hunger, image, and position)
-The player class also handels movement for the player. ***Called by [World](#world)***
+The player class also handles movement for the player. ***Called by [World](#world)***
 
 ### Tools
 The tools class is not a class to be constructed, it is only a collection of tools that is used, mainly resize().
 
 ### WorldBuilder
-The worldbuilder class handels terrain generation. ***Called by [World](#world)***
+The WorldBuilder class handles terrain generation. ***Called by [World](#world)***
 
 ### Physics
 The physics class provides functions like gravity and collision detection ***called by [World](#world)***
@@ -32,13 +32,13 @@ The physics class provides functions like gravity and collision detection ***cal
 The Ui class provides the Ui drawing for the game, it renders things like the hotbar and currently hovered block. ***called by [World](#world)***
 
 ### Item
-The Item class provies the information and structure that items use, ***mainly used by [Ui](#ui)***
+The Item class provides the information and structure that items use, ***mainly used by [Ui](#ui)***
 
 ### Inventory (WIP)
 The <u> Inventory </u> currently only houses a hotbar.
 
 ### JSONReader
-The <u> JSONReader </u> class reads in a <b>.json</b> file and returns a <u>[JSONObject](#jsonobject)</u>. The philosophy behind the approach of this class is that the file itself is a key and the contents of the file its value. <b>Mainly used by [Id.java](#id) </b>
+The <u> JSONReader </u> class reads in a <b>.json</b> file and returns a <u>[JSONObject](#JSONObject)</u>. The philosophy behind the approach of this class is that the file itself is a key and the contents of the file its value. <b>Mainly used by [Id.java](#id) </b>
 
 ### JSONObject
 The <u> JSONObject </u> is used by the <u> [JSONReader](#jsonreader) </u> class to interpret a .json file. <b> Mainly used by [Id.java](#id) </b>

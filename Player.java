@@ -5,17 +5,18 @@ import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.ImageIO;
 
 public class Player {
-    private File playerImage = new File("assets/steve/steve.png");
+    private final File playerImage = new File("assets/steve/steve.png");
 
     // player image
     private BufferedImage image;
-    private BufferedImage images[] = new BufferedImage[3];
+    private final BufferedImage[] images = new BufferedImage[3];
     // current player position
     private Point position;
-    private Physics phyx;
+    private final Physics phyx;
     
     // player data
     private int[] inventory = new int[9];
@@ -24,7 +25,7 @@ public class Player {
     // player default constructor
     public Player(Physics _phyx, String username) {
         // skin loading
-        if (username != "") {
+        if (!username.equals("")) {
             BufferedImage playerSkin = Tools.fetchMinecraftSkin(username);
             loadImages(playerSkin);
         }

@@ -20,7 +20,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
 
-    private Player player;
+    private final Player player;
     private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
     private final Block[][] backBlocks = new Block[ROWS][COLUMNS]; // back panel blocks
     private final Physics physics;

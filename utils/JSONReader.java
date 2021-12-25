@@ -13,11 +13,9 @@ public class JSONReader {
      * Constructor for JSONReader. Parses file if given file is a JSON File.
      *
      * @param in the JSON File
-     * @throws IOException              if any errors occur while reading in JSON
-     *                                  File
      * @throws IllegalArgumentException if given file is not a JSON File
      */
-    public JSONReader(File in) throws IOException, IllegalArgumentException {
+    public JSONReader(File in) throws IllegalArgumentException {
         // file validation
         String inName = in.getName().contains("/") ? in.getName() : "./" + in.getName();
         if (!in.exists())
