@@ -110,7 +110,8 @@ public class Tools {
             // it's probably worth fixing the bug in JSONObject.java though but this still
             // works fine as-is.
             String skinURL;
-            if (userTextures.get("SKIN") instanceof String userSkin) {
+            if (userTextures.get("SKIN") instanceof String) {
+                String userSkin = (String) userTextures.get("SKIN");
                 skinURL = userSkin.substring(userSkin.indexOf("http://"));
             }
             else {
