@@ -4,4 +4,6 @@
 ./MinecraftTextureRip
 test.json
 .vscode
+.idea
+*.iml
 Test.java

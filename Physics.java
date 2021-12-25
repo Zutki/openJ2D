@@ -1,9 +1,9 @@
 import java.awt.Point;
 
 public class Physics {
-    private Block[][] blocks;
+    private final Block[][] blocks;
     private Player player;
-    private int ticksToWait;
+    private final int ticksToWait;
 
     // Constructor
     public Physics(Block[][] _blocks) {

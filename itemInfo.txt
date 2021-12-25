@@ -1,3 +1,0 @@
-Dirt Block:assets/dirt.png
-Grass Block:assets/grass_block_side.png
-Stone:assets/stone.png

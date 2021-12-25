@@ -1,8 +1,8 @@
 import java.awt.Point;
 
 public class WorldBuilder {
-    private Block[][] blockArray;
-    private int terrainLevel;
+    private final Block[][] blockArray;
+    private final int terrainLevel;
 
     public WorldBuilder(Block[][] _blockArray, int _terrainLevel) {
         blockArray = _blockArray;

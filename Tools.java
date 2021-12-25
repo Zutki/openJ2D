@@ -40,7 +40,7 @@ public class Tools {
         Graphics2D g = target.createGraphics();
         // Set the Graphics composite to Alpha
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
-        // Draw the image into the prepared reciver image
+        // Draw the image into the prepared receiver image
         g.drawImage(source, null, 0, 0);
         // let go of all system resources in this Graphics
         g.dispose();
@@ -110,8 +110,7 @@ public class Tools {
             // it's probably worth fixing the bug in JSONObject.java though but this still
             // works fine as-is.
             String skinURL;
-            if (userTextures.get("SKIN") instanceof String) {
-                String userSkin = (String) userTextures.get("SKIN");
+            if (userTextures.get("SKIN") instanceof String userSkin) {
                 skinURL = userSkin.substring(userSkin.indexOf("http://"));
             }
             else {
@@ -123,8 +122,7 @@ public class Tools {
             minecraftSkin = ImageIO.read(new URL(skinURL));
         } catch (IOException e) {
             // this should be the only reason why a Minecraft skin wasn't fetched ⤵
-            System.out.println(
-                    String.format("\"%s\" was not found on the Minecraft database.\n%s\n", username, e.toString()));
+            System.out.printf("\"%s\" was not found on the Minecraft database.\n%s\n\n", username, e.toString());
         }
         return minecraftSkin;
     }

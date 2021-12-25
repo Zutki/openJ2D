@@ -10,7 +10,7 @@ import utils.JSONReader;
 public class Id {
     private final int NAMES = 0;
     private final int IMAGES = 1;
-    private Object[][] itemData; // row 0 = String[] itemNames, row 1 = BufferedImage[] itemImgss
+    private Object[][] itemData; // row 0 = String[] itemNames, row 1 = BufferedImage[] itemImgs
 
     public Id() {
         try {
@@ -25,7 +25,7 @@ public class Id {
                 int index = (int) id;
                 String name = (String) block.get("name");
                 String path = (String) block.get("path");
-                itemData[NAMES][index] = (String) block.get("name");
+                itemData[NAMES][index] = name;
                 itemData[IMAGES][index] = Tools.resize(ImageIO.read(new File(path)), World.BLOCK_SIZE, World.BLOCK_SIZE);
                 // debug statement
                 System.out.printf("%s (id: %d) located at path: %s\n", name, id, path);

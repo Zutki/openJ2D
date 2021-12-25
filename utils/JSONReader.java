@@ -7,10 +7,10 @@ import java.io.IOException;
 import java.io.Reader;
 
 public class JSONReader {
-    private File file;
+    private final File file;
 
     /**
-     * Constructer for JSONReader. Parses file if given file is a JSON File.
+     * Constructor for JSONReader. Parses file if given file is a JSON File.
      *
      * @param in the JSON File
      * @throws IOException              if any errors occur while reading in JSON
@@ -32,7 +32,7 @@ public class JSONReader {
      * Parses the .json file by creating a JSONObject of that file
      *
      * @return <code>JSONObject</code>, the file
-     * @throws IOException if an error occured reading in the file.
+     * @throws IOException if an error occurred reading in the file.
      */
     public JSONObject interpretFile() throws IOException {
         BufferedReader fi = new BufferedReader(new FileReader(file));
@@ -52,6 +52,7 @@ public class JSONReader {
             }
             line = fi.readLine();
         }
+        fi.close();
 
         // the file is one object, so create a JSONObject with that
         return new JSONObject(file.getName(), json.toString());
@@ -74,6 +75,7 @@ public class JSONReader {
             }
             line = reader.readLine();
         }
+        reader.close();
 
         // the file is one object, so create a JSONObject with that
         return new JSONObject(fileName, json.toString());

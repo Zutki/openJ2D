@@ -22,19 +22,19 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
     private Player player;
     private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
-    private Block[][] backBlocks = new Block[ROWS][COLUMNS]; // back panel blocks
-    private Physics physics;
+    private final Block[][] backBlocks = new Block[ROWS][COLUMNS]; // back panel blocks
+    private final Physics physics;
     
     // load ui
-    private Ui ui;
-    
+    private final Ui ui;
+
     // load the inventory
     private Inventory inv;
 
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
     private Timer timer;
-    
+
     // building the world
     public World(String username) {
         // set the game world size
@@ -162,9 +162,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         // add a block when the user left clicks
         // if the user is holding alt while clicking then ignore this statement
         if (me.getButton() == MouseEvent.BUTTON1 &&
-                !((me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0)) {
+                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) == 0) {
             // check if the block the user is clicking on is the player
-            if (blockCl.equals(player.getPos()) == false && blockCl.equals(new Point(player.getPos().x, player.getPos().y+1)) == false) {
+            if (!blockCl.equals(player.getPos()) && !blockCl.equals(new Point(player.getPos().x, player.getPos().y + 1))) {
                 int itemId = ui.getSelectedItem().item_id;
                 if (itemId != -1) {
                     addBlock(blockCl, itemId);
@@ -182,8 +182,8 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         }
 
         // remove a block when the user right clicks and is not holding alt
-        if (me.getButton() == MouseEvent.BUTTON3 && 
-                !((me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0)) {
+        if (me.getButton() == MouseEvent.BUTTON3 &&
+                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) == 0) {
             blocks[blockCl.y][blockCl.x] = null;
         }
         // remove a block from the background
