@@ -45,13 +45,17 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         
         // initialize the inventory
         inv = new Inventory();
+        inv.setItem(new Item(itemIDS, 5), 0);
         inv.setItem(new Item(itemIDS, 2), 4);
         inv.setItem(new Item(itemIDS, 0), 3);
         // initialize the UI
         ui = new Ui(inv);
 
+        // this code is here to fix an issue with the block not initially rendering when the game loads
+        ui.moveSlot(-1);
+        ui.moveSlot(1);
+
         // make the player
-        // for now only default
         physics = new Physics(blocks);
         player = new Player(physics, username);
         physics.setPlayer(player);
@@ -65,7 +69,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     }
     
     // adds a block to the world
-    //
+    
     // if a block is already present where it is trying to add
     // it will not add the block if there is a block already 
     // present where it is trying to add
@@ -78,7 +82,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     // adds a background block to the world
     private void addBackgroundBlock(Point pos, int id) {
         if (backBlocks[pos.y][pos.x] == null) {
-            backBlocks[pos.y][pos.x] = new Block(id, pos, 0.85f);
+            backBlocks[pos.y][pos.x] = new Block(id, pos);
         }
     }
 
@@ -103,7 +107,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         for (Block[] row: backBlocks) {
             for (Block block: row) {
                 if (block != null) {
-                    block.drawBlock(g, this);
+                    block.drawBlock(0.5f, g, this);
                 }
             }
         }

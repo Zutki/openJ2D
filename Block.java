@@ -2,8 +2,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
+import java.awt.Color;
 
 public class Block {
    private BufferedImage texture;
@@ -24,23 +23,18 @@ public class Block {
        
    }
     
-   public Block(int block_id, Point pos, float brightness) {
-       position = pos;
-       id = block_id;
-       dropItem = block_id;
-       texture = World.itemIDS.getItemImageByID(id);
-
-       float[] elements = {brightness};
-       Kernel kernel = new Kernel(1, 1, elements);
-       ConvolveOp op = new ConvolveOp(kernel);
-       BufferedImage temp = new BufferedImage(texture.getWidth(), texture.getHeight(), texture.getType());
-       op.filter(texture, temp);
-       texture = temp;
-   }
-
    public void drawBlock(Graphics g, ImageObserver observer) {
 
         g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
+   }
+
+   // draw the block with a black square overlaying it, so it looks darker
+   public void drawBlock(float opacity, Graphics g, ImageObserver observer) {
+       g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
+       Color col = g.getColor();
+       g.setColor(new Color(0, 0, 0, opacity));
+       g.fillRect(position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, World.BLOCK_SIZE, World.BLOCK_SIZE);
+       g.setColor(col);
    }
 
    public Point getPos() {
