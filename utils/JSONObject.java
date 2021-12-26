@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * An object used to store JSON Objects. A low-priority thing for me to complete
- * because
- * the JSON Files used in this project don't contain JSON objects.
+ * An object used to store JSON Objects as key-value pair with methods to retrieve each key and value.
+ *
+ * @since December 9, 2021
+ * @author itsMinhNguyen
  */
 public class JSONObject {
+    // the name of the .json object
     private final String name;
+    // used to store each key and value of a .json object
     private final HashMap<String, Object> map;
-    // splits JSON by its outermost commas
+    // splits JSON by its outermost commas (doesn't work for curly brackets)
+    // TODO: come up with a better algorithm to parse a JSONObject; just RegEx isn't good enough.
     private final String JSON_COMMA_SPLITTER = "(,)(?=\")*(?=(((?!\\]).)*\\[)|[^\\[\\]]*$)(?=(((?!\\}).)*\\{)|[^\\{\\}]*$)";
 
     public JSONObject(String name, String content) {
@@ -24,7 +28,7 @@ public class JSONObject {
      * Returns the value of given key in JSONObject
      *
      * @param key the key to find the value of
-     * @return the value from the key
+     * @return an Object containing the value from the key
      * @throws IllegalArgumentException if no such key can be found.
      */
     public Object get(String key) throws IllegalArgumentException {
@@ -35,11 +39,16 @@ public class JSONObject {
         return map.get(key);
     }
 
+    /**
+     * @return an ArrayList of Strings containing each key in the JSONObject
+     */
     public ArrayList<String> getKeys() {
         return new ArrayList<>(map.keySet());
     }
 
     /**
+     * This method splits the .json file by splitting it by its key-value pairs and adding them to the HashMap map.
+     *
      * Algorithm for parsing the JSON string:
      * 1. Split string by commas (outside of quotation marks) into array of key-pairs
      * 2. Iterate through each pair:
@@ -62,6 +71,7 @@ public class JSONObject {
     }
 
     /**
+     * This method parses each value in the key-value pair into its appropriate datatypes
      * @param val String that's getting processed
      * @return <code>Object</code>, will be an instance of String, int, double,
      *         boolean, or null depending on the contents of val.

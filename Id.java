@@ -14,8 +14,7 @@ public class Id {
 
     public Id() {
         try {
-            JSONReader reader = new JSONReader(new File("itemInfo.json"));
-            JSONObject obj = reader.interpretFile();
+            JSONObject obj = JSONReader.interpretFile(new File("itemInfo.json"));
 
             ArrayList<JSONObject> blocks = (ArrayList<JSONObject>) obj.get("itemInfo.json");
             itemData = new Object[2][blocks.size()];

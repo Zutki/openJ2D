@@ -1,28 +1,16 @@
-import java.io.BufferedReader;
+import utils.JSONObject;
+import utils.JSONReader;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-
-import java.net.URL;
-import javax.net.ssl.HttpsURLConnection;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Scanner;
-
-import java.awt.image.BufferedImage;
-
-import utils.*;
 
 class Test {
     public static void main(String[] args) throws IOException {
-        JSONReader reader = new JSONReader(new File("itemInfo.json"));
-        JSONObject object = reader.interpretFile();
+        JSONObject object = JSONReader.interpretFile(new File("itemInfo.json"));
         
         ArrayList<JSONObject> list = (ArrayList<JSONObject>) object.get("itemInfo.json");
-        JSONObject obj1 = (JSONObject) list.get(0);
+        JSONObject obj1 = list.get(0);
         System.out.println(obj1.get("id"));
         
     }
