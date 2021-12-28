@@ -1,17 +1,23 @@
-import utils.JSONObject;
-import utils.JSONReader;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import javax.swing.*;
 
 class Test {
-    public static void main(String[] args) throws IOException {
-        JSONObject object = JSONReader.interpretFile(new File("itemInfo.json"));
-        
-        ArrayList<JSONObject> list = (ArrayList<JSONObject>) object.get("itemInfo.json");
-        JSONObject obj1 = list.get(0);
-        System.out.println(obj1.get("id"));
-        
+    private static void initWindow() {
+        JFrame window = new JFrame("Minecraft 2D");
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        World2 world = new World2();
+        window.add(world);
+        window.setResizable(false);
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                initWindow();
+            }
+        });
     }
 }
