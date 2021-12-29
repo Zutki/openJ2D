@@ -19,8 +19,18 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
+    
+    // this block is the top left corner of the world viewing window
+    // the purpose of this is for figuring out the positions to draw blocks at relative to the viewable area
+    // example:
+    // A block is at (170, 0) and the blockOffset is at (160, 0), the block will be drawn at (10, 0) relative to the viewable area
+    private Point blockOffset = new Point(0, 0);
 
-    private Chunk testChunk = new Chunk(new Point(0, 0));
+    // The current chunk the player is inside
+    private Point currentChunk = new Point(0, 0);
+
+    // number of chunks that will be simulated/rendered, some of these chunks are not visible
+    private int renderDistance = 5;
 
     // 2D ArrayList of chunks
     // it feels cursed to write this
@@ -45,8 +55,26 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
         // add the first chunk
         // this chunk is at 0, 0
         chunks.get(0).add(new Chunk(new Point(0, 0)));
+        // add chunks left and right of 0, 0
 
-        testChunk.blocks[4][4] = new Block(0, new Point(4, 4));
+        // creating spawn chunks, the size of the render distance
+        // the +1 is to make sure we don't create 0, 0 again
+        for (int row = 0; row < renderDistance; row++) {
+            chunks.add(new ArrayList<Chunk>()); // add a new row
+            for (int column = 0; column < renderDistance; column++) {
+                // add chunks in the negative x and y directions
+                chunks.get(row).add(0, new Chunk(new Point(-(column+1), -(row+1))));
+                // add chunks in the positve x and y directions
+                chunks.get(row).add(new Chunk(new Point(column+1, row+1)));
+            }
+        }
+
+       for (ArrayList<Chunk> chunkArray: chunks) {
+           for (Chunk chunk: chunkArray) {
+               System.out.print("("+chunk.position.x + ", "+chunk.position.y+")");
+           }
+           System.out.println();
+       }
     }
     
     @Override
@@ -59,13 +87,20 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
         super.paintComponent(g);
         Toolkit.getDefaultToolkit().sync();
 
-        for (int blockY = 0; blockY < 16; blockY++) {
-            for (int blockX = 0; blockX < 16; blockX++) {
-                if (testChunk.blocks[blockY][blockX] != null) {
-                    testChunk.blocks[blockY][blockX].drawBlock(g, this);
+        // drawing the blocks
+        for (ArrayList<Chunk> chunkArray: chunks) {
+            for (Chunk chunk: chunkArray) {
+                for (Block[] blocks: chunk.blocks) {
+                    for (Block block: blocks) {
+                        if (block != null) {
+                            block.drawBlock(g, this);
+                        }
+                    }
                 }
             }
         }
+
+
 
         if (debugMode) {
             // block grid
@@ -80,7 +115,12 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
 
             // chunk grid
             g.setColor(Color.RED);
-            g.drawRect(testChunk.position.x, testChunk.position.y, 16*BLOCK_SIZE, 16*BLOCK_SIZE);
+
+            for (ArrayList<Chunk> chunkArray: chunks) {
+                for (Chunk chunk: chunkArray) {
+                    g.drawRect(chunk.position.x * 16 * BLOCK_SIZE, chunk.position.y * 16 * BLOCK_SIZE, 16 * BLOCK_SIZE, 16 * BLOCK_SIZE);
+                }
+            }
         }
     }
 }
