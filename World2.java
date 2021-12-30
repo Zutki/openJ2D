@@ -48,28 +48,15 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
         timer = new Timer(TICK_DELAY, this);
         timer.start();
         
-        // add a horizontal array of chunks
-        // this will be at (0, x)
-        chunks.add(new ArrayList<Chunk>());
-        
-        // add the first chunk
-        // this chunk is at 0, 0
-        chunks.get(0).add(new Chunk(new Point(0, 0)));
-        // add chunks left and right of 0, 0
-
-        // creating spawn chunks, the size of the render distance
-        // the +1 is to make sure we don't create 0, 0 again
-        for (int row = 0; row < renderDistance; row++) {
-            chunks.add(new ArrayList<Chunk>()); // add a new row
-            for (int column = 0; column < renderDistance; column++) {
-                // add chunks in the negative x and y directions
-                chunks.get(row).add(0, new Chunk(new Point(-(column+1), -(row+1))));
-                // add chunks in the positve x and y directions
-                chunks.get(row).add(new Chunk(new Point(column+1, row+1)));
+        // generate spawn chunks, this is the size of render distance
+        for (int row = 0; row < renderDistance*2+1; row++) {
+            chunks.add(new ArrayList<Chunk>());
+            for (int col = 0; col < renderDistance*2+1; col++) {
+                chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
             }
         }
 
-       for (ArrayList<Chunk> chunkArray: chunks) {
+        for (ArrayList<Chunk> chunkArray: chunks) {
            for (Chunk chunk: chunkArray) {
                System.out.print("("+chunk.position.x + ", "+chunk.position.y+")");
            }
@@ -99,8 +86,6 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
                 }
             }
         }
-
-
 
         if (debugMode) {
             // block grid
