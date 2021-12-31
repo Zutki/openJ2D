@@ -31,6 +31,9 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
 
     // number of chunks that will be simulated/rendered, some of these chunks are not visible
     private int renderDistance = 5;
+    
+    // the chunks that will be rendered
+    private ArrayList<ArrayList<Chunk>> renderedChunks = new ArrayList<ArrayList<Chunk>>();
 
     // 2D ArrayList of chunks
     // it feels cursed to write this
@@ -55,13 +58,18 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
                 chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
             }
         }
-
+    
+        // DEBUG: print all the currently created chunks
         for (ArrayList<Chunk> chunkArray: chunks) {
-           for (Chunk chunk: chunkArray) {
-               System.out.print("("+chunk.position.x + ", "+chunk.position.y+")");
-           }
-           System.out.println();
-       }
+            for (Chunk chunk: chunkArray) {
+                System.out.print("("+chunk.position.x + ", "+chunk.position.y+")");
+            }
+            System.out.println();
+        }
+
+        // get the rendered chunks
+        // this is an = because at world generation the generated chunks are the same size as the render distance
+        renderedChunks = chunks;
     }
     
     @Override
@@ -75,8 +83,10 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
         Toolkit.getDefaultToolkit().sync();
 
         // drawing the blocks
-        for (ArrayList<Chunk> chunkArray: chunks) {
+        // loop through the rendered chunks
+        for (ArrayList<Chunk> chunkArray: renderedChunks) {
             for (Chunk chunk: chunkArray) {
+                // loop through the blocks in the chunk and draw them
                 for (Block[] blocks: chunk.blocks) {
                     for (Block block: blocks) {
                         if (block != null) {
@@ -107,5 +117,17 @@ public class World2 extends JPanel implements ActionListener/*, KeyListener, Mou
                 }
             }
         }
+    }
+
+    private ArrayList<ArrayList<Chunk>> getRenderedChunks() {
+        ArrayList<ArrayList<Chunk>> renderChunks = new ArrayList<ArrayList<Chunk>>();
+        
+        for (int row = currentChunk.y; row < renderDistance * 2 + 1 + currentChunk.y; row++) {
+            renderChunks.add(new ArrayList<Chunk>());
+            for (int col = currentChunk.x; col < renderDistance * 2 + 1 + currentChunk.x; col++) {
+                renderChunks.get(row).add(col, chunks.get(row).get(col));
+            }
+        }
+        return renderChunks;
     }
 }
