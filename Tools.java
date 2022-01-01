@@ -19,6 +19,9 @@ import javax.net.ssl.HttpsURLConnection;
 import utils.JSONObject;
 import utils.JSONReader;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class Tools {
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
@@ -262,5 +265,20 @@ public class Tools {
         // return image
         g2d.dispose();
         return playerImg;
+    }
+
+    // I love floating point errors
+
+    public static float addFloat(float a, float b) {
+        BigDecimal abd = new BigDecimal(Float.toString(a));
+        BigDecimal bbd = new BigDecimal(Float.toString(b));
+        BigDecimal c = abd.add(bbd);
+        return c.floatValue();
+    }
+    public static float subFloat(float a, float b) {
+        BigDecimal abd = new BigDecimal(Float.toString(a));
+        BigDecimal bbd = new BigDecimal(Float.toString(b));
+        BigDecimal c = abd.subtract(bbd);
+        return c.floatValue();
     }
 }

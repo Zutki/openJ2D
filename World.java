@@ -1,234 +1,180 @@
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
-public class World extends JPanel implements ActionListener, KeyListener, MouseListener, MouseWheelListener{
-    // DEBUG MODE
-    private boolean debugMode = false;
+public class World extends JPanel implements ActionListener, KeyListener/*, MouseListener, MouseWheelListener*/ {
+    private boolean debugMode = true;
 
-    // Tick delay (ms)
+    // Delay between frames
     public static final int TICK_DELAY = 12;
 
     // Controls the size of blocks and the world
     public static final int BLOCK_SIZE = 70;
-    public static final int ROWS = 12;
+    public static final int ROWS = 12; // for now this value has to be even
     public static final int COLUMNS = 18;
 
-    // make the id for EVERY component to use
+    // id system, used by everything
     public static final Id itemIDS = new Id();
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
-
-    private final Player player;
-    private Block[][] blocks = new Block[ROWS][COLUMNS]; // makes the blocks for the world
-    private final Block[][] backBlocks = new Block[ROWS][COLUMNS]; // back panel blocks
-    private final Physics physics;
     
-    // load ui
-    private final Ui ui;
+    // this block is the top left corner of the world viewing window
+    // the purpose of this is for figuring out the positions to draw blocks at relative to the viewable area
+    // example:
+    // A block is at (170, 0) and the blockOffset is at (160, 0), the block will be drawn at (10, 0) relative to the viewable area
+    private Point2D.Float blockOffset = new Point2D.Float(0.0f, 0.0f);
 
-    // load the inventory
-    private Inventory inv;
+    // The current chunk the player is inside
+    private Point currentChunk = new Point(0, 0);
 
-    // keep a reference to the timer object that triggers actionPerformed() in
-    // case we need access to it in another method
+    // number of chunks that will be simulated/rendered, some of these chunks are not visible
+    private int renderDistance = 5;
+    
+    // the chunks that will be rendered
+    private ArrayList<ArrayList<Chunk>> renderedChunks = new ArrayList<ArrayList<Chunk>>();
+
+    // 2D ArrayList of chunks
+    // it feels cursed to write this
+    private ArrayList<ArrayList<Chunk>> chunks = new ArrayList<ArrayList<Chunk>>();
+
     private Timer timer;
 
-    // building the world
-    public World(String username) {
-        // set the game world size
+    private Player player;
+
+    public World() {
+        // set the window size to fit the columns and rows
         setPreferredSize(new Dimension(BLOCK_SIZE * COLUMNS, BLOCK_SIZE * ROWS));
-        
-        // set the world background color (sky)
+
+        // set the sky color
         setBackground(new Color(123, 167, 237));
-        
-        // initialize the inventory
-        inv = new Inventory();
-        inv.setItem(new Item(itemIDS, 5), 0);
-        inv.setItem(new Item(itemIDS, 2), 4);
-        inv.setItem(new Item(itemIDS, 0), 3);
-        // initialize the UI
-        ui = new Ui(inv);
-
-        // this code is here to fix an issue with the block not initially rendering when the game loads
-        ui.moveSlot(-1);
-        ui.moveSlot(1);
-
-        // make the player
-        physics = new Physics(blocks);
-        player = new Player(physics, username);
-        physics.setPlayer(player);
 
         timer = new Timer(TICK_DELAY, this);
         timer.start();
-
-        // generate terrain
-        WorldBuilder wb = new WorldBuilder(blocks, 8);
-        blocks = wb.buildWorld();
-    }
-    
-    // adds a block to the world
-    
-    // if a block is already present where it is trying to add
-    // it will not add the block if there is a block already 
-    // present where it is trying to add
-    private void addBlock(Point pos, int id) {
-        if (blocks[pos.y][pos.x] == null) {
-            blocks[pos.y][pos.x] = new Block(id, pos);
+        
+        // generate spawn chunks, this is the size of render distance
+        for (int row = 0; row < renderDistance*2+1; row++) {
+            chunks.add(new ArrayList<Chunk>());
+            for (int col = 0; col < renderDistance*2+1; col++) {
+                chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
+            }
         }
-    }
     
-    // adds a background block to the world
-    private void addBackgroundBlock(Point pos, int id) {
-        if (backBlocks[pos.y][pos.x] == null) {
-            backBlocks[pos.y][pos.x] = new Block(id, pos);
-        }
-    }
+        // get the rendered chunks
+        // this is an = because at world generation the generated chunks are the same size as the render distance
+        renderedChunks = chunks;
 
+        // make player
+        player = new Player("");
+    }
     
-    // this function is executed every tick, tick is defined earlier in the code
-    // timer is the runner of this function
     @Override
     public void actionPerformed(ActionEvent e) {
-        physics.tick(); // physics tick
-        repaint(); // redraw
+        // get the block offset based on the player's position
+        blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
+        blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
+        
+        if (player.position.x < 0) {
+            currentChunk.x = (int) player.position.x/16-1;
+        }
+        else {
+            currentChunk.x = (int) player.position.x/16;
+        }
+        
+        if (player.position.y < 0) {
+            currentChunk.y = (int) player.position.y/16-1;
+        }
+        else {
+            currentChunk.y = (int) player.position.y/16;
+        }
+        
+        //System.out.println(blockOffset);
+
+        player.tick();
+        repaint();
     }
-    
-    // this function is drawing the world
-    // this function is also called by repaint();
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
         Toolkit.getDefaultToolkit().sync();
-        
-        // draw background Blocks
-        for (Block[] row: backBlocks) {
-            for (Block block: row) {
-                if (block != null) {
-                    block.drawBlock(0.5f, g, this);
+
+        // drawing the blocks
+        // loop through the rendered chunks
+        for (ArrayList<Chunk> chunkArray: renderedChunks) {
+            for (Chunk chunk: chunkArray) {
+                // loop through the blocks in the chunk and draw them
+                for (Block[] blocks: chunk.blocks) {
+                    for (Block block: blocks) {
+                        if (block != null) {
+                            block.drawBlock(g, this);
+                        }
+                    }
                 }
             }
         }
 
         player.draw(g, this);
 
-        // draw terrain
-        for (Block[] row: blocks) {
-            for (Block block: row) {
-                if (block != null) {
-                    block.drawBlock(g, this);
-                }
-            }
-        }
-        // show an outline over the current block
-
-        // get the mouse position
-        Point mousePos = MouseInfo.getPointerInfo().getLocation();
-        SwingUtilities.convertPointFromScreen(mousePos, this); // convert position from screen to local position
-        Point blockHovered = new Point((int) Math.round((double) mousePos.x / BLOCK_SIZE - 0.5), (int) Math.round((double) mousePos.y / BLOCK_SIZE - 0.5)); // get the hovered block
-        
-        ui.setHoveredBlock(blockHovered, g, this);
-
-
-
-        // load the UI on top of everything
-        ui.loadUI(g, this);
-        // DEBUG
-        // This draws a grid to represent all the block positions
         if (debugMode) {
-            for (int row = 0; row < ROWS; row++) {
-                for (int col = 0; col < COLUMNS; col++) {
-                    if ((row + col) % 2 == 1) {
-                        g.drawRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            drawDebugLines(g);
+        }
+        
+        g.setFont(new Font("Noto Sans", Font.PLAIN, 20));
+        g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
+    }
+
+    private void drawDebugLines(Graphics g) {
+        for (ArrayList<Chunk> chunkArray: chunks) {
+            for (Chunk chunk: chunkArray) {
+                // block grid
+                g.setColor(Color.BLACK);
+                for (int row = 0; row < 16; row++) {
+                    for (int col = 0; col < 16; col++) {
+                        if ((row + col) % 2 == 1) {
+                            g.drawRect((col + chunk.position.x*16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x), 
+                                (row + chunk.position.y*16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y), 
+                                BLOCK_SIZE, BLOCK_SIZE);
+                        }
                     }
                 }
+                // chunk grid
+                g.setColor(Color.RED);
+                g.drawRect(chunk.position.x * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x), 
+                        chunk.position.y * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y), 
+                        16 * BLOCK_SIZE, 16 * BLOCK_SIZE);
             }
         }
     }
-    
-    // reacts to a key being pressed
+
+    private ArrayList<ArrayList<Chunk>> getRenderedChunks() {
+        ArrayList<ArrayList<Chunk>> renderChunks = new ArrayList<ArrayList<Chunk>>();
+        
+        for (int row = currentChunk.y; row < renderDistance * 2 + 1 + currentChunk.y; row++) {
+            renderChunks.add(new ArrayList<Chunk>());
+            for (int col = currentChunk.x; col < renderDistance * 2 + 1 + currentChunk.x; col++) {
+                renderChunks.get(row).add(col, chunks.get(row).get(col));
+            }
+        }
+        return renderChunks;
+    }
+
+    // react to key events
+    // NOTE:
+    // There is a minor issue with this system, when switching keys the key might not immeditly register
+    // no clue how to fix for now 2021-12-31
     @Override
     public void keyPressed(KeyEvent e) {
-        // react to key down events
-        player.keyPressed(e);
+        player.keyPressed = e;    
     }
     
-    // reacts to a mouse button being pressed
-    @Override
-    public void mouseClicked(MouseEvent me) {
-        int screenX = me.getX();
-        int screenY = me.getY();
-        
-        Point blockCl = new Point((int) Math.round((double) screenX / BLOCK_SIZE - 0.5), (int) Math.round((double) screenY / BLOCK_SIZE - 1));
-        
-        // add a block when the user left clicks
-        // if the user is holding alt while clicking then ignore this statement
-        if (me.getButton() == MouseEvent.BUTTON1 &&
-                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) == 0) {
-            // check if the block the user is clicking on is the player
-            if (!blockCl.equals(player.getPos()) && !blockCl.equals(new Point(player.getPos().x, player.getPos().y + 1))) {
-                int itemId = ui.getSelectedItem().item_id;
-                if (itemId != -1) {
-                    addBlock(blockCl, itemId);
-                }
-            }
-        }
-        
-        // add a block to the background, these blocks are not considered in physics
-        else if (me.getButton() == MouseEvent.BUTTON1 &&
-                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
-            int itemId = ui.getSelectedItem().item_id;
-            if (itemId != -1) {
-                addBackgroundBlock(blockCl, itemId);
-            }
-        }
-
-        // remove a block when the user right clicks and is not holding alt
-        if (me.getButton() == MouseEvent.BUTTON3 &&
-                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) == 0) {
-            blocks[blockCl.y][blockCl.x] = null;
-        }
-        // remove a block from the background
-        else if (me.getButton() == MouseEvent.BUTTON3 && 
-                (me.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
-            backBlocks[blockCl.y][blockCl.x] = null;
-        }
-        //System.out.println("screen(X,Y) = " + Math.round((double) screenX / BLOCK_SIZE - 0.5) + "," + Math.round((double) screenY / BLOCK_SIZE - 1));
-    }
-    // react to mouse wheel
-    @Override
-    public void mouseWheelMoved(MouseWheelEvent e) {
-        //System.out.println(e.getWheelRotation());
-        ui.moveSlot(e.getWheelRotation());
-    }
-
-    // Required overrides
-    // these aren't currently used but 
-    // are required because KeyEvent and MouseEvent are implements
     @Override
     public void keyTyped(KeyEvent e) {
-        // this is not used but must be defined as part of the KeyListener interface
     }
     @Override
     public void keyReleased(KeyEvent e) {
-        // react to key up events
-    }
-    @Override
-    public void mousePressed(MouseEvent me) {
-        // required
-    }
-    @Override
-    public void mouseReleased(MouseEvent me) {
-        // required
-    }
-    @Override
-    public void mouseEntered(MouseEvent me) {
-        // required
-    }
-    @Override
-    public void mouseExited(MouseEvent me) {
-        // required
+        player.keyPressed = null;
     }
 }
