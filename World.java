@@ -44,6 +44,8 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
     private Player player;
 
+    private boolean currentlyMoving = false;
+
     public World() {
         // set the window size to fit the columns and rows
         setPreferredSize(new Dimension(BLOCK_SIZE * COLUMNS, BLOCK_SIZE * ROWS));
@@ -72,22 +74,25 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        // get the block offset based on the player's position
-        blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
-        blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
+        // only update when the player is moving
+        if (player.keyPressed != null) {
+            // get the block offset based on the player's position
+            blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
+            blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
+
+            if (player.position.x < 0) {
+                currentChunk.x = (int) player.position.x/16-1;
+            }
+            else {
+                currentChunk.x = (int) player.position.x/16;
+            }
         
-        if (player.position.x < 0) {
-            currentChunk.x = (int) player.position.x/16-1;
-        }
-        else {
-            currentChunk.x = (int) player.position.x/16;
-        }
-        
-        if (player.position.y < 0) {
-            currentChunk.y = (int) player.position.y/16-1;
-        }
-        else {
-            currentChunk.y = (int) player.position.y/16;
+            if (player.position.y < 0) {
+                currentChunk.y = (int) player.position.y/16-1;
+            }
+            else {
+                currentChunk.y = (int) player.position.y/16;
+            }
         }
         
         //System.out.println(blockOffset);
@@ -167,7 +172,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     // no clue how to fix for now 2021-12-31
     @Override
     public void keyPressed(KeyEvent e) {
-        player.keyPressed = e;    
+        player.keyPressed = e;
     }
     
     @Override
