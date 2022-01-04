@@ -106,7 +106,19 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
             // this is run when we enter a new chunk
             if (!previousChunk.equals(currentChunk)) {
-                System.out.println("Entered New Chunk");
+                Point diff = new Point(currentChunk.x - previousChunk.x,
+                        currentChunk.y - previousChunk.y);
+                System.out.println("Entered New Chunk\nWith difference of ("+diff.x+", "+diff.y+")\n");
+                
+                // TEST CODE
+                int ungenChunks = chunks.size()-renderDistance - renderDistance * 2;
+                System.out.println("Ungenerated Chunks: "+ungenChunks);
+                if (ungenChunks > 0) {
+                    for (int i = 0; i < ungenChunks; i++) {
+                        chunks.add(new ArrayList<Chunk>());
+                    }
+                }
+                System.out.println("Ungenerated Chunks: "+ungenChunks);
                 //generateChunk();
 
                 //renderedChunks = getRenderedChunks();
@@ -186,22 +198,10 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         }
         return renderChunks;
     }
-    
-    private void generateChunk() {
-        Point currChunkIndex = Tools.getIndexOfChunk(chunks, currentChunk);
-        for (int row = currChunkIndex.y; row < renderDistance*2+1+currChunkIndex.y; row++) {
-            chunks.add(new ArrayList<Chunk>());
-            for (int col = currChunkIndex.x; col < renderDistance*2+1+currChunkIndex.x; col++) {
-                // little bit of funk
-                // if the get method works then that means that the chunk is already created and there is no need to make it again
-                // however if the method throws an error that means that the chunk is not yet generated and should be
-                try {
-                    chunks.get(row).get(col);
-                }
-                catch (IndexOutOfBoundsException e) {
-                    chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
-                }
 
+    private void generateChunks(Point startingPoint) {
+        for (int row = 0; row < renderDistance * 2 + 1; row++) {
+            for (int col = 0; col < renderDistance * 2 + 1; col++) {
             }
         }
     }
@@ -213,6 +213,11 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     @Override
     public void keyPressed(KeyEvent e) {
         player.keyPressed = e;
+
+        // debug teleportation code
+        if (e.getKeyCode() == KeyEvent.VK_F) {
+            player.position = new Point2D.Float(11 * 16, player.position.y);
+        }
     }
     
     @Override
