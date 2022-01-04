@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 
 import java.io.File;
 import java.io.IOException;
@@ -280,5 +281,14 @@ public class Tools {
         BigDecimal bbd = new BigDecimal(Float.toString(b));
         BigDecimal c = abd.subtract(bbd);
         return c.floatValue();
+    }
+
+    public static Point getIndexOfChunk(ArrayList<ArrayList<Chunk>> chunkArray, Point chunkPos) {
+        // get the position of index (0, 0) to be able to find the offset of the given chunk position
+        Point posOfZZ = new Point(chunkArray.get(0).get(0).position.x, chunkArray.get(0).get(0).position.y);
+        Point difference = new Point(Math.subtractExact(posOfZZ.x, chunkPos.x), Math.subtractExact(posOfZZ.y, chunkPos.y));
+        difference.x = Math.abs(difference.x);
+        difference.y = Math.abs(difference.y);
+        return difference;
     }
 }

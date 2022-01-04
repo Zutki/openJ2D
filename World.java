@@ -44,8 +44,6 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
     private Player player;
 
-    private boolean currentlyMoving = false;
-
     public World() {
         // set the window size to fit the columns and rows
         setPreferredSize(new Dimension(BLOCK_SIZE * COLUMNS, BLOCK_SIZE * ROWS));
@@ -63,10 +61,19 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
                 chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
             }
         }
-    
+        
+        for (ArrayList<Chunk> chunkArray: chunks) {
+            for (Chunk chunk: chunkArray) {
+                System.out.print(chunk.position.x + ", "+chunk.position.y+" ");
+            }
+            System.out.println();
+        }
+
+        Point test = Tools.getIndexOfChunk(chunks, new Point(-5, -2));
+
         // get the rendered chunks
         // this is an = because at world generation the generated chunks are the same size as the render distance
-        renderedChunks = chunks;
+        renderedChunks.addAll(chunks); // written like this because java is funny
 
         // make player
         player = new Player("");
@@ -79,6 +86,9 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             // get the block offset based on the player's position
             blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
             blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
+            
+            // like this because of java cracking some mad funny jokes
+            Point previousChunk = new Point(currentChunk.x, currentChunk.y);
 
             if (player.position.x < 0) {
                 currentChunk.x = (int) player.position.x/16-1;
@@ -92,6 +102,14 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             }
             else {
                 currentChunk.y = (int) player.position.y/16;
+            }
+
+            // this is run when we enter a new chunk
+            if (!previousChunk.equals(currentChunk)) {
+                System.out.println("Entered New Chunk");
+                //generateChunk();
+
+                //renderedChunks = getRenderedChunks();
             }
         }
         
@@ -154,6 +172,9 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         }
     }
 
+    // Pretty sure neither of these work,
+    // needs to be rewritten while NOT coding at 3 in the morning
+
     private ArrayList<ArrayList<Chunk>> getRenderedChunks() {
         ArrayList<ArrayList<Chunk>> renderChunks = new ArrayList<ArrayList<Chunk>>();
         
@@ -164,6 +185,25 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             }
         }
         return renderChunks;
+    }
+    
+    private void generateChunk() {
+        Point currChunkIndex = Tools.getIndexOfChunk(chunks, currentChunk);
+        for (int row = currChunkIndex.y; row < renderDistance*2+1+currChunkIndex.y; row++) {
+            chunks.add(new ArrayList<Chunk>());
+            for (int col = currChunkIndex.x; col < renderDistance*2+1+currChunkIndex.x; col++) {
+                // little bit of funk
+                // if the get method works then that means that the chunk is already created and there is no need to make it again
+                // however if the method throws an error that means that the chunk is not yet generated and should be
+                try {
+                    chunks.get(row).get(col);
+                }
+                catch (IndexOutOfBoundsException e) {
+                    chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
+                }
+
+            }
+        }
     }
 
     // react to key events
