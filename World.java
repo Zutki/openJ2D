@@ -200,10 +200,8 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     }
 
     private void generateChunks(Point startingPoint) {
-        for (int row = 0; row < renderDistance * 2 + 1; row++) {
-            for (int col = 0; col < renderDistance * 2 + 1; col++) {
-            }
-        }
+        // solve any issues with ungenerated chunks being between the about-to-be generated chunks and the already generated chunks
+        
     }
 
     // react to key events
