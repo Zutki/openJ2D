@@ -5,7 +5,7 @@ class Minecraft {
         JFrame window = new JFrame("Minecraft 2D");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        World2 world = new World2();
+        World world = new World();
         window.add(world);
         window.addKeyListener(world);
 

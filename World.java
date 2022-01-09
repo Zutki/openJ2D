@@ -2,47 +2,49 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.event.*;
 import javax.swing.*;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class World extends JPanel implements ActionListener, KeyListener/*, MouseListener, MouseWheelListener*/ {
     private boolean debugMode = true;
 
-    // Delay between frames
+    // Delay between frames in ms
     public static final int TICK_DELAY = 12;
 
-    // Controls the size of blocks and the world
-    public static final int BLOCK_SIZE = 70;
-    public static final int ROWS = 12; // for now this value has to be even
-    public static final int COLUMNS = 18;
+    // Size of blocks and the number of blocks in the view frame
+    public static int BLOCK_SIZE = 70;
+    public static int ROWS = 12;
+    public static int COLUMNS = 18;
 
-    // id system, used by everything
+    // the id system, used for block names and rendering
     public static final Id itemIDS = new Id();
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
-    
-    // this block is the top left corner of the world viewing window
-    // the purpose of this is for figuring out the positions to draw blocks at relative to the viewable area
-    // example:
-    // A block is at (170, 0) and the blockOffset is at (160, 0), the block will be drawn at (10, 0) relative to the viewable area
+
+    // this block is at the top left corner of the screen.
+    // used to offset blocks being drawn
     private Point2D.Float blockOffset = new Point2D.Float(0.0f, 0.0f);
 
-    // The current chunk the player is inside
+    // the current chunk the player is inside
     private Point currentChunk = new Point(0, 0);
-
-    // number of chunks that will be simulated/rendered, some of these chunks are not visible
-    private int renderDistance = 5;
     
-    // the chunks that will be rendered
-    private ArrayList<ArrayList<Chunk>> renderedChunks = new ArrayList<ArrayList<Chunk>>();
+    // number of chunks generated/simulated/rendered
+    // making this number higher lags the game
+    private int renderDistance = 2;
 
-    // 2D ArrayList of chunks
-    // it feels cursed to write this
-    private ArrayList<ArrayList<Chunk>> chunks = new ArrayList<ArrayList<Chunk>>();
+    // HashMap of all the chunks
+    private HashMap<Point, Chunk> chunks = new HashMap<Point, Chunk>();
 
     private Timer timer;
 
     private Player player;
+
+    private WorldBuilder worldBuilder;
+    
+    // framerate calculation
+    private int frames = 0;
+    private long start;
+    private int framerate;
 
     public World() {
         // set the window size to fit the columns and rows
@@ -53,41 +55,33 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
         timer = new Timer(TICK_DELAY, this);
         timer.start();
-        
-        // generate spawn chunks, this is the size of render distance
-        for (int row = 0; row < renderDistance*2+1; row++) {
-            chunks.add(new ArrayList<Chunk>());
-            for (int col = 0; col < renderDistance*2+1; col++) {
-                chunks.get(row).add(col, new Chunk(new Point(col-renderDistance, row-renderDistance)));
+
+        // spawn chunk generation
+        for (int y = 0; y < renderDistance * 2 + 1; y++) {
+            for (int x = 0; x < renderDistance * 2 + 1; x++) {
+                chunks.put(new Point(x-renderDistance, y-renderDistance), new Chunk(x-renderDistance, y-renderDistance));
             }
         }
-        
-        for (ArrayList<Chunk> chunkArray: chunks) {
-            for (Chunk chunk: chunkArray) {
-                System.out.print(chunk.position.x + ", "+chunk.position.y+" ");
-            }
-            System.out.println();
-        }
 
-        Point test = Tools.getIndexOfChunk(chunks, new Point(-5, -2));
-
-        // get the rendered chunks
-        // this is an = because at world generation the generated chunks are the same size as the render distance
-        renderedChunks.addAll(chunks); // written like this because java is funny
-
-        // make player
+        // instance the player
         player = new Player("");
+
+        // setup world builder
+        worldBuilder = new WorldBuilder(chunks, 5, renderDistance);
+        start = System.currentTimeMillis();
+
     }
     
+    // run per frame
     @Override
     public void actionPerformed(ActionEvent e) {
-        // only update when the player is moving
+        frames++;
+        // only run when the player is moving
         if (player.keyPressed != null) {
-            // get the block offset based on the player's position
             blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
             blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
-            
-            // like this because of java cracking some mad funny jokes
+
+            // java likes cracking some really banger jokes
             Point previousChunk = new Point(currentChunk.x, currentChunk.y);
 
             if (player.position.x < 0) {
@@ -96,7 +90,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             else {
                 currentChunk.x = (int) player.position.x/16;
             }
-        
+
             if (player.position.y < 0) {
                 currentChunk.y = (int) player.position.y/16-1;
             }
@@ -104,44 +98,37 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
                 currentChunk.y = (int) player.position.y/16;
             }
 
-            // this is run when we enter a new chunk
+            // this is run when the player enters a new chunk
             if (!previousChunk.equals(currentChunk)) {
-                Point diff = new Point(currentChunk.x - previousChunk.x,
-                        currentChunk.y - previousChunk.y);
-                System.out.println("Entered New Chunk\nWith difference of ("+diff.x+", "+diff.y+")\n");
-                
-                // TEST CODE
-                int ungenChunks = chunks.size()-renderDistance - renderDistance * 2;
-                System.out.println("Ungenerated Chunks: "+ungenChunks);
-                if (ungenChunks > 0) {
-                    for (int i = 0; i < ungenChunks; i++) {
-                        chunks.add(new ArrayList<Chunk>());
-                    }
-                }
-                System.out.println("Ungenerated Chunks: "+ungenChunks);
-                //generateChunk();
-
-                //renderedChunks = getRenderedChunks();
+                System.out.println("Entered New Chunk");
+                worldBuilder.generateNewChunks(currentChunk);
             }
         }
-        
-        //System.out.println(blockOffset);
 
         player.tick();
         repaint();
+        if (System.currentTimeMillis() - start >= 1000) {
+            framerate = frames;
+            frames = 0;
+            start = System.currentTimeMillis();
+        }
     }
 
     @Override
     public void paintComponent(Graphics g) {
+        // boilerplate
         super.paintComponent(g);
         Toolkit.getDefaultToolkit().sync();
 
-        // drawing the blocks
-        // loop through the rendered chunks
-        for (ArrayList<Chunk> chunkArray: renderedChunks) {
-            for (Chunk chunk: chunkArray) {
-                // loop through the blocks in the chunk and draw them
-                for (Block[] blocks: chunk.blocks) {
+        // drawing blocks
+        // this is done by reading the blocks around the player
+        for (int y = 0; y < renderDistance * 2 + 1; y++) {
+            for (int x = 0; x < renderDistance * 2 + 1; x++) {
+                int xOff = x-renderDistance; // example: 0 - 11 to -5 - 5
+                int yOff = y-renderDistance; // same as above but for y
+
+                Chunk workingChunk = chunks.get(new Point(xOff+currentChunk.x, yOff+currentChunk.y));
+                for (Block[] blocks: workingChunk.blocks) {
                     for (Block block: blocks) {
                         if (block != null) {
                             block.drawBlock(g, this);
@@ -156,71 +143,48 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         if (debugMode) {
             drawDebugLines(g);
         }
-        
+        g.setColor(Color.WHITE);
         g.setFont(new Font("Noto Sans", Font.PLAIN, 20));
         g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
+        g.drawString(String.format("FPS: %d", framerate), 10, 50);
     }
 
     private void drawDebugLines(Graphics g) {
-        for (ArrayList<Chunk> chunkArray: chunks) {
-            for (Chunk chunk: chunkArray) {
-                // block grid
-                g.setColor(Color.BLACK);
-                for (int row = 0; row < 16; row++) {
-                    for (int col = 0; col < 16; col++) {
-                        if ((row + col) % 2 == 1) {
-                            g.drawRect((col + chunk.position.x*16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x), 
-                                (row + chunk.position.y*16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y), 
+        for (Chunk chunk: chunks.values()) {
+            // block grid
+            g.setColor(Color.BLACK);
+            for (int y = 0; y < 16; y++) {
+                for (int x = 0; x < 16; x++) {
+                    if ((y + x) % 2 == 1) {
+                        g.drawRect((x + chunk.position.x*16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x),
+                                (y + chunk.position.y * 16) * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y),
                                 BLOCK_SIZE, BLOCK_SIZE);
-                        }
                     }
                 }
-                // chunk grid
-                g.setColor(Color.RED);
-                g.drawRect(chunk.position.x * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x), 
-                        chunk.position.y * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y), 
-                        16 * BLOCK_SIZE, 16 * BLOCK_SIZE);
             }
+            // chunk grid
+            g.setColor(Color.RED);
+            g.drawRect(chunk.position.x * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.x),
+                    chunk.position.y * 16 * BLOCK_SIZE - (int) (BLOCK_SIZE * blockOffset.y),
+                    16 * BLOCK_SIZE, 16 * BLOCK_SIZE);
         }
-    }
-
-    // Pretty sure neither of these work,
-    // needs to be rewritten while NOT coding at 3 in the morning
-
-    private ArrayList<ArrayList<Chunk>> getRenderedChunks() {
-        ArrayList<ArrayList<Chunk>> renderChunks = new ArrayList<ArrayList<Chunk>>();
-        
-        for (int row = currentChunk.y; row < renderDistance * 2 + 1 + currentChunk.y; row++) {
-            renderChunks.add(new ArrayList<Chunk>());
-            for (int col = currentChunk.x; col < renderDistance * 2 + 1 + currentChunk.x; col++) {
-                renderChunks.get(row).add(col, chunks.get(row).get(col));
-            }
-        }
-        return renderChunks;
-    }
-
-    private void generateChunks(Point startingPoint) {
-        // solve any issues with ungenerated chunks being between the about-to-be generated chunks and the already generated chunks
-        
     }
 
     // react to key events
-    // NOTE:
-    // There is a minor issue with this system, when switching keys the key might not immeditly register
-    // no clue how to fix for now 2021-12-31
+    // NOTE: slight issue with key reactions
     @Override
     public void keyPressed(KeyEvent e) {
         player.keyPressed = e;
 
-        // debug teleportation code
+        // debug teleportation
         if (e.getKeyCode() == KeyEvent.VK_F) {
             player.position = new Point2D.Float(11 * 16, player.position.y);
         }
     }
-    
+
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
+
     @Override
     public void keyReleased(KeyEvent e) {
         player.keyPressed = null;
