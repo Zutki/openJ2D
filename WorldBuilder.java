@@ -23,11 +23,15 @@ public class WorldBuilder {
                     Chunk chunk = new Chunk(workingChunk);
                     for (int row = 0; row < 16; row++) {
                         for (int col = 0; col < 16; col++) {
-                            if (row == terrainLevel) {
-                                chunk.blocks[row][col] = new Block(1, new Point(workingChunk.x * 16 + col, workingChunk.y * 16 + row));
+                            Point blockPos = new Point(workingChunk.x * 16 + row, workingChunk.y * 16 + col);
+                            if (blockPos.y == terrainLevel) {
+                                chunk.blocks[row][col] = new Block(1, blockPos);
                             }
-                            if (row > terrainLevel) {
-                                chunk.blocks[row][col] = new Block(0, new Point(workingChunk.x * 16 + col, workingChunk.y * 16 + row));
+                            if (blockPos.y > terrainLevel) {
+                                chunk.blocks[row][col] = new Block(0, blockPos);
+                            }
+                            if (blockPos.y > terrainLevel + 2) {
+                                chunk.blocks[row][col] = new Block(2, blockPos);
                             }
                         }
                     }

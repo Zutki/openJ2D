@@ -69,6 +69,13 @@ public class Player {
             if (keyPressed.getKeyCode() == KeyEvent.VK_D || keyPressed.getKeyCode() == KeyEvent.VK_RIGHT) {
                 position.x = Tools.addFloat(position.x, movementDistance);
             }
+
+            if (keyPressed.getKeyCode() == KeyEvent.VK_W || keyPressed.getKeyCode() == KeyEvent.VK_UP) {
+                position.y = Tools.subFloat(position.y, movementDistance);
+            }
+            if (keyPressed.getKeyCode() == KeyEvent.VK_S || keyPressed.getKeyCode() == KeyEvent.VK_DOWN) {
+                position.y = Tools.addFloat(position.y, movementDistance);
+            }
         }
     }
 
