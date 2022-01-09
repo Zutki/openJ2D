@@ -2,6 +2,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.Color;
 
 public class Block {
@@ -26,6 +27,10 @@ public class Block {
    public void drawBlock(Graphics g, ImageObserver observer) {
 
         g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
+   }
+
+   public void drawBlock(Graphics g, ImageObserver observer, Point2D.Float blockOffset) {
+       g.drawImage(texture, position.x * World.BLOCK_SIZE - (int) (World.BLOCK_SIZE * blockOffset.x), position.y * World.BLOCK_SIZE - (int) (World.BLOCK_SIZE * blockOffset.y), observer);
    }
 
    // draw the block with a black square overlaying it, so it looks darker

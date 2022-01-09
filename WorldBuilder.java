@@ -20,7 +20,19 @@ public class WorldBuilder {
                 
                 Point workingChunk = new Point(startingPos.x + xOff, startingPos.y + yOff);
                 if (chunks.containsKey(workingChunk) == false) {
-                    chunks.put(workingChunk, new Chunk(workingChunk));
+                    Chunk chunk = new Chunk(workingChunk);
+                    for (int row = 0; row < 16; row++) {
+                        for (int col = 0; col < 16; col++) {
+                            if (row == terrainLevel) {
+                                chunk.blocks[row][col] = new Block(1, new Point(workingChunk.x * 16 + col, workingChunk.y * 16 + row));
+                            }
+                            if (row > terrainLevel) {
+                                chunk.blocks[row][col] = new Block(0, new Point(workingChunk.x * 16 + col, workingChunk.y * 16 + row));
+                            }
+                        }
+                    }
+
+                    chunks.put(workingChunk, chunk);
                 }
             }
         }

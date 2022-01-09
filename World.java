@@ -56,18 +56,17 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         timer = new Timer(TICK_DELAY, this);
         timer.start();
 
-        // spawn chunk generation
-        for (int y = 0; y < renderDistance * 2 + 1; y++) {
-            for (int x = 0; x < renderDistance * 2 + 1; x++) {
-                chunks.put(new Point(x-renderDistance, y-renderDistance), new Chunk(x-renderDistance, y-renderDistance));
-            }
-        }
 
         // instance the player
         player = new Player("");
 
         // setup world builder
         worldBuilder = new WorldBuilder(chunks, 5, renderDistance);
+
+        // spawn chunk generation
+        currentChunk = new Point(0, 0);
+        worldBuilder.generateNewChunks(currentChunk);
+        
         start = System.currentTimeMillis();
 
     }
@@ -131,7 +130,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
                 for (Block[] blocks: workingChunk.blocks) {
                     for (Block block: blocks) {
                         if (block != null) {
-                            block.drawBlock(g, this);
+                            block.drawBlock(g, this, blockOffset);
                         }
                     }
                 }
