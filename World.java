@@ -106,6 +106,9 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
         player.tick();
         repaint();
+
+        // count the frames that happened within a second
+        // when 1 second has passed reset the frame counter and reset the start time
         if (System.currentTimeMillis() - start >= 1000) {
             framerate = frames;
             frames = 0;
@@ -121,6 +124,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
         // drawing blocks
         // this is done by reading the blocks around the player
+        // TODO: optimise this bit of code
         for (int y = 0; y < renderDistance * 2 + 1; y++) {
             for (int x = 0; x < renderDistance * 2 + 1; x++) {
                 int xOff = x-renderDistance; // example: 0 - 11 to -5 - 5
@@ -139,13 +143,14 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
         player.draw(g, this);
 
+        // debug stuff
         if (debugMode) {
             drawDebugLines(g);
+            g.setColor(Color.WHITE);
+            g.setFont(new Font("Noto Sans", Font.PLAIN, 20));
+            g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
+            g.drawString(String.format("FPS: %d", framerate), 10, 50);
         }
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Noto Sans", Font.PLAIN, 20));
-        g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
-        g.drawString(String.format("FPS: %d", framerate), 10, 50);
     }
 
     private void drawDebugLines(Graphics g) {
@@ -178,6 +183,10 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         // debug teleportation
         if (e.getKeyCode() == KeyEvent.VK_F) {
             player.position = new Point2D.Float(11 * 16, player.position.y);
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_F1) {
+            debugMode = !debugMode;
         }
     }
 

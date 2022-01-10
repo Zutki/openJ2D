@@ -53,5 +53,10 @@
         "name" : "Warped Planks",
         "path" : "assets/warped_planks.png",
         "id" : 10
+    },
+    {
+        "name" : "Iron Ore",
+        "path" : "assets/iron_ore.png",
+        "id": 11
     }
 ]
