@@ -5,6 +5,10 @@ all in Java and limiting myself to not using any game libraries.
 
 This project has no dependencies as all libraries used are part of the default JDK installation.
 
+## Controls:
+- WASD or Arrow Keys to move player
+- F1 to toggle debug mode
+
 ## Useful info:
 
 - Java version: 17 (openJDK)
