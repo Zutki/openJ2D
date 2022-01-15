@@ -1,0 +1,1 @@
+jar cvmf MANIFEST.MF Minecraft2D.jar Block.class Chunk.class Id.class Inventory.class Item.class Minecraft$1.class Minecraft.class Physics.class Player.class Test$1.class Test.class Tools.class Ui.class World2.class WorldBuilder.class World.class utils/ assets/ Minecraft$1.class Test$1.class itemInfo.json
