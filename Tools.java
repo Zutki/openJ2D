@@ -282,13 +282,9 @@ public class Tools {
         BigDecimal c = abd.subtract(bbd);
         return c.floatValue();
     }
-
-    public static Point getIndexOfChunk(ArrayList<ArrayList<Chunk>> chunkArray, Point chunkPos) {
-        // get the position of index (0, 0) to be able to find the offset of the given chunk position
-        Point posOfZZ = new Point(chunkArray.get(0).get(0).position.x, chunkArray.get(0).get(0).position.y);
-        Point difference = new Point(Math.subtractExact(posOfZZ.x, chunkPos.x), Math.subtractExact(posOfZZ.y, chunkPos.y));
-        difference.x = Math.abs(difference.x);
-        difference.y = Math.abs(difference.y);
-        return difference;
+    public static float dropWholeNumbers(float num) {
+        String floatString = Float.toString(num);
+        int decimalIndex = floatString.indexOf(".");
+        return Float.valueOf(floatString.substring(decimalIndex, floatString.length()));
     }
 }

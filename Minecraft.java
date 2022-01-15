@@ -8,6 +8,7 @@ class Minecraft {
         World world = new World();
         window.add(world);
         window.addKeyListener(world);
+        window.addMouseListener(world);
 
         window.setResizable(false);
         window.pack();

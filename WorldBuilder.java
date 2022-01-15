@@ -2,7 +2,7 @@ import java.awt.Point;
 import java.util.HashMap;
 
 public class WorldBuilder {
-    private final int terrainLevel;
+    private int terrainLevel;
     private HashMap<Point, Chunk> chunks;
     private int renderDistance;
 
@@ -20,15 +20,23 @@ public class WorldBuilder {
                 
                 Point workingChunk = new Point(startingPos.x + xOff, startingPos.y + yOff);
                 
+
                 // if the chunks is ungenerated
                 if (chunks.containsKey(workingChunk) == false) {
                     Chunk chunk = new Chunk(workingChunk);
                     // go per block in a chunk
+                    if ((int) (Math.random() * 2) + 1 == 2) {
+                        //terrainLevel++;
+                    }
+                    else {
+                        //terrainLevel--;
+                    }
+
                     for (int row = 0; row < 16; row++) {
                         for (int col = 0; col < 16; col++) {
                             // set up the position of the block we are working with
                             Point blockPos = new Point(workingChunk.x * 16 + row, workingChunk.y * 16 + col);
-
+                    
                             // grass block
                             if (blockPos.y == terrainLevel) {
                                 chunk.blocks[row][col] = new Block(1, blockPos);

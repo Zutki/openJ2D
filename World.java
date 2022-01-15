@@ -4,8 +4,10 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
 
-public class World extends JPanel implements ActionListener, KeyListener/*, MouseListener, MouseWheelListener*/ {
+public class World extends JPanel implements ActionListener, KeyListener, MouseListener/*, MouseWheelListener*/ {
     private boolean debugMode = true;
+    private boolean paused = false;
+    private boolean incrementFrame = false;
 
     // Delay between frames in ms
     public static final int TICK_DELAY = 12;
@@ -40,6 +42,8 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     private Player player;
 
     private WorldBuilder worldBuilder;
+
+    private Physics phyx;
     
     // framerate calculation
     private int frames = 0;
@@ -55,13 +59,15 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
 
         timer = new Timer(TICK_DELAY, this);
         timer.start();
-
+    
+        phyx = new Physics(chunks);
 
         // instance the player
         player = new Player("");
+        phyx.setPlayer(player);
 
         // setup world builder
-        worldBuilder = new WorldBuilder(chunks, 5, renderDistance);
+        worldBuilder = new WorldBuilder(chunks, 16, renderDistance);
 
         // spawn chunk generation
         currentChunk = new Point(0, 0);
@@ -74,9 +80,14 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     // run per frame
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (paused == false || incrementFrame) {
         frames++;
+        incrementFrame = false;
+        
+        phyx.setCurrentChunk(currentChunk);
+        
         // only run when the player is moving
-        if (player.keyPressed != null) {
+        if (player.keyPressed != null || phyx.inMovement) {
             blockOffset.x = Tools.subFloat(player.position.x, COLUMNS / 2);
             blockOffset.y = Tools.subFloat(player.position.y, ROWS / 2);
 
@@ -103,8 +114,10 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
                 worldBuilder.generateNewChunks(currentChunk);
             }
         }
-
+        
+        phyx.tick();
         player.tick();
+
         repaint();
 
         // count the frames that happened within a second
@@ -113,6 +126,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             framerate = frames;
             frames = 0;
             start = System.currentTimeMillis();
+        }
         }
     }
 
@@ -150,6 +164,7 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             g.setFont(new Font("Noto Sans", Font.PLAIN, 20));
             g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
             g.drawString(String.format("FPS: %d", framerate), 10, 50);
+            g.drawString(String.format("Block offset: (%f, %f)",blockOffset.x, blockOffset.y), 10, 80);
         }
     }
 
@@ -174,6 +189,34 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
         }
     }
 
+    // REQUIRES SEVERE FIXING
+    // Kinda works but DO NOT RELY ON IT
+    // TODO: FIX IT
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        int screenX = me.getX();
+        int screenY = me.getY();
+
+        // works somewhat good, still needs some fixing
+        Point blockClicked = new Point(
+                (int) ( (screenX + Tools.dropWholeNumbers(blockOffset.x) ) / BLOCK_SIZE + (int) blockOffset.x),
+                (int) ( (screenY + Tools.dropWholeNumbers(blockOffset.y) ) / BLOCK_SIZE + (int) blockOffset.y));
+        System.out.println(blockClicked);
+        
+        // maybe this math too idk
+        System.out.println(blockClicked);
+        Point blockInsideChunkClicked = new Point(blockClicked.y % 16, blockClicked.x % 16);
+        Point chunkClicked = new Point(blockClicked.x / 16, blockClicked.y / 16);
+        
+        if (me.getButton() == MouseEvent.BUTTON1) {
+            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.x][blockInsideChunkClicked.y] = new Block(5, blockClicked);
+        }
+        else if (me.getButton() == MouseEvent.BUTTON3) {
+            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.x][blockInsideChunkClicked.y] = null;
+        }
+        phyx.updateChunk(chunks);
+    }
+
     // react to key events
     // NOTE: slight issue with key reactions
     @Override
@@ -185,8 +228,27 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
             player.position = new Point2D.Float(11 * 16, player.position.y);
         }
 
+        // toggle debug mode
         if (e.getKeyCode() == KeyEvent.VK_F1) {
             debugMode = !debugMode;
+        }
+        // pause the game
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            paused = !paused;
+        }
+        // play one frame
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+            incrementFrame = true;
+        }
+        // print contents of current chunk
+        if (e.getKeyCode() == KeyEvent.VK_P) {
+            System.out.println("Printing Data for chunk: "+currentChunk);
+            for (Block[] blocks: chunks.get(currentChunk).blocks) {
+                for (Block block: blocks) {
+                    System.out.print(block + " ");
+                }
+                System.out.println();
+            }
         }
     }
 
@@ -197,4 +259,13 @@ public class World extends JPanel implements ActionListener, KeyListener/*, Mous
     public void keyReleased(KeyEvent e) {
         player.keyPressed = null;
     }
+
+    @Override
+    public void mousePressed(MouseEvent me) {}
+    @Override
+    public void mouseReleased(MouseEvent me) {}
+    @Override
+    public void mouseEntered(MouseEvent me) {}
+    @Override
+    public void mouseExited(MouseEvent me) {}
 }

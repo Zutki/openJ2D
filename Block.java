@@ -49,4 +49,8 @@ public class Block {
    public void setPos(Point pos) {
        position = pos;
    }
+
+   public String toString() {
+       return id+"";
+   }
 }
