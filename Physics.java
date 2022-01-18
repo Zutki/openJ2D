@@ -21,19 +21,6 @@ public class Physics {
     }
     public void updateChunk(HashMap<Point, Chunk> chunks) {
         this.chunks = chunks;
-
-
-
-     //for (Block[] blocks: chunks.get(currentChunk).blocks) {
-     //    for (Block block: blocks) {
-     //        if (block == null) {
-     //            System.out.print("n ");
-     //        } else {
-     //            System.out.print(block+" ");
-     //        }
-     //    }
-     //    System.out.println();
-     //}
     }
 
     public void tick() {
@@ -52,7 +39,7 @@ public class Physics {
         else {
             inMovement = false;
         }
-        
+
         //if (chunks.get(currentChunk).blocks[xOff][yOff-1] == null) {
             //player.position.y = Tools.addFloat(player.position.y, 0.1f);
         //}
