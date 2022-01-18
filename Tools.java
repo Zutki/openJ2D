@@ -5,7 +5,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -21,9 +20,14 @@ import utils.JSONObject;
 import utils.JSONReader;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class Tools {
+    // Some constants to make code more readable
+    public static final Point LEFT = new Point(-1, 0);
+    public static final Point RIGHT = new Point(1, 0);
+    public static final Point UP = new Point(0, 1);
+    public static final Point DOWN = new Point(0, -1);
+
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);

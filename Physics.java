@@ -23,6 +23,11 @@ public class Physics {
         this.chunks = chunks;
     }
 
+    public boolean canMoveInDirection(Point direction) {
+        return false;
+    }
+
+
     public void tick() {
         // replace 0.1f with a proper value
         int yOff = (int) Math.abs((player.position.y)+1) % 16;
