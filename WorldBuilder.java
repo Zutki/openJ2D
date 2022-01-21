@@ -35,7 +35,7 @@ public class WorldBuilder {
                     for (int row = 0; row < 16; row++) {
                         for (int col = 0; col < 16; col++) {
                             // set up the position of the block we are working with
-                            Point blockPos = new Point(workingChunk.x * 16 + row, workingChunk.y * 16 + col);
+                            Point blockPos = new Point(workingChunk.x * 16 + col, workingChunk.y * 16 + row);
                     
                             // grass block
                             if (blockPos.y == terrainLevel) {

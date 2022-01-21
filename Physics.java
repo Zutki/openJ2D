@@ -24,7 +24,38 @@ public class Physics {
     }
 
     public boolean canMoveInDirection(Point direction) {
-        return false;
+        // left
+        if (direction.equals(Tools.LEFT)) {
+            if (Tools.isFloatWhole(Tools.subFloat(player.position.x, 1.5f))) {
+                Point2D.Float blockToGet = new Point2D.Float(Tools.subFloat(player.position.x, 1.5f), player.position.y);
+                Block block = chunks.get(currentChunk).blocks[ (int) Math.abs(blockToGet.y) % 16 ][ (int) Math.abs(blockToGet.x) % 16 ];
+                if (block != null) {
+                    return false;
+                }
+            }
+        }
+        // right
+        if (direction.equals(Tools.RIGHT)) {
+            if (Tools.isFloatWhole(Tools.addFloat(player.position.x, 0.5f))) {
+                Point2D.Float blockToGet = new Point2D.Float(Tools.addFloat(player.position.x, 0.5f), player.position.y);
+                Block block = chunks.get(currentChunk).blocks[ (int) Math.abs(blockToGet.y) % 16][ (int) Math.abs(blockToGet.x) % 16 ];
+                if (block != null) {
+                    return false;
+                }
+            }
+        }
+        // down
+        if (direction.equals(Tools.DOWN)) {
+            if (Tools.isFloatWhole(Tools.addFloat(player.position.y, 2.0f))) {
+                Point2D.Float blockToGet = new Point2D.Float(player.position.x, Tools.addFloat(player.position.y, 2.0f));
+                Block block = chunks.get(currentChunk).blocks[ (int) Math.abs(blockToGet.y) % 16][ (int) Math.abs(blockToGet.x) % 16 ];
+                if (block != null) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
 

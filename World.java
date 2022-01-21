@@ -63,11 +63,11 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         phyx = new Physics(chunks);
 
         // instance the player
-        player = new Player("");
+        player = new Player("", phyx);
         phyx.setPlayer(player);
 
         // setup world builder
-        worldBuilder = new WorldBuilder(chunks, 16, renderDistance);
+        worldBuilder = new WorldBuilder(chunks, 32, renderDistance);
 
         // spawn chunk generation
         currentChunk = new Point(0, 0);
@@ -201,13 +201,13 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         Point blockClicked = new Point(
                 (int) ( (screenX + Tools.dropWholeNumbers(blockOffset.x) ) / BLOCK_SIZE + (int) blockOffset.x),
                 (int) ( (screenY + Tools.dropWholeNumbers(blockOffset.y) ) / BLOCK_SIZE + (int) blockOffset.y));
-        System.out.println(blockClicked);
         
         // maybe this math too idk
-        System.out.println(blockClicked);
+        System.out.println("absolute: "+blockClicked);
         Point blockInsideChunkClicked = new Point(blockClicked.y % 16, blockClicked.x % 16);
         Point chunkClicked = new Point(blockClicked.x / 16, blockClicked.y / 16);
-        
+        System.out.println("inside chunk: "+blockInsideChunkClicked);
+
         if (me.getButton() == MouseEvent.BUTTON1) {
             chunks.get(chunkClicked).blocks[blockInsideChunkClicked.x][blockInsideChunkClicked.y] = new Block(5, blockClicked);
         }

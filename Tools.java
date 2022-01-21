@@ -291,4 +291,8 @@ public class Tools {
         int decimalIndex = floatString.indexOf(".");
         return Float.valueOf(floatString.substring(decimalIndex, floatString.length()));
     }
+    public static boolean isFloatWhole(float a) {
+        float b = Math.round(a);
+        return a == b;
+    }
 }
