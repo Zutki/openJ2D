@@ -200,15 +200,15 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
                 (int) ( (screenY + Tools.dropWholeNumbers(blockOffset.y) ) / BLOCK_SIZE + (int) blockOffset.y));
         
         System.out.println("absolute: "+blockClicked);
-        Point blockInsideChunkClicked = new Point(blockClicked.y % 16, blockClicked.x % 16);
+        Point blockInsideChunkClicked = new Point(blockClicked.x % 16, blockClicked.y % 16);
         Point chunkClicked = new Point(blockClicked.x / 16, blockClicked.y / 16);
         System.out.println("inside chunk: "+blockInsideChunkClicked);
 
         if (me.getButton() == MouseEvent.BUTTON1) {
-            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.x][blockInsideChunkClicked.y] = new Block(5, blockClicked);
+            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.y][blockInsideChunkClicked.x] = new Block(5, blockClicked);
         }
         else if (me.getButton() == MouseEvent.BUTTON3) {
-            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.x][blockInsideChunkClicked.y] = null;
+            chunks.get(chunkClicked).blocks[blockInsideChunkClicked.y][blockInsideChunkClicked.x] = null;
         }
         phyx.updateChunk(chunks);
     }
