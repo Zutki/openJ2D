@@ -189,9 +189,6 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         }
     }
 
-    // REQUIRES SEVERE FIXING
-    // Kinda works but DO NOT RELY ON IT
-    // TODO: FIX IT
     @Override
     public void mouseClicked(MouseEvent me) {
         int screenX = me.getX();
@@ -202,7 +199,6 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
                 (int) ( (screenX + Tools.dropWholeNumbers(blockOffset.x) ) / BLOCK_SIZE + (int) blockOffset.x),
                 (int) ( (screenY + Tools.dropWholeNumbers(blockOffset.y) ) / BLOCK_SIZE + (int) blockOffset.y));
         
-        // maybe this math too idk
         System.out.println("absolute: "+blockClicked);
         Point blockInsideChunkClicked = new Point(blockClicked.y % 16, blockClicked.x % 16);
         Point chunkClicked = new Point(blockClicked.x / 16, blockClicked.y / 16);

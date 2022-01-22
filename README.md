@@ -30,12 +30,7 @@ This project has no dependencies as all libraries used are part of the default J
 ## Project Stretch Goals:
 
 - [ ] No outside library usage
-- [ ] procedurally generated map, infinite
 - [ ] structures other than trees
-- [ ] world chunking
 
 ## TODO When Able:
-
-- [ ] Fetch skin for player from minecraft.net using apis and use it
-    - [Resource](https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3)
 - [ ] Ability to use and change regular minecraft resource packs for textures
