@@ -64,11 +64,11 @@ public class Physics {
         int yOff = (int) Math.abs((player.position.y)+1) % 16;
 
         // chunk border gravity fixing
-        if (yOff == 0 && chunks.get(new Point(currentChunk.x, currentChunk.y+1)).blocks[ (int) Math.abs(player.position.x) % 16 ][ yOff ] == null) {
+        if (yOff == 0 && chunks.get(new Point(currentChunk.x, currentChunk.y+1)).blocks[ yOff ][ (int) Math.abs(player.position.x) % 16 ] == null) {
             player.position.y = Tools.addFloat(player.position.y, 0.1f);
             inMovement = true;
         }
-        else if (yOff != 0 && chunks.get(currentChunk).blocks[ (int) Math.abs(player.position.x) % 16 ][ yOff ] == null) {
+        else if (yOff != 0 && chunks.get(currentChunk).blocks[ yOff ][ (int) Math.abs(player.position.x) % 16 ] == null) {
             player.position.y = Tools.addFloat(player.position.y, 0.1f);
             inMovement = true;
         }
