@@ -6,35 +6,85 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+ * UI Class contains functions for displaying and loading elements into the hotbar.
+ *
+ * @author Zutki
+ */
 public class Ui {
+
+    /**
+     * The width of the hotbar.
+     */
     private static final int HOTBAR_WIDTH = World.BLOCK_SIZE * 9;
+
+    /**
+     * The height of the hotbar.
+     */
     private static final int HOTBAR_HEIGHT = World.BLOCK_SIZE;
 
+    /**
+     * The image of the hotbar.
+     */
     private static final File hotbar = new File("assets/ui/hotbar.png");
+    /**
+     * The image of a selected element in a hotbar.
+     */
     private static final File selected = new File("assets/ui/selected.png");
-    
+
+    /**
+     * The Hotbar image.
+     */
     private BufferedImage hotbarImage;
+    /**
+     * The Selected image.
+     */
     private BufferedImage selectedImage;
+    /**
+     * The Hover block img.
+     */
     private BufferedImage hoverBlockImg;
 
+    /**
+     * The Selected slot. Its default value is 0, the first slot of the hotbar.
+     */
     private int selectedSlot = 0;
 
+    /**
+     * Declares an Inventory class.
+     */
     private final Inventory inv;
 
-    //private Point hotbarPos = new Point((World.ROWS / 2) World.BLOCK_SIZE), (World.COLUMNS - 1) * World.BLOCK_SIZE);
+    /**
+     * The Hotbar position.
+     */
     private final Point hotbarPos = new Point((World.COLUMNS * World.BLOCK_SIZE) / 2, 0);
+//private Point hotbarPos = new Point((World.ROWS / 2) World.BLOCK_SIZE), (World.COLUMNS - 1) * World.BLOCK_SIZE);
 
+    /**
+     * Instantiates a new Ui class.
+     *
+     * @param _inv the inv
+     */
     public Ui(Inventory _inv) {
        loadHotbar(); 
        inv = _inv;
     }
 
-    // get the currently selected block
+    /**
+     * Gets the currently selected block.
+     *
+     * @return the selected item
+     */
     public Item getSelectedItem() {
         return inv.getItem(selectedSlot);
     }
-    
-    // move up or down a slot by the mouse wheel (mwIn)
+
+    /**
+     * Move up or down a slot by the mouse wheel
+     *
+     * @param mwIn an integer indicated the mouse wheel's position
+     */
     public void moveSlot(int mwIn) {
         // scrolling down
         if (mwIn == -1) {
@@ -63,8 +113,10 @@ public class Ui {
             hoverBlockImg = null;
         }
     }
-    
-    // load the image for the hotbar
+
+    /**
+     * Load the image for the hotbar
+     */
     private void loadHotbar() {
 
         try {
@@ -81,23 +133,42 @@ public class Ui {
         }
 
     }
-    
-    // draw the block the mouse is currently hovering over at pos
+
+    /**
+     * draw the block the mouse is currently hovering over at pos.
+     */
     private Point hovered;
-    // this is needed because java likes to complain when it is not done this way
+
+    /**
+     * Sets hovered block. This is needed because java likes to complain when it is not done this way
+     *
+     * @param pos      the position to set the hovered block at
+     * @param g        the graphics
+     * @param observer the observer
+     */
     public void setHoveredBlock(Point pos, Graphics g, ImageObserver observer) {
         hovered = pos;
         drawHoverBlock(g, observer);
     }
-    
-    // function called in setHoveredBlock to draw the block
+
+    /**
+     * Draw hover block. This function called in setHoveredBlock to draw the block
+     *
+     * @param g        the graphics
+     * @param observer the observer
+     */
     private void drawHoverBlock(Graphics g, ImageObserver observer) {
         g.drawImage(hoverBlockImg, hovered.x * World.BLOCK_SIZE, hovered.y * World.BLOCK_SIZE, observer);
         
     }
-    
 
-    // load all UI elements
+
+    /**
+     * Loads all the  UI elements.
+     *
+     * @param g        the graphics
+     * @param observer the observer
+     */
     public void loadUI(Graphics g, ImageObserver observer) {
         // hotbar
         g.drawImage(hotbarImage, hotbarPos.x, hotbarPos.y, observer);

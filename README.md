@@ -1,6 +1,6 @@
 # Minecraft2D
 
-This project is an experiment that I am doing to see if I can create some resemblence of Minecraft. I am writing this
+This project is an experiment that I am doing to see if I can create some resemblance of Minecraft. I am writing this
 all in Java and limiting myself to not using any game libraries.
 
 This project has no dependencies as all libraries used are part of the default JDK installation.
@@ -32,6 +32,6 @@ This project has no dependencies as all libraries used are part of the default J
 
 ## TODO When Able:
 
-- [ ] Fetch skin for player from minecraft.net using apis and use it
+- [x] Fetch skin for player from minecraft.net using apis and use it
     - [Resource](https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3)
 - [ ] Ability to use and change regular minecraft resource packs for textures

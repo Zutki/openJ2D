@@ -19,7 +19,23 @@ import javax.net.ssl.HttpsURLConnection;
 import utils.JSONObject;
 import utils.JSONReader;
 
+/**
+ * This class contains functions to manipulate images, more specifically, block and player images. <b>Zutki</b> created
+ * functions to resize images, and to get specific player model images. <b>Minh</b> created a function to fetch a
+ * Minecraft skin using Minecraft's API.
+ *
+ * @author samminhch
+ * @author Zutki
+ */
 public class Tools {
+    /**
+     * Resize buffered image.
+     *
+     * @param img  the img
+     * @param newW the new w
+     * @param newH the new h
+     * @return the buffered image
+     */
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -31,8 +47,14 @@ public class Tools {
         return dimg;
     }
 
-    // credit:
-    // http://www.java2s.com/Code/Java/2D-Graphics-GUI/MakeimageTransparency.htm
+    /**
+     * Make image translucent buffered image.//
+     * Credit: <a href="http://www.java2s.com/Code/Java/2D-Graphics-GUI/MakeimageTransparency.htm">java2s.com</a>
+     * @param source the source
+     * @param alpha  the alpha
+     * @return the buffered image
+     * @author Zutki
+     */
     public static BufferedImage makeImageTranslucent(BufferedImage source, float alpha) {
         BufferedImage target = new BufferedImage(source.getWidth(), source.getHeight(),
                 java.awt.Transparency.TRANSLUCENT);
@@ -49,17 +71,27 @@ public class Tools {
     }
 
     /**
-     * Returns an image of the minecraft avatar from specified username.
+     * Returns an image of the minecraft avatar from specified username through the use of Minecraft's player-base API.
+     * <p>
      * Used resources to create this function:
-     * - https://www.baeldung.com/java-http-request
-     * -
-     * https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3
+     *     <ul>
+     *         <li>
+     *             <a href="https://www.baeldung.com/java-http-request">
+     *                 baeldung.com
+     *             </a>
+     *         </li>
+     *         <li>
+     *             <a href="https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3">
+     *                 ourcodeworld.com
+     *             </a>
+     *         </li>
+     *     </ul>
+     * </p>
      *
-     * @param username the username to the Minecraft skin of
+     * @param username a String representing a Minecraft username
      * @return <code>BufferedImage</code> the Minecraft skin of the username
-     * @throws IllegalArgumentException if username cannot be found within database
      */
-    public static BufferedImage fetchMinecraftSkin(String username) throws IllegalArgumentException {
+    public static BufferedImage fetchMinecraftSkin(String username) {
         BufferedImage minecraftSkin = null;
         try {
             URL url = new URL(String.format("https://api.mojang.com/users/profiles/minecraft/%s", username));
@@ -94,12 +126,12 @@ public class Tools {
             // create a JSONObject from decryptedString
             JSONObject decryptedJSON = JSONReader.interpretJSONString("root", new StringReader(decryptedString));
             // System.out.println(decryptedJSON.getKeys());
-            
+
 
             // get textures -> skin -> url
             JSONObject userTextures = (JSONObject) decryptedJSON.get("textures");
             // System.out.println(userTextures);
-            
+
             // this is as far as I can get with my regex statement in JSONObject.java. I'm
             // going to need to fix that regex in order for this to work...
             // JSONObject userSkin = (JSONObject) userTextures.get("SKIN");
@@ -124,28 +156,34 @@ public class Tools {
         } catch (IOException e) {
             // this should be the only reason why a Minecraft skin wasn't fetched ⤵
             System.out.printf("\"%s\" was not found on the Minecraft database.\n%s\n\n", username, e);
+
+            // set Steve as the Minecraft username (nested try-catch statement because i don't want to add a throw exception)
+            // i am a lazy bum... -minh
+            try {
+                minecraftSkin = ImageIO.read(new File("assets/steve/steve.png"));
+
+            } catch (IOException f) {
+                System.out.printf("Could not find default Minecraft skin.\n%s\n\n", f);
+            }
         }
         return minecraftSkin;
     }
 
     // Player image decoding from skin image
+    /**
+     * Gets player facing front.
+     *
+     * @param skinImage the skin image
+     * @return the player facing front
+     */
     public static BufferedImage getPlayerFacingFront(BufferedImage skinImage) {
         // define some buffered images for different parts of the body
-        // BufferedImage bi = null;
         BufferedImage torso;
         BufferedImage head;
         BufferedImage lArm;
         BufferedImage rArm;
         BufferedImage lLeg;
         BufferedImage rLeg;
-
-        // no need to convert File to BufferedImage anymore
-        // // crop out the parts of the image we need
-        // try {
-        //     bi = ImageIO.read(skinImage);
-        // } catch (IOException e) {
-        //     System.out.println(e);
-        // }
 
         torso = skinImage.getSubimage(20, 20, 8, 12);
         head = skinImage.getSubimage(8, 8, 8, 8);
@@ -184,19 +222,17 @@ public class Tools {
         return playerImg;
     }
 
+    /**
+     * Gets player facing left.
+     *
+     * @param skinImage the skin image
+     * @return the player facing left
+     */
     public static BufferedImage getPlayerFacingLeft(BufferedImage skinImage) {
         // define parts of the image
-        // BufferedImage bi = null;
         BufferedImage head;
         BufferedImage arm;
         BufferedImage leg;
-
-        // // load image
-        // try {
-        //     bi = ImageIO.read(skinImage);
-        // } catch (IOException e) {
-        //     System.out.println(e);
-        // }
 
         // crop full image to get body parts
         head = skinImage.getSubimage(16, 8, 8, 8);
@@ -224,19 +260,17 @@ public class Tools {
         return playerImg;
     }
 
+    /**
+     * Gets player facing right.
+     *
+     * @param skinImage the skin image
+     * @return the player facing right
+     */
     public static BufferedImage getPlayerFacingRight(BufferedImage skinImage) {
         // define parts of the image
-        // BufferedImage bi = null;
         BufferedImage head;
         BufferedImage arm;
         BufferedImage leg;
-
-        // // load image
-        // try {
-        //     bi = ImageIO.read(skinImage);
-        // } catch (IOException e) {
-        //     System.out.println(e);
-        // }
 
         // crop full image to get body parts
         head = skinImage.getSubimage(0, 8, 8, 8);

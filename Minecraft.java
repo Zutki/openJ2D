@@ -1,8 +1,21 @@
 import javax.swing.*;
 
+/**
+ * The Minecraft class is used to initiate a new Window to render the game, and creates and provides the World class
+ * data for a Mouse, Key, and Action listener.
+ * @author Zutki
+ */
 class Minecraft {
+    /**
+     * The constant username.
+     */
     private static String username = ""; // empty string means no username, game will assume default skin
 
+    /**
+     * Initiates a window for the Minecraft game.
+     *
+     * @param _username the username
+     */
     private static void initWindow(String _username) {
         JFrame window = new JFrame("Minecraft 2D");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,6 +34,11 @@ class Minecraft {
         window.setVisible(true);
     }
 
+    /**
+     * The entry point of application. Checks if a username is given via command line arguments.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         // flags
         if (args.length > 1) {

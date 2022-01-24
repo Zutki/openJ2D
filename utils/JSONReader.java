@@ -1,27 +1,24 @@
 package utils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 /**
  * This is a class used to read a .json file or a .json String, returning a JSONObject with the parsed content.
  *
- * @since December 9, 2021
- * @author itsMinhNguyen
+ * @author samminhch
  * @see JSONObject
+ * @since December 9, 2021
  */
 public class JSONReader {
     /**
      * Parses the .json file by creating a JSONObject of that file
      *
      * @return <code>JSONObject</code>, the file
-     * @throws IOException if an error occurred reading in the file.
+     * @throws IOException              if an error occurred reading in the file.
+     * @throws IllegalArgumentException if file given is not a valid .json file.
      * @see JSONObject
      */
-    public static  JSONObject interpretFile(File file) throws IOException, IllegalArgumentException{
+    public static JSONObject interpretFile(File file) throws IOException, IllegalArgumentException {
         // file validation
         String inName = file.getName().contains("/") ? file.getName() : "./" + file.getName();
         if (!file.exists())
@@ -55,7 +52,8 @@ public class JSONReader {
 
     /**
      * This interprets a .json file if it's passed through as a stream.
-     * @param fileName name of the .json file
+     *
+     * @param fileName          name of the .json file
      * @param inputStreamReader stream to read the .json contents from
      * @return a JSONObject of the .json file that's being passed
      * @throws IOException If something goes wrong while reading in inputStreamReader

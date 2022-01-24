@@ -4,31 +4,67 @@ import java.awt.image.ImageObserver;
 import java.awt.Point;
 import java.awt.Color;
 
+/**
+ * The Block class contains data on a 'block' in Minecraft.
+ * @author Zutki
+ */
 public class Block {
-   private BufferedImage texture;
-   private Point position;
-   private final int id;
-   private final int dropItem;
+    /**
+     * The image of the block's texture.
+     */
+    private BufferedImage texture;
+
+    /**
+     * The position of where the block is located.
+     */
+    private Point position;
+    /**
+     * The Id of the block.
+     */
+    private final int id;
+
+    /**
+     * The drop item.
+     */
+    private final int dropItem;
 
    // TODO:
    //private final int hardness = 5;
    // ADVANCED TODO:
    // block sound
-    
-   public Block(int block_id, Point pos) {
+
+    /**
+     * Instantiates a new Block.
+     *
+     * @param block_id the block's id
+     * @param pos      the position of where to render the block
+     */
+    public Block(int block_id, Point pos) {
        position = pos;
        id = block_id;
        dropItem = block_id;
        texture = World.itemIDS.getItemImageByID(id);
-       
    }
-    
-   public void drawBlock(Graphics g, ImageObserver observer) {
+
+    /**
+     * Draws block onto the screen.
+     *
+     * @param g        the graphics
+     * @param observer the observer
+     */
+    public void drawBlock(Graphics g, ImageObserver observer) {
 
         g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
    }
 
-   // draw the block with a black square overlaying it, so it looks darker
+    /**
+     * Draw block onto screen with a transparent black box rendered on top of it to simulate reduced brightness.
+     *
+     * @param opacity  the opacity of the black box
+     * @param g        the graphics
+     * @param observer the observer
+     */
+// draw the block with a black square overlaying it, so it looks darker
    public void drawBlock(float opacity, Graphics g, ImageObserver observer) {
        g.drawImage(texture, position.x * World.BLOCK_SIZE, position.y * World.BLOCK_SIZE, observer);
        Color col = g.getColor();
@@ -37,11 +73,21 @@ public class Block {
        g.setColor(col);
    }
 
-   public Point getPos() {
+    /**
+     * Gets position of the block.
+     *
+     * @return the position of the block
+     */
+    public Point getPos() {
        return position;
    }
 
-   public void setPos(Point pos) {
+    /**
+     * Sets position of the block.
+     *
+     * @param pos the position of the block
+     */
+    public void setPos(Point pos) {
        position = pos;
    }
 }
