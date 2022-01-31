@@ -63,7 +63,10 @@ public class Player {
     }
 
     public void draw(Graphics g, ImageObserver observer) {
-        g.drawImage(currentPlayerImage, (int) (World.COLUMNS * World.BLOCK_SIZE/2-(World.BLOCK_SIZE/2)), (int) (World.ROWS * World.BLOCK_SIZE/2 - (World.BLOCK_SIZE)), observer);
+        g.drawImage(currentPlayerImage, 
+                (World.COLUMNS/2) * World.BLOCK_SIZE - World.BLOCK_SIZE/2, 
+                (World.ROWS/2) * World.BLOCK_SIZE - World.BLOCK_SIZE, 
+                observer);
     }
 
     public void tick() {

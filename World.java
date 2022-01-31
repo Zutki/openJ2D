@@ -3,10 +3,11 @@ import java.awt.geom.Point2D;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.HashMap;
+import java.awt.Point;
 
 public class World extends JPanel implements ActionListener, KeyListener, MouseListener/*, MouseWheelListener*/ {
     private boolean debugMode = true;
-    private boolean paused = false;
+    private boolean paused = true;
     private boolean incrementFrame = false;
 
     // Delay between frames in ms
@@ -67,7 +68,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         phyx.setPlayer(player);
 
         // setup world builder
-        worldBuilder = new WorldBuilder(chunks, 32, renderDistance);
+        worldBuilder = new WorldBuilder(chunks, 14, renderDistance);
 
         // spawn chunk generation
         currentChunk = new Point(0, 0);
@@ -128,6 +129,9 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             start = System.currentTimeMillis();
         }
         }
+        else { // still redraw screen when paused
+            repaint();
+        }
     }
 
     @Override
@@ -157,6 +161,14 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
         player.draw(g, this);
 
+        // Ui drawing code
+        Point mousePos = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointToScreen(mousePos, this);
+
+        // I have no clue where these numbers come from, I just guessed and checked until it worked almost correctly
+        Point blockHovered = new Point((int) Math.round((double) mousePos.x / BLOCK_SIZE - 9.9), (int) Math.round((double) mousePos.y / BLOCK_SIZE - 3.5)); // get the hovered block
+        
+
         // debug stuff
         if (debugMode) {
             drawDebugLines(g);
@@ -166,6 +178,8 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             g.drawString(String.format("FPS: %d", framerate), 10, 50);
             g.drawString(String.format("Block offset: (%f, %f)",blockOffset.x, blockOffset.y), 10, 80);
         }
+        //g.setColor(Color.CYAN);
+        //g.drawRect(blockHovered.x * BLOCK_SIZE, blockHovered.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
     }
 
     private void drawDebugLines(Graphics g) {
@@ -193,6 +207,24 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
     public void mouseClicked(MouseEvent me) {
         int screenX = me.getX();
         int screenY = me.getY();
+    
+        Point playerPos = new Point((COLUMNS/2) * BLOCK_SIZE - BLOCK_SIZE/2,
+            (ROWS/2) * BLOCK_SIZE);
+
+        Point diff = new Point(screenX - playerPos.x - BLOCK_SIZE/2, screenY - playerPos.y - BLOCK_SIZE/2);
+        diff = new Point(diff.x / BLOCK_SIZE, diff.y / BLOCK_SIZE);
+        Point blockClicked = new Point(diff.x + (int) player.position.x, diff.y + (int) player.position.y);
+        Point blockClickedInChunk = new Point(blockClicked.x % 16-1, blockClicked.y % 16-2);
+
+        chunks.get(currentChunk).blocks[blockClickedInChunk.y][blockClickedInChunk.x] = new Block(5, blockClicked);;
+
+        System.out.println(blockClicked);
+        
+    }
+
+    /*public void mouseClicked(MouseEvent me) {
+        int screenX = me.getX();
+        int screenY = me.getY();
 
         // works somewhat good, still needs some fixing
         Point blockClicked = new Point(
@@ -200,7 +232,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
                 (int) ( (screenY + Tools.dropWholeNumbers(blockOffset.y) ) / BLOCK_SIZE + (int) blockOffset.y));
         
         System.out.println("absolute: "+blockClicked);
-        Point blockInsideChunkClicked = new Point(blockClicked.x % 16, blockClicked.y % 16);
+        Point blockInsideChunkClicked = new Point(Math.abs(blockClicked.x) % 16, Math.abs(blockClicked.y) % 16);
         Point chunkClicked = new Point(blockClicked.x / 16, blockClicked.y / 16);
         System.out.println("inside chunk: "+blockInsideChunkClicked);
 
@@ -211,7 +243,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             chunks.get(chunkClicked).blocks[blockInsideChunkClicked.y][blockInsideChunkClicked.x] = null;
         }
         phyx.updateChunk(chunks);
-    }
+    }*/
 
     // react to key events
     // NOTE: slight issue with key reactions
