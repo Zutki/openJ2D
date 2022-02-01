@@ -177,6 +177,10 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
             g.drawString(String.format("Player Position: %.2f, %.2f @ Chunk: %d, %d", player.position.x, player.position.y, currentChunk.x, currentChunk.y) , 10, 20);
             g.drawString(String.format("FPS: %d", framerate), 10, 50);
             g.drawString(String.format("Block offset: (%f, %f)",blockOffset.x, blockOffset.y), 10, 80);
+
+            if (clicked != null) {
+                g.drawLine((int)clicked.x, (int)clicked.y, playerPos.x, playerPos.y);
+            }
         }
         //g.setColor(Color.CYAN);
         //g.drawRect(blockHovered.x * BLOCK_SIZE, blockHovered.y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
@@ -203,7 +207,7 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
         }
     }
 
-    @Override
+    /*@Override
     public void mouseClicked(MouseEvent me) {
         int screenX = me.getX();
         int screenY = me.getY();
@@ -220,11 +224,33 @@ public class World extends JPanel implements ActionListener, KeyListener, MouseL
 
         System.out.println(blockClicked);
         
+    }*/
+    
+
+    Point playerPos = new Point((COLUMNS/2) * BLOCK_SIZE,
+            (ROWS/2) * BLOCK_SIZE);
+    Point clicked;
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+
+        clicked = me.getLocationOnScreen();
+        SwingUtilities.convertPointFromScreen(clicked, this);
+
+        Point2D.Float diff = new Point2D.Float(Tools.subFloat(clicked.x, playerPos.x), Tools.subFloat(clicked.y, playerPos.y));
+
+        Point2D.Float blockClicked = new Point2D.Float(Tools.addFloat(diff.x, player.position.x), Tools.addFloat(diff.y, player.position.y));
+        Point2D.Float yee = new Point2D.Float(diff.x / BLOCK_SIZE, diff.y / BLOCK_SIZE + 1);
+
+        System.out.println(yee);
     }
 
     /*public void mouseClicked(MouseEvent me) {
-        int screenX = me.getX();
-        int screenY = me.getY();
+        clicked = me.getLocationOnScreen();
+        SwingUtilities.convertPointFromScreen(clicked, this);
+        
+        int screenX = clicked.x;
+        int screenY = clicked.y;
 
         // works somewhat good, still needs some fixing
         Point blockClicked = new Point(
