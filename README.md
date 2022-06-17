@@ -1,37 +1,9 @@
-# Minecraft2D
+# Minecraft 2D
+This project has been at the back of mind, I am rewriting it after having gained more experience in Java, however, this is probably not the final rewrite of this project, there is more to come.
 
-This project is an experiment that I am doing to see if I can create some resemblance of Minecraft. I am writing this
-all in Java and limiting myself to not using any game libraries.
-
-This project has no dependencies as all libraries used are part of the default JDK installation.
-
-## Useful info:
-
-- Java version: 17 (openJDK)
-- Asset Credit: Mojang Studio
-- Using the Java Swing and AWT libraries
-- Example GitHub which has a lot of **very** useful
-  info: [here](https://github.com/learncodebygaming/java_2d_game/blob/master/Board.java)
-
-## TODO:
-
-- [x] Movable Player
-- [x] World Generation debug mode
-    - Draw a grid of all the squares on the world
-- [ ] World generation with varied blocks
-- [ ] World height generation with perlin noise
-- [x] Proper player image
-- [ ] sound: [here](https://stackoverflow.com/questions/577724/trouble-playing-wav-in-java/577926#577926)
-
-## Project Stretch Goals:
-
-- [ ] No outside library usage
-- [ ] procedurally generated map, infinite
-- [ ] structures other than trees
-- [ ] world chunking
-
-## TODO When Able:
-
-- [x] Fetch skin for player from minecraft.net using apis and use it
-    - [Resource](https://ourcodeworld.com/articles/read/1293/how-to-retrieve-the-skin-of-a-minecraft-user-from-mojang-using-python-3)
-- [ ] Ability to use and change regular minecraft resource packs for textures
+## Goal
+The goal of this project is to make a resemblance of the game Minecraft in a 2D format, using only the Java Swing and AWT library because masochism.
+Anything else like JSON readers have to manually written (bugs galore)
+And also to follow the way the actual code in Minecraft is structured.
+Infinite map.
+And usage of regular Minecraft resource packs.

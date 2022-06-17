@@ -6,11 +6,10 @@
 
 # Excluded Files #
 ##################
-test.json
-Test.java
+./src/main/resources/*
 
 # Excluded Directories #
 ########################
-./MinecraftTextureRip
-.vscode
-.idea
+./build/
+./.idea/
+./src/main/resources/
