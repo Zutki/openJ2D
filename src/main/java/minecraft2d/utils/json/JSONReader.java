@@ -1,4 +1,4 @@
-package utils;
+package minecraft2d.utils.json;
 
 import java.io.*;
 

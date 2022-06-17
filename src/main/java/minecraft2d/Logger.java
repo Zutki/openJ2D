@@ -1,8 +1,5 @@
 package minecraft2d;
 
-// TODO:
-// FIX THIS
-
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.LocalTime;
@@ -14,11 +11,10 @@ import java.time.LocalTime;
  */
 public class Logger extends PrintStream {
 
-    PrintStream consoleStream;
+    private final PrintStream CONSOLE_STREAM = System.out;
 
-    public Logger(OutputStream out, PrintStream consoleStream) {
+    public Logger(OutputStream out) {
         super(out);
-        this.consoleStream = consoleStream;
     }
 
     public String getTime() {
@@ -29,14 +25,24 @@ public class Logger extends PrintStream {
                 currentTime.getSecond());
     }
     private String logPrepend() {
-        String className = Thread.currentThread().getStackTrace()[1].getClassName();
+        // get tbe class name by getting the highest element in the stack trace
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        String className = stackTrace[stackTrace.length-1].getClassName();
+
         return String.format("[%s %s]: ", getTime(), className);
     }
 
+    public PrintStream getDefaultStream() {
+        return CONSOLE_STREAM;
+    }
+
     public void println() {
-        consoleStream.println(logPrepend());
+        CONSOLE_STREAM.println(logPrepend());
     }
-    public void println(Object v) {
-        consoleStream.println(logPrepend() + v);
-    }
+    public void println(String v) { CONSOLE_STREAM.println(logPrepend() + v); }
+    public void println(boolean v) { CONSOLE_STREAM.println(logPrepend() + v); }
+    public void println(int v) { CONSOLE_STREAM.println(logPrepend() + v); }
+    public void println(float v) { CONSOLE_STREAM.println(logPrepend() + v); }
+    public void println(double v) { CONSOLE_STREAM.println(logPrepend() + v); }
+    public void println(long v) { CONSOLE_STREAM.println(logPrepend() + v); }
 }

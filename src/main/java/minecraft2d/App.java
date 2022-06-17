@@ -6,6 +6,8 @@
 
 package minecraft2d;
 
+import minecraft2d.utils.texture.TextureMap;
+
 import javax.swing.*;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -21,42 +23,31 @@ import java.util.zip.ZipInputStream;
 public class App {
     public static final String version = "v0.0.1-ALPHA";
     public static final String DEFAULT_RESOURCE_PACK_LOCATION = "./resources/default.zip";
+    public static Logger logger = new Logger(System.out);
+    public static TextureMap textureMap;
 
     private static void init() {
+        textureMap = new TextureMap();
+    }
+
+    private static void initWindow() {
         JFrame window = new JFrame("Minecraft 2D");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    private static HashMap<String, String> textureMap = new HashMap<>();
-
-    public static HashMap<String, String> createTextureMap(String location) {
-        try {
-            ZipFile rpZip = new ZipFile(DEFAULT_RESOURCE_PACK_LOCATION);
-
-            FileInputStream fs = new FileInputStream(DEFAULT_RESOURCE_PACK_LOCATION);
-            ZipInputStream zs = new ZipInputStream(new BufferedInputStream(fs));
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("File \"default.zip\" not found, please provide the file default.zip in a resources folder in the same folder that the jar was executed in");
-            ex.printStackTrace();
-            System.exit(1);
-        } catch (IOException ex) {
-            System.out.println("Error while trying to read \"default.zip\" printing stack trace");
-            ex.printStackTrace();
-            System.exit(1);
-        }
-        return null;
-    }
-
     public static void main(String[] args) {
+        // Setup system to use the logger
+        System.setOut(logger);
+        System.setErr(logger);
 
         System.out.println("Starting Minecraft 2D "+version);
         System.out.println("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
-        //textureMap = createTextureMap(DEFAULT_RESOURCE_PACK_LOCATION);
 
+
+        init();
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                init();
+                initWindow();
             }
         });
     }
