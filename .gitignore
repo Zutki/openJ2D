@@ -3,13 +3,12 @@
 *.class
 *.jar
 *.iml
+*.zip
 
 # Excluded Files #
 ##################
-./src/main/resources/*
 
 # Excluded Directories #
 ########################
 ./build/
 ./.idea/
-./src/main/resources/
