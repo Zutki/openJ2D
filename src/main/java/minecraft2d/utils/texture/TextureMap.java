@@ -125,3 +125,5 @@ public class TextureMap {
         }
     }
 }
+
+// NOTE: For the extraction, use tmp/{the assets folder}
