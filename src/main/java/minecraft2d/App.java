@@ -9,10 +9,7 @@ package minecraft2d;
 import minecraft2d.utils.texture.TextureMap;
 
 import javax.swing.*;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -22,7 +19,7 @@ import java.util.zip.ZipInputStream;
  */
 public class App {
     public static final String version = "v0.0.1-ALPHA";
-    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "./resources/default.zip";
+    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/build/resources/main/resources/default.zip";
     public static Logger logger = new Logger(System.out);
     public static TextureMap textureMap;
 

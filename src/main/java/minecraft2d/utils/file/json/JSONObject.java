@@ -1,4 +1,4 @@
-package minecraft2d.utils.json;
+package minecraft2d.utils.file.json;
 
 import java.util.ArrayList;
 import java.util.HashMap;
