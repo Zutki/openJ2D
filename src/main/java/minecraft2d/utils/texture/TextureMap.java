@@ -1,14 +1,16 @@
 package minecraft2d.utils.texture;
 
 import minecraft2d.App;
+import minecraft2d.utils.file.ZipUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.NoSuchFileException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
+
+// TODO (LOW PRIORITY): Make this work with directories
 
 /**
  * The TextureMap class maps item names to textures
@@ -17,16 +19,29 @@ import java.util.zip.ZipInputStream;
  * @version 0.0.1-ALPHA
  */
 public class TextureMap {
-    public HashMap<String, BufferedImage> textureMap;
+    public HashMap<String, BufferedImage> textureMap = new HashMap<>();
 
     private String baseResourcePack;
 
+    private boolean useExisting;
+
     /**
      * Default constructor uses the default location of the resource pack set in App.java
+     * @param useExisting whether to use the already existing pack in the temp folder (DOES NOTHING AS OF V0.0.1-ALPHA)
      */
-    public TextureMap() {
+    public TextureMap(boolean useExisting) {
+        // create the tmp directory where created asset files are stored
+        File tmp = new File("./resources/tmp/");
+
+        this.useExisting = useExisting;
+
+        tmp.mkdir();
+
+        // TODO: uncomment when no longer in debug
+        //tmp.deleteOnExit();
+
         baseResourcePack = App.DEFAULT_RESOURCE_PACK_LOCATION;
-        loadTexturesFromZip(baseResourcePack);
+        loadTextures(baseResourcePack);
     }
 
     /**
@@ -35,62 +50,41 @@ public class TextureMap {
      */
     public void setBaseResourcePackResourcePackZip(String baseResourcePack) {
         this.baseResourcePack = baseResourcePack;
-        loadTexturesFromZip(baseResourcePack);
+        loadTextures(baseResourcePack);
     }
-
 
     /**
-     * The loadTexturesFromZip method loads textures into the textureMap
-     * if the texture already exists in the map it will overwrite it with the new one
-     * @param location the location of the file
+     * Loads textures into the texture map, overwriting any textures
+     * @param locationOfTextures location of the zip file to use
      */
-    public void loadTexturesFromZip(String location) {
-        FileInputStream fs;
-        ZipInputStream zs;
-        ZipEntry ze;
-
+    public void loadTextures(String locationOfTextures) {
+        String[] ignoreList = {
+                "realms",
+                "shaders",
+                "pack.mcmeta",
+                "pack.png"
+        };
+        // register textures
         try {
-            ZipFile rpFile = new ZipFile(location);
+            // use zipUtils to get an array of the files
+            ArrayList<File> extractedFiles = ZipUtils.extractZip(locationOfTextures, "resources/tmp/", ignoreList);
+            for (File file : extractedFiles) { // loop though each file returned by the extraction
+                // using guard clauses
+                if (file == null) { continue; } // make sure it's not null
+                if (file.isDirectory()) { continue; } // make sure it's not a directory
+                if (!file.getName().endsWith(".png")) { continue; }
 
-            fs = new FileInputStream(location);
-            zs = new ZipInputStream(new BufferedInputStream(fs));
-
-            File file = new File("./assets/");
-            file.mkdir();
-
-            while ((ze = zs.getNextEntry()) != null) {
-                convertZipEntryToFile(ze, zs);
+                String name = file.getName().substring(0, file.getName().lastIndexOf("."));
+                System.out.println("Registering texture with name: " + name);
+                BufferedImage tmp = ImageIO.read(file);
+                forceRegisterTexture(name, tmp); // forcefully register it
             }
-            zs.close();
-
-        } catch (NoSuchFileException ex) {
-            System.out.println("File "+ location +" does not exist.");
-            ex.printStackTrace();
-            System.exit(1);
-        } catch (IOException ex) {
-            System.out.println("Error while trying to read "+ location +" printing stack trace");
+        }
+        catch (IOException ex) {
+            System.out.println("Error while trying to extract pack, printing stacktrace");
             ex.printStackTrace();
             System.exit(1);
         }
-    }
-
-    private File convertZipEntryToFile(ZipEntry zipEntry, ZipInputStream zipInputStream) throws IOException {
-        System.out.println(zipEntry.getName());
-        File file = new File(zipEntry.getName());
-
-
-        if (!zipEntry.isDirectory()) {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-
-            fileOutputStream.write(zipInputStream.readAllBytes());
-            System.out.println(fileOutputStream);
-            //System.exit(0);
-        }
-        else {
-            file.mkdir();
-            return null;
-        }
-        return null;
     }
 
     /**
@@ -125,5 +119,3 @@ public class TextureMap {
         }
     }
 }
-
-// NOTE: For the extraction, use tmp/{the assets folder}

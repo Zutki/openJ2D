@@ -19,12 +19,25 @@ import java.util.zip.ZipInputStream;
  */
 public class App {
     public static final String version = "v0.0.1-ALPHA";
-    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/build/resources/main/resources/default.zip";
+    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
     public static Logger logger = new Logger(System.out);
     public static TextureMap textureMap;
 
+    /**
+     * Crashes the game by throwing an exception (primarily used for debug purposes)
+     * @throws Exception
+     */
+    public static void crash() throws Exception {
+        throw new Exception("Intentional crash");
+    }
+
+    // TODO (MEDIUM PRIORITY): Multithread texture registration
+    // Textures are only needed once drawing needs to happen, until then it is not as important
+    // Useful link for that: https://www.w3schools.com/java/java_threads.asp
     private static void init() {
-        textureMap = new TextureMap();
+        File resources = new File("resources/");
+        resources.mkdir();
+        textureMap = new TextureMap(true);
     }
 
     private static void initWindow() {

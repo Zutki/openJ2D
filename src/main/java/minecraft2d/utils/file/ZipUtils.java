@@ -1,15 +1,13 @@
 package minecraft2d.utils.file;
 
+import minecraft2d.App;
 import minecraft2d.utils.ArrayUtils;
 
 import java.io.*;
 import java.nio.file.NoSuchFileException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-// URGENT TODO: Use paths instead of strings!
-// BECAUSE THIS IS JANK to do with strings
 
 /**
  * The ZipUtils class provides tools for working with zip files
@@ -19,34 +17,39 @@ import java.util.zip.ZipInputStream;
 public class ZipUtils {
 
     /**
-     * Extracts a zip file to a specified directory and ignores and files/directories that are specified in ignoreFiles and ignoreDirs
+     * Extracts a zip file to a specified directory and ignores and files/directories that are specified in ignoreList
      * @param zipLocation the location of the zip file to extract
-     * @param extractionLocation the location where to extract the files to
-     * @param ignoreFiles list of files to ignore
-     * @param ignoreDirs list of directories to extract
+     * @param extractToDir the location where to extract the files to
+     * @param ignoreList any files or directories that match names specified in ignoreList will not be extracted, can be null
+     * @return An array of the created files
      */
-    public static void extractZip(String zipLocation, String extractionLocation, String[] ignoreFiles, String[] ignoreDirs) {
+    public static ArrayList<File> extractZip(String zipLocation, String extractToDir, String[] ignoreList) throws IOException {
         FileInputStream fs;
         ZipInputStream zs;
         ZipEntry ze;
+        ArrayList<File> outputArray = new ArrayList<File>();
 
-        // make sure the extraction location has a / at the end, if not add it
-        if (!extractionLocation.endsWith("/")) {
-            extractionLocation = extractionLocation + "/";
+        File extractionDir = new File(extractToDir);
+
+        // check if the extraction directory exists, if not throw an exception
+        if (!extractionDir.exists()) {
+            throw new NoSuchFileException("The specified extraction directory does not exist!");
+        }
+
+        // check if the extraction directory is a directory, if not throw an exception
+        if (!extractionDir.isDirectory()) {
+            throw new IOException("The specified extraction directory is not a file!");
         }
 
         try {
             fs = new FileInputStream(zipLocation);
             zs = new ZipInputStream(new BufferedInputStream(fs));
 
-            // make the directory we are extracting files to
-            File file = new File(extractionLocation);
-            // check if the directory already exists before making it
-            if (!file.isDirectory()) { file.mkdir(); }
-
+            // iterate through each entry in the zip input stream
             while ((ze = zs.getNextEntry()) != null) {
-                createFile(extractionLocation, ze, zs, ignoreFiles, ignoreDirs);
+                outputArray.add(createFile(extractToDir, ze, zs, ignoreList));
             }
+            // close it since we are done with it
             zs.close();
 
         } catch (NoSuchFileException ex) {
@@ -58,34 +61,54 @@ public class ZipUtils {
             ex.printStackTrace();
             System.exit(1);
         }
+
+        return outputArray;
     }
 
     /**
      * Creates a file from a specified ZipEntry and ZipInputStream
      *
+     * @param location the base dir the files will be extracted to
      * @param zipEntry       the ZipEntry to extract
      * @param zipInputStream the ZipInputStream
+     * @param ignoreList list passed from extractZip for files/directories to ignore, can be null
+     * @return the file created
      * @throws IOException when an IOException is caught
      */
-    private static void createFile(String location, ZipEntry zipEntry, ZipInputStream zipInputStream, String[] ignoreFiles, String[] ignoreDirs) throws IOException {
-        System.out.println("Creating file: "+location+zipEntry.getName());
+    private static File createFile(String location, ZipEntry zipEntry, ZipInputStream zipInputStream, String[] ignoreList) throws IOException {
+        // TODO (LOW PRIORITY): Find some way to make this more efficient
+        
+        // quick check so you don't have to make an empty string
+        if (ignoreList != null) {
+            // check if the file name is in the ignore list
+            if (ignoreList.length != 0) { // check if we actually have to do this check
+                for (String q : ignoreList) { // iterate through each item in the ignore list
+                    if (ArrayUtils.contains(zipEntry.getName().split("/"), q)) { // if the file is in the ignore list
+                        System.out.println("File " + zipEntry.getName() + " is in the ignore list, ignoring...");
+                        return null;
+                    }
+                }
+            }
+        }
+        String type = zipEntry.isDirectory() ? "directory" : "file";
+        System.out.println("Creating "+type+": "+location+zipEntry.getName());
         File file = new File(location+zipEntry.getName());
 
         // if the file is a directory or not
-        if (!zipEntry.isDirectory()) {
-            String fileName = file.getName().substring(file.getName().lastIndexOf("/"));
-
-            // if the file is in the ignore list then return
-            if (ArrayUtils.contains(ignoreFiles, fileName)) { return; }
+        if (!zipEntry.isDirectory()) { // not a directory
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
 
             fileOutputStream.write(zipInputStream.readAllBytes());
+
         }
-        else {
-            String dirName = file.getName().substring(file.getName().lastIndexOf(file.getParent()));
+        else { // is a directory
             // if the file is a directory then make it
-            file.mkdir();
+            if (file.mkdirs() == false) {
+                System.out.println("WAS UNABLE TO CREATE DIRECTORY");
+                System.exit(1);
+            }
         }
+        return file;
     }
 }

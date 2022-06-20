@@ -25,6 +25,7 @@ public class Logger extends PrintStream {
                 currentTime.getSecond());
     }
     private String logPrepend() {
+        // TODO (HIGH PRIORITY): This only gets the most super class, which will always be App, maybe use slf4j instead of this crap
         // get tbe class name by getting the highest element in the stack trace
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String className = stackTrace[stackTrace.length-1].getClassName();
