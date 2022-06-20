@@ -1,4 +1,4 @@
-# This branch exists for referance reasons, and is no longer actively developed, See the complete-rewrite branch for newer changes (as long as don't take an "extended" break again)
+# This branch exists for referance reasons, and is no longer actively developed, See the complete-rewrite branch for newer changes (as long as I don't take an "extended" break again)
 
 # Minecraft2D
 
