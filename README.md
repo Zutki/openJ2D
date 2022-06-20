@@ -1,3 +1,5 @@
+# This branch exists for referance reasons, and is no longer actively developed, See the complete-rewrite branch for newer changes (as long as don't take an "extended" break again)
+
 # Minecraft2D
 
 This project is an experiment that I am doing to see if I can create some resemblence of Minecraft. I am writing this
