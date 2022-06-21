@@ -8,12 +8,13 @@ import java.time.LocalTime;
  * The Logger class exists to provide more detailed print statements by prepending time and class name
  * @author Zutki
  * @version 0.0.1-ALPHA
+ * @deprecated
  */
-public class Logger extends PrintStream {
+public class LoggerOLD extends PrintStream {
 
     private final PrintStream CONSOLE_STREAM = System.out;
 
-    public Logger(OutputStream out) {
+    public LoggerOLD(OutputStream out) {
         super(out);
     }
 

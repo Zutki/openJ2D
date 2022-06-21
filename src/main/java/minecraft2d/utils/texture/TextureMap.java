@@ -2,6 +2,8 @@ package minecraft2d.utils.texture;
 
 import minecraft2d.App;
 import minecraft2d.utils.file.ZipUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,6 +23,7 @@ import java.util.HashMap;
 public class TextureMap {
     public HashMap<String, BufferedImage> textureMap = new HashMap<>();
 
+    public static Logger LOGGER = LoggerFactory.getLogger(TextureMap.class);
     private String baseResourcePack;
 
     private boolean useExisting;
@@ -75,13 +78,13 @@ public class TextureMap {
                 if (!file.getName().endsWith(".png")) { continue; }
 
                 String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-                System.out.println("Registering texture with name: " + name);
+                LOGGER.info("Registering texture with name: " + name);
                 BufferedImage tmp = ImageIO.read(file);
                 forceRegisterTexture(name, tmp); // forcefully register it
             }
         }
         catch (IOException ex) {
-            System.out.println("Error while trying to extract pack, printing stacktrace");
+            LOGGER.error("Error while trying to extract pack, printing stacktrace");
             ex.printStackTrace();
             System.exit(1);
         }

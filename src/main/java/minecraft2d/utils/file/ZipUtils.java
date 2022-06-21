@@ -1,7 +1,8 @@
 package minecraft2d.utils.file;
 
-import minecraft2d.App;
 import minecraft2d.utils.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.NoSuchFileException;
@@ -15,6 +16,8 @@ import java.util.zip.ZipInputStream;
  * @version 0.0.1-ALPHA
  */
 public class ZipUtils {
+
+    public static Logger LOGGER = LoggerFactory.getLogger(ZipUtils.class);
 
     /**
      * Extracts a zip file to a specified directory and ignores and files/directories that are specified in ignoreList
@@ -53,11 +56,11 @@ public class ZipUtils {
             zs.close();
 
         } catch (NoSuchFileException ex) {
-            System.out.println("File "+ zipLocation +" does not exist.");
+            LOGGER.error("File "+ zipLocation +" does not exist.");
             ex.printStackTrace();
             System.exit(1);
         } catch (IOException ex) {
-            System.out.println("Error while trying to read "+ zipLocation +" printing stack trace");
+            LOGGER.error("Error while trying to read "+ zipLocation +" printing stack trace");
             ex.printStackTrace();
             System.exit(1);
         }
@@ -84,14 +87,14 @@ public class ZipUtils {
             if (ignoreList.length != 0) { // check if we actually have to do this check
                 for (String q : ignoreList) { // iterate through each item in the ignore list
                     if (ArrayUtils.contains(zipEntry.getName().split("/"), q)) { // if the file is in the ignore list
-                        System.out.println("File " + zipEntry.getName() + " is in the ignore list, ignoring...");
+                        LOGGER.info("File " + zipEntry.getName() + " is in the ignore list, ignoring...");
                         return null;
                     }
                 }
             }
         }
         String type = zipEntry.isDirectory() ? "directory" : "file";
-        System.out.println("Creating "+type+": "+location+zipEntry.getName());
+        LOGGER.info("Creating "+type+": "+location+zipEntry.getName());
         File file = new File(location+zipEntry.getName());
 
         // if the file is a directory or not
@@ -105,7 +108,7 @@ public class ZipUtils {
         else { // is a directory
             // if the file is a directory then make it
             if (file.mkdirs() == false) {
-                System.out.println("WAS UNABLE TO CREATE DIRECTORY");
+                LOGGER.error("WAS UNABLE TO CREATE DIRECTORY");
                 System.exit(1);
             }
         }

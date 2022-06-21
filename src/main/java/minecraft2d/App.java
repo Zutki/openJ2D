@@ -7,12 +7,12 @@
 package minecraft2d;
 
 import minecraft2d.utils.texture.TextureMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.HashMap;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
 
 /**
  * The main class that initializes and starts up the game, does this by providing all the needed listeners
@@ -20,8 +20,10 @@ import java.util.zip.ZipInputStream;
 public class App {
     public static final String version = "v0.0.1-ALPHA";
     public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
-    public static Logger logger = new Logger(System.out);
+    public static Logger LOGGER = LoggerFactory.getLogger(App.class);
     public static TextureMap textureMap;
+
+    public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
     /**
      * Crashes the game by throwing an exception (primarily used for debug purposes)
@@ -46,19 +48,12 @@ public class App {
     }
 
     public static void main(String[] args) {
-        // Setup system to use the logger
-        System.setOut(logger);
-        System.setErr(logger);
+        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J(); // called so that system.out calls are handled by slf4j
 
-        System.out.println("Starting Minecraft 2D "+version);
-        System.out.println("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
-
+        LOGGER.info("Starting Minecraft 2D "+version);
+        LOGGER.info("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
 
         init();
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initWindow();
-            }
-        });
+        SwingUtilities.invokeLater(() -> initWindow());
     }
 }
