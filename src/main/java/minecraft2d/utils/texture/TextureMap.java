@@ -86,7 +86,6 @@ public class TextureMap {
         catch (IOException ex) {
             LOGGER.error("Error while trying to extract pack, printing stacktrace");
             ex.printStackTrace();
-            System.exit(1);
         }
     }
 
