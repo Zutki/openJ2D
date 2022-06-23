@@ -46,4 +46,10 @@ public class Registry {
         registry.get(Block.class).put(identifier.getName(), regBlock);
         return regBlock;
     }
+
+    public RegistryEntry registerDimension(Identifier identifier, Dimension dimension) {
+        RegistryEntry regDim = new RegistryEntry(identifier, dimension);
+        registry.get(Dimension.class).put(identifier.getName(), regDim);
+        return regDim;
+    }
 }

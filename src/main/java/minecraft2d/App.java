@@ -6,7 +6,9 @@
 
 package minecraft2d;
 
+import minecraft2d.utils.registry.Registry;
 import minecraft2d.utils.texture.TextureMap;
+import minecraft2d.world.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
@@ -21,16 +23,29 @@ public class App {
     public static final String version = "v0.0.1-ALPHA";
     public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
     public static Logger LOGGER = LoggerFactory.getLogger(App.class);
-    public static TextureMap textureMap;
+    //public static TextureMap textureMap;
+    public static Registry registry;
+    public static Game game;
 
     public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
-    /**
-     * Crashes the game by throwing an exception (primarily used for debug purposes)
-     * @throws Exception
-     */
-    public static void crash() throws Exception {
+
+    private static void crashException() throws Exception {
         throw new Exception("Intentional crash");
+    }
+
+    /**
+     * Crashes the game and prints the stacktrace
+     */
+    public static void crash() {
+        try {
+            crashException();
+        }
+        catch (Exception e) {
+            LOGGER.error("Intentional Crash");
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 
     // TODO (MEDIUM PRIORITY): Multithread texture registration
@@ -39,12 +54,19 @@ public class App {
     private static void init() {
         File resources = new File("resources/");
         resources.mkdir();
-        textureMap = new TextureMap(true);
+        //textureMap = new TextureMap(true);
+        registry = new Registry();
+        game = new Game();
     }
 
     private static void initWindow() {
         JFrame window = new JFrame("Minecraft 2D");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.add(game);
+        window.setResizable(false);
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
     }
 
     public static void main(String[] args) {

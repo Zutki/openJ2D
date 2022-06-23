@@ -58,11 +58,11 @@ public class ZipUtils {
         } catch (NoSuchFileException ex) {
             LOGGER.error("File "+ zipLocation +" does not exist.");
             ex.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
         } catch (IOException ex) {
             LOGGER.error("Error while trying to read "+ zipLocation +" printing stack trace");
             ex.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
         }
 
         return outputArray;
@@ -109,7 +109,7 @@ public class ZipUtils {
             // if the file is a directory then make it
             if (file.mkdirs() == false) {
                 LOGGER.error("WAS UNABLE TO CREATE DIRECTORY");
-                System.exit(1);
+                //System.exit(1);
             }
         }
         return file;

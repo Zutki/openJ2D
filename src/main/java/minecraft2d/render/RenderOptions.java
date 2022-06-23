@@ -1,4 +1,4 @@
-package minecraft2d.world.settings;
+package minecraft2d.render;
 
 import java.awt.*;
 

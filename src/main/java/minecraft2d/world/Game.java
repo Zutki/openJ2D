@@ -1,7 +1,10 @@
 package minecraft2d.world;
 
+import minecraft2d.render.RenderThread;
 import minecraft2d.world.settings.DebugSettings;
-import minecraft2d.world.settings.RenderOptions;
+import minecraft2d.render.RenderOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,6 +27,9 @@ public class Game extends JPanel {
 
     // debug info settings, aims to replicate the usage of F3 in Minecraft;
     DebugSettings debugSettings = new DebugSettings();
+    static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
+
+    public RenderThread renderThread;
 
     // The delay between each game Tick (ms)
     public static final int TICK_DELAY = 12;
@@ -41,5 +47,12 @@ public class Game extends JPanel {
     public Game() {
         setPreferredSize(renderOptions.getDimension());
         setBackground(new Color(123, 167, 237));
+    }
+
+    public void startRenderThread() {
+        LOGGER.info("Starting render thread");
+        Thread renderingThread = new Thread(renderThread);
+        renderingThread.start();
+        LOGGER.info("Render thread started");
     }
 }
