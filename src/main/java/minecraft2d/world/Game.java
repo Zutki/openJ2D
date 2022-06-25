@@ -1,29 +1,25 @@
 package minecraft2d.world;
 
+import minecraft2d.render.RenderOptions;
 import minecraft2d.render.RenderThread;
 import minecraft2d.world.settings.DebugSettings;
-import minecraft2d.render.RenderOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.swing.*;
-import java.awt.*;
-
 /**
+ * AS OF VERSION 0.0.1-PRE_ALPHA_TESTING: This exists to learn using LWJGL as I have never used this library before
+ *
  * The Game class.
  * Holds the information for the game, such as:
- * <li>
- *     <ul>Registered blocks</ul>
- *     <ul>The player</ul>
- *     <ul>The current level</ul>
- * </li>
+ * <ul>
+ *     <li>The player</ul>
+ *     <li>The current level</ul>
+ * </ul>
  * Also does the job of ordering events such as render calls, game window stuff, input, essentially the essentials.
  * @author Zutki
- * @version 0.0.1-ALPHA
+ * @version 0.0.1-PRE_ALPHA_TESTING
  */
-public class Game extends JPanel {
-    // suppress serialization warning
-    private static final long serialVersionUID = 490905409104883233L;
+public class Game {
 
     // debug info settings, aims to replicate the usage of F3 in Minecraft;
     DebugSettings debugSettings = new DebugSettings();
@@ -31,22 +27,19 @@ public class Game extends JPanel {
 
     public RenderThread renderThread;
 
-    // The delay between each game Tick (ms)
-    public static final int TICK_DELAY = 12;
-
     // Defining the Window options
     // private because any changes to this should result in a window resizing and other stuff
     private RenderOptions renderOptions = new RenderOptions();
 
-    private Timer timer;
+    // The window handle
+    private long window;
 
     /**
      * Start the game
      * Sets everything up and defines some important stuff
      */
     public Game() {
-        setPreferredSize(renderOptions.getDimension());
-        setBackground(new Color(123, 167, 237));
+
     }
 
     public void startRenderThread() {

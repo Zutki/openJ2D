@@ -15,6 +15,13 @@ And finally, one of my major downfalls as a person. This project has a lifespan,
 
 ## Info
 The version that is provided with each class indicated the version of the file, not the version of the game it's meant for
+Minecraft2D uses some of the following libraries:
+- LWJGL
+- Log4j2
+- slf4j
+
+The implementation of LWJGL that is used is built for Linux, (since I use Linux as my primary OS) windows builds will be available (once the game actually works)
+Although I will not be able to test if the Windows builds work :p
 
 ## Mod Loader Information
 The mod loader will have some limitations that may later get solved.

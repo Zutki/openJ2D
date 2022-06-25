@@ -8,12 +8,10 @@ package minecraft2d;
 
 import minecraft2d.utils.registry.Registry;
 import minecraft2d.utils.texture.TextureMap;
-import minecraft2d.world.Game;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
-import javax.swing.*;
 import java.io.*;
 
 /**
@@ -25,8 +23,6 @@ public class App {
     public static Logger LOGGER = LoggerFactory.getLogger(App.class);
     //public static TextureMap textureMap;
     public static Registry registry;
-    public static Game game;
-
     public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
 
@@ -56,17 +52,6 @@ public class App {
         resources.mkdir();
         //textureMap = new TextureMap(true);
         registry = new Registry();
-        game = new Game();
-    }
-
-    private static void initWindow() {
-        JFrame window = new JFrame("Minecraft 2D");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.add(game);
-        window.setResizable(false);
-        window.pack();
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -76,6 +61,5 @@ public class App {
         LOGGER.info("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
 
         init();
-        SwingUtilities.invokeLater(() -> initWindow());
     }
 }
