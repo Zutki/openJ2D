@@ -1,7 +1,5 @@
 package minecraft2d.world;
 
-import minecraft2d.render.RenderOptions;
-import minecraft2d.render.RenderThread;
 import minecraft2d.world.settings.DebugSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,27 +23,11 @@ public class Game {
     DebugSettings debugSettings = new DebugSettings();
     static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
 
-    public RenderThread renderThread;
-
-    // Defining the Window options
-    // private because any changes to this should result in a window resizing and other stuff
-    private RenderOptions renderOptions = new RenderOptions();
-
-    // The window handle
-    private long window;
-
     /**
      * Start the game
      * Sets everything up and defines some important stuff
      */
     public Game() {
 
-    }
-
-    public void startRenderThread() {
-        LOGGER.info("Starting render thread");
-        Thread renderingThread = new Thread(renderThread);
-        renderingThread.start();
-        LOGGER.info("Render thread started");
     }
 }
