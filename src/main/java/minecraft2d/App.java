@@ -10,6 +10,8 @@ import minecraft2d.utils.registry.Registry;
 import minecraft2d.utils.texture.TextureMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import render.Event;
+import render.RenderEngine;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 import java.io.*;
@@ -25,6 +27,8 @@ public class App {
     public static Registry registry;
     public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
+    public static RenderEngine renderEngine;
+    private static Thread renderThread;
 
     private static void crashException() throws Exception {
         throw new Exception("Intentional crash");
@@ -52,6 +56,18 @@ public class App {
         resources.mkdir();
         //textureMap = new TextureMap(true);
         registry = new Registry();
+
+        LOGGER.info("Starting render thread");
+        renderEngine = RenderEngine.getInstance();
+
+        RenderEngine.addEventToQueue(() -> {
+            RenderEngine.setWindowDimension(1920 / 2, 1080 / 2);
+            RenderEngine.setTitle("MC2D "+version);
+            RenderEngine.setMaxFramerate(60);
+        });
+
+        renderThread = new Thread(renderEngine, "Render Thread");
+        renderThread.start();
     }
 
     public static void main(String[] args) {

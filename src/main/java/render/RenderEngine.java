@@ -7,6 +7,8 @@
 package render;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import render.renderer.Renderer;
 
 import javax.swing.*;
@@ -23,13 +25,14 @@ import java.util.ArrayList;
  */
 public class RenderEngine implements Runnable {
     private static RenderEngine renderEngine = null;
-    private Renderer renderer;
+    private static Renderer renderer;
     private static JFrame window = null;
     private static Dimension windowDimension = new Dimension(1920/4, 1080/4);
     private static String title = "SARE Window";
     private static ArrayList<Event> eventQueue = new ArrayList<Event>(); // the event queue
     private static boolean isRunningQueue = false; // this variable tells the render engine whether it is currently running the event queue
     private static volatile boolean initialized = false; // turned true when the window has been initialized
+    private static final Logger LOGGER = LoggerFactory.getLogger(RenderEngine.class);
 
     private RenderEngine() {
         renderer = new Renderer(windowDimension);
@@ -105,6 +108,35 @@ public class RenderEngine implements Runnable {
     public static Dimension getWindowDimension() { return windowDimension; }
 
     /**
+     * Sets the maximum framerate that the renderer will run at
+     * If the max is set to 0 then v-sync will be set
+     * @param framerate maximum framerate to set
+     */
+    public static void setMaxFramerate(int framerate ) {
+        if (framerate == 0) {
+            LOGGER.info("Setting framerate from V-Sync");
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            DisplayMode dm = ge.getDefaultScreenDevice().getDisplayMode();
+            int refreshRate = dm.getRefreshRate();
+            if (refreshRate == DisplayMode.REFRESH_RATE_UNKNOWN) {
+                LOGGER.warn("V-Sync could not be found, assuming 60 fps");
+                renderer.setMaxFramerate(60);
+            }
+            else {
+                renderer.setMaxFramerate(refreshRate);
+            }
+            return;
+        }
+        renderer.setMaxFramerate(framerate);
+    }
+
+    /**
+     * Returns the maximum framerate currently set
+     * @return the maximum framerate
+     */
+    public static int getMaxFramerate() { return renderer.getMaxFramerate(); }
+
+    /**
      * Adds an event to the event queue, it will also run the event queue if it is not already running
      * @param event the event to add
      */
@@ -112,7 +144,7 @@ public class RenderEngine implements Runnable {
         eventQueue.add(event);
 
         if (!initialized) {
-            System.out.println("Window has not been initialized yet, cannot run the queue!");
+            LOGGER.warn("Window has not been initialized yet, cannot run the queue!");
             return;
         }
 
@@ -138,16 +170,23 @@ public class RenderEngine implements Runnable {
      */
     @Override
     public void run() {
-        System.out.println("Starting the render engine"); // Note: if you have a logger implementation, then replace this with it
+        LOGGER.info("Starting the render engine"); // Note: if you have a logger implementation, then replace this with it
         SwingUtilities.invokeLater(this::initialize);
 
         // wait for the window to be initialized and started
-        System.out.println("Waiting for window to start...");
+        LOGGER.info("Waiting for window to start...");
         while (!initialized) Thread.onSpinWait();
-        System.out.println("Window started without error!");
+        LOGGER.info("Window started without error!");
 
         // run the event queue
-        System.out.println("Running through event queue");
+        LOGGER.info("Running through event queue "+eventQueue.size()+ " event(s)");
+
+        // If you do not do this, it will for some reason not work???
+        try {
+            Thread.sleep(50l);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         runEventQueue();
     }
 }

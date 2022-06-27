@@ -3,6 +3,7 @@ package minecraft2d.world;
 import minecraft2d.world.settings.DebugSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import render.RenderEngine;
 
 /**
  * AS OF VERSION 0.0.1-PRE_ALPHA_TESTING: This exists to learn using LWJGL as I have never used this library before
@@ -28,6 +29,5 @@ public class Game {
      * Sets everything up and defines some important stuff
      */
     public Game() {
-
     }
 }
