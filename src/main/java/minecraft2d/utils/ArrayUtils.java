@@ -30,4 +30,18 @@ public class ArrayUtils {
         }
         return false;
     }
+
+    /**
+     * returns whether the array contains the specified element
+     * @param array the array to check
+     * @param object the object o check
+     * @return if array contains object
+     */
+    public static boolean contains(char[] array, char object) {
+        for (char q : array) {
+            if (object == q) { return true; }
+        }
+        return false;
+    }
+
 }

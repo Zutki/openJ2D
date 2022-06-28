@@ -43,7 +43,6 @@ public class RenderEngine implements Runnable {
      */
     private void initialize() {
         window = new JFrame(title);
-        initialized = true;
         window.add(renderer);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Here you can put whatever options you need for the JFrame
@@ -53,6 +52,7 @@ public class RenderEngine implements Runnable {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        initialized = true;
     }
 
 
@@ -112,7 +112,7 @@ public class RenderEngine implements Runnable {
      * If the max is set to 0 then v-sync will be set
      * @param framerate maximum framerate to set
      */
-    public static void setMaxFramerate(int framerate ) {
+    public static void setMaxFramerate(int framerate) {
         if (framerate == 0) {
             LOGGER.info("Setting framerate from V-Sync");
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -181,12 +181,6 @@ public class RenderEngine implements Runnable {
         // run the event queue
         LOGGER.info("Running through event queue "+eventQueue.size()+ " event(s)");
 
-        // If you do not do this, it will for some reason not work???
-        try {
-            Thread.sleep(50l);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         runEventQueue();
     }
 }

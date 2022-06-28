@@ -23,7 +23,7 @@ public class App {
     public static final String version = "v0.0.1-ALPHA";
     public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
     public static Logger LOGGER = LoggerFactory.getLogger(App.class);
-    //public static TextureMap textureMap;
+    public static TextureMap textureMap;
     public static Registry registry;
     public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
@@ -54,7 +54,7 @@ public class App {
     private static void init() {
         File resources = new File("resources/");
         resources.mkdir();
-        //textureMap = new TextureMap(true);
+        textureMap = new TextureMap(true);
         registry = new Registry();
 
         LOGGER.info("Starting render thread");
