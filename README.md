@@ -1,6 +1,6 @@
 # Minecraft 2D
-Minecraft 2D is a game built to resemble the game Minecraft developed by Mojang Studios in a 2D format, while providing support for creations built for Minecraft such as resource packs.
-A major goal of the game is to provide mod support of the get-go.
+Minecraft2D (Due to be renamed in the future) is a game engine build around the concept of Minecraft in a 2D environment. The main goal of MC2D is to provide an environment in which mods
+are a core component of the game. As MC2D by itself does not provide gameplay, gameplay would be introduced by any installed mods.
 
 ## Note:
 In no way am I a good java programmer, this is a rewrite of the entire project. Almost all the code here is probably going to be completely different from any of the original code.
@@ -14,14 +14,12 @@ And finally, one of my major downfalls as a person. This project has a lifespan,
 - Proper Javadoc documentation
 
 ## Info
-The version that is provided with each class indicated the version of the file, not the version of the game it's meant for
-Minecraft2D uses some of the following libraries:
-- LWJGL
+The version that is provided in class files indicate the version of the game it was developed for
+Minecraft2D has some of the following dependencies:
 - Log4j2
 - slf4j
 
-The implementation of LWJGL that is used is built for Linux, (since I use Linux as my primary OS) windows builds will be available (once the game actually works)
-Although I will not be able to test if the Windows builds work :p
+The render engine used by MC2D is built on Swing and AWT. The engine attempts to solve speed issues caused by these libraries by running all rendering tasks in a separate thread.
 
 ## Mod Loader Information
 The mod loader will have some limitations that may later get solved.

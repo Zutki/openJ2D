@@ -50,12 +50,8 @@ public class Renderer extends JPanel implements ActionListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        String[] fonts =
-                GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-
-        TextUtil.drawText("FPS:"+framerate, TextUtil.RIGHT, Color.BLACK, new Font(fonts[0], Font.BOLD, 24), new Point(1,25), g);
-        //TextUtil.drawText("Hello World!", TextUtil.CENTERED, Color.BLACK, new Font(fonts[0], Font.BOLD, 48), new Point(getWidth()/2, getHeight()/2), g);
-        g.drawImage(text.convertString("Balls Man 2 hllalsd", null, 24), getWidth()/2, getHeight()/2, this);
+        g.drawImage(text.convertString("FPS: "+framerate, null, 15), 1, 1, this);
+        g.drawImage(text.convertString("Ayooooo Minecraft Font Reader works!", null, 20), getWidth()/2-50, getHeight()/2, this);
 
         // General recommendation for smooth animations on all systems
         Toolkit.getDefaultToolkit().sync();

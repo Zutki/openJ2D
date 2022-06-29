@@ -21,7 +21,7 @@ import java.io.*;
  */
 public class App {
     public static final String version = "v0.0.1-ALPHA";
-    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/user/Downloads/default.zip";
+    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
     public static Logger LOGGER = LoggerFactory.getLogger(App.class);
     public static TextureMap textureMap;
     public static Registry registry;
