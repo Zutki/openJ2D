@@ -1,6 +1,8 @@
 # Minecraft 2D
 Minecraft2D (Due to be renamed in the future) is a game engine build around the concept of Minecraft in a 2D environment. The main goal of MC2D is to provide an environment in which mods
 are a core component of the game. As MC2D by itself does not provide gameplay, gameplay would be introduced by any installed mods.
+
+
 A major goal of MC2D is to be 100% compatible with existing minecraft resource packs, so that they do not need to be custom-made for MC2D
 
 ## Important Note on Installation and Running
@@ -31,6 +33,8 @@ And finally, one of my major downfalls as a person. This project has a lifespan,
 
 ## Info
 The version that is provided in class files indicate the version of the game it was developed for
+
+
 Minecraft2D has some of the following dependencies:
 - Log4j2
 - slf4j
