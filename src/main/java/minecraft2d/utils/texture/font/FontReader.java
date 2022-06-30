@@ -13,7 +13,8 @@ import java.awt.image.BufferedImage;
  * Once constructed the getFont() method can be used to draw the text
  *
  * @author Zutki
- * @version 0.0.1-Alpha
+ * @gameVersion 0.0.1-Alpha
+ * @version 0.0.1
  */
 public class FontReader {
     public static final Logger LOGGER = LoggerFactory.getLogger(FontReader.class);
@@ -111,7 +112,7 @@ public class FontReader {
                 width += charImg.getWidth()*size;
             }
             img.dispose();
-            return outputImage; // return the completed image
+            return outputImage; // return the completed image0
         };
     }
 

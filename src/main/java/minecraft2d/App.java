@@ -1,7 +1,8 @@
 /**
  * Minecraft 2D, done again because I am not a good coder
  * @author Zutki
- * @version 0.0.1-ALPHA
+ * @gameVersion 0.0.1-ALPHA
+ * @version 0.0.2
  */
 
 package minecraft2d;
@@ -52,8 +53,18 @@ public class App {
     // Textures are only needed once drawing needs to happen, until then it is not as important
     // Useful link for that: https://www.w3schools.com/java/java_threads.asp
     private static void init() {
-        File resources = new File("resources/");
-        resources.mkdir();
+        File rootDir = new File("MC2D/");
+        File resourcesDir = new File("MC2D/resources/");
+        File modsDir = new File("MC2D/mods/");
+        File atlasDir = new File("MC2D/atlas/");
+        File atlasPackDir = new File("MC2D/atlas/pack/");
+
+        rootDir.mkdir();
+        resourcesDir.mkdir();
+        modsDir.mkdir();
+        atlasDir.mkdir();
+        atlasPackDir.mkdir();
+
         textureMap = new TextureMap(true);
         registry = new Registry();
 

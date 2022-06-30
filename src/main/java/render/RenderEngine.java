@@ -3,6 +3,8 @@
  * A key way to interact with the render engine is through the use of events.
  * While using events is not entirely necessary when running in a single threaded way, it is absolutely important when running
  * in a multithreaded environment as concurrency issues can arise from the engine not being started in time or other issues
+ *
+ * @version 0.0.1-ALPHA
  */
 package render;
 

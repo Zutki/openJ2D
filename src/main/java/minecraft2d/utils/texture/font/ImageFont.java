@@ -11,5 +11,5 @@ public interface ImageFont {
      * @param size the size multiplier at which to draw it at (Note: integers are read as if they have been divided by 10
      * @return the BufferedImage representation of the text
      */
-    public BufferedImage convertString(String text, Color color, int size);
+    BufferedImage convertString(String text, Color color, int size);
 }

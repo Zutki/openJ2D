@@ -13,7 +13,8 @@ import java.util.zip.ZipInputStream;
 /**
  * The ZipUtils class provides tools for working with zip files
  * @author Zutki
- * @version 0.0.1-ALPHA
+ * @gameVersion 0.0.1-ALPHA
+ * @version 0.0.1
  */
 public class ZipUtils {
 

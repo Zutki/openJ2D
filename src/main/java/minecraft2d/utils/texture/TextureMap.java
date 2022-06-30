@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 // TODO (LOW PRIORITY): Make this work with directories
+// TODO (SUPER HIGH PRIORITY): Potentially rewrite all of this to create and use texture atlases instead of a giant hashmap
 
 /**
  * The TextureMap class maps item names to textures
@@ -34,14 +35,12 @@ public class TextureMap {
      */
     public TextureMap(boolean useExisting) {
         // create the tmp directory where created asset files are stored
-        File tmp = new File("./resources/tmp/");
+        File tmp = new File("MC2D/resources/tmp/");
 
         this.useExisting = useExisting;
 
         tmp.mkdir();
 
-        // TODO: uncomment when no longer in debug
-        //tmp.deleteOnExit();
 
         baseResourcePack = App.DEFAULT_RESOURCE_PACK_LOCATION;
         loadTextures(baseResourcePack);
@@ -70,7 +69,7 @@ public class TextureMap {
         // register textures
         try {
             // use zipUtils to get an array of the files
-            ArrayList<File> extractedFiles = ZipUtils.extractZip(locationOfTextures, "resources/tmp/", ignoreList);
+            ArrayList<File> extractedFiles = ZipUtils.extractZip(locationOfTextures, "MC2D/resources/tmp/", ignoreList);
             for (File file : extractedFiles) { // loop though each file returned by the extraction
                 // using guard clauses
                 if (file == null) { continue; } // make sure it's not null
