@@ -8,6 +8,7 @@
 package minecraft2d;
 
 import minecraft2d.utils.registry.Registry;
+import minecraft2d.utils.texture.TextureAtlaser;
 import minecraft2d.utils.texture.TextureMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,10 @@ import render.RenderEngine;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
 import java.io.*;
+import java.nio.file.NotDirectoryException;
 
 /**
- * The main class that initializes and starts up the game, does this by providing all the needed listeners
+ * The main class that initializes and starts up the game
  */
 public class App {
     public static final String version = "v0.0.1-ALPHA";
@@ -29,7 +31,17 @@ public class App {
     public static final PrintStream sysout = System.out; // this is here in case something absolutely needs to be written without slf4j
 
     public static RenderEngine renderEngine;
-    private static Thread renderThread;
+    public static Thread renderThread;
+
+    // Core engine directories
+    public static File rootDir;
+    public static File resourcesDir;
+    public static File modsDir;
+    public static File atlasDir;
+    public static File atlasPackDir;
+
+    public static TextureAtlaser blockAtlas;
+    public static TextureAtlaser itemAtlas;
 
     private static void crashException() throws Exception {
         throw new Exception("Intentional crash");
@@ -53,21 +65,37 @@ public class App {
     // Textures are only needed once drawing needs to happen, until then it is not as important
     // Useful link for that: https://www.w3schools.com/java/java_threads.asp
     private static void init() {
-        File rootDir = new File("MC2D/");
-        File resourcesDir = new File("MC2D/resources/");
-        File modsDir = new File("MC2D/mods/");
-        File atlasDir = new File("MC2D/atlas/");
-        File atlasPackDir = new File("MC2D/atlas/pack/");
+        // Define some directories used by the engine
+        rootDir = new File("MC2D/");
+        resourcesDir = new File("MC2D/resources/");
+        modsDir = new File("MC2D/mods/");
+        atlasDir = new File("MC2D/atlas/");
+        atlasPackDir = new File("MC2D/atlas/pack/");
 
-        rootDir.mkdir();
-        resourcesDir.mkdir();
-        modsDir.mkdir();
-        atlasDir.mkdir();
-        atlasPackDir.mkdir();
+        // check if any of the core dirs exists, if they don't create them
+        if (!rootDir.exists()) { rootDir.mkdir(); }
+        if (!resourcesDir.exists()) { resourcesDir.mkdir(); }
+        if (!modsDir.exists()) { modsDir.mkdir(); }
+        if (!atlasDir.exists()) { atlasDir.mkdir(); }
+        if (!atlasPackDir.exists()) { atlasPackDir.mkdir(); }
 
-        textureMap = new TextureMap(true);
+        // things to do with registries and textures
+
+        textureMap = new TextureMap(true); // TODO: remove or rework TextureMap
+
+        try {
+            // TODO: replace with reference instead of absolute path
+            blockAtlas = new TextureAtlaser(new File("MC2D/resources/tmp/assets/minecraft/textures/block/"), "block");
+            itemAtlas = new TextureAtlaser(new File("MC2D/resources/tmp/assets/minecraft/textures/item/"), "item");
+        } catch (NotDirectoryException e) {
+            LOGGER.error("wtf, this is not supposed to happen");
+            throw new RuntimeException(e);
+        }
+
         registry = new Registry();
 
+
+        // render engine initialization
         LOGGER.info("Starting render thread");
         renderEngine = RenderEngine.getInstance();
 
