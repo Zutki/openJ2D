@@ -24,7 +24,7 @@ import java.nio.file.NotDirectoryException;
  */
 public class App {
     public static final String version = "v0.0.1-ALPHA";
-    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "/home/david/code/java/modDev/Minecraft2D/src/main/resources/default.zip";
+    public static final String DEFAULT_RESOURCE_PACK_LOCATION = "src/main/resources/default.zip";
     public static Logger LOGGER = LoggerFactory.getLogger(App.class);
     public static TextureMap textureMap;
     public static Registry registry;
@@ -80,7 +80,7 @@ public class App {
         if (!atlasPackDir.exists()) { atlasPackDir.mkdir(); }
 
         // things to do with registries and textures
-
+        LOGGER.info("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
         textureMap = new TextureMap(true); // TODO: remove or rework TextureMap
 
         try {
@@ -113,7 +113,6 @@ public class App {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J(); // called so that system.out calls are handled by slf4j
 
         LOGGER.info("Starting Minecraft 2D "+version);
-        LOGGER.info("Attempting to create texture map from file "+ DEFAULT_RESOURCE_PACK_LOCATION);
 
         init();
     }

@@ -1,6 +1,7 @@
 package minecraft2d.utils.texture;
 
 import minecraft2d.App;
+import minecraft2d.utils.file.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,8 +177,9 @@ public class TextureAtlaser {
         for (int i = 0; i < atlasCount; i++) {
             // TODO: Fix issue with relative file paths
             // create the output file name by getting the location of pack dirs from the initiator class
-            File outputFile =  engineAtlas ? new File(App.atlasPackDir.getAbsolutePath() + "atlas" + i) : new File(App.atlasDir.getAbsolutePath() + "atlas" + i);
-            outputFile = new File("MC2D/atlas/pack/"+type+"Atlas"+i+".png");
+            //File outputFile =  engineAtlas ? new File(App.atlasPackDir.getAbsolutePath() + "atlas" + i) : new File(App.atlasDir.getAbsolutePath() + "atlas" + i);
+            //outputFile = new File("MC2D/atlas/pack/"+type+"Atlas"+i+".png");
+            File outputFile = engineAtlas ? FileUtils.addPaths(App.atlasDir, type+"_atlas" + i + ".png") : FileUtils.addPaths(App.atlasPackDir, type+"_atlas"+i+".png");
 
             // attempt to write the file
             try {
@@ -190,6 +192,10 @@ public class TextureAtlaser {
         // and finally the atlas array to the created array
         textureAtlases = new BufferedImage[atlasCount];
         textureAtlases = atlases.toArray(textureAtlases);
+    }
+
+    private void createMetaAtlases() {
+
     }
 
     /**
