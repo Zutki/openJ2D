@@ -1,18 +1,17 @@
-# Minecraft 2D
-Minecraft2D (Due to be renamed in the future) is a game engine build around the concept of Minecraft in a 2D environment. The main goal of MC2D is to provide an environment in which mods
-are a core component of the game. As MC2D by itself does not provide gameplay, gameplay would be introduced by any installed mods.
+# OpenJ2D (Formerly Minecraft2D)
+OpenJ2D is an engine written in java with the main goal of giving devs a framework in where they can interact with all parts of the engine with a large amount of control. Another goal of OpenJ2D is to build an environment similar to Minetest, in which mods are the king and the experience is up to the user.
 
 
-A major goal of MC2D is to be 100% compatible with existing minecraft resource packs, so that they do not need to be custom-made for MC2D
+Due to the similarity between Minecraft and Minetest a goal of OpenJ2D is to provide compatability with regular Minecraft texture packs
 
 ## Important Note on Installation and Running
-**NOTE: THIS IS CURRENTLY ONLY CONCEPTUAL, MC2D AT THIS POINT IN TIME DOES NOT RUN**
+**NOTE: THIS IS CURRENTLY ONLY CONCEPTUAL, OJ2D AT THIS POINT IN TIME DOES NOT RUN**
 
 ### Installation and Running
-1. Download MC2D_launcher.jar
+1. Download OJ2D_launcher.jar
 2. Put the launcher in a folder and run it
 3. ???
-4. (Optional) If you wish to play a minecraft like experience then click the "Download base game and library mods" button
+4. (Optional) If you wish to play a Minecraft like experience then click the "Download demo game and library mods" button
 5. ???
 6. Select a resource pack that contains all files Minecraft uses by default, in other words, the default resource pack used by minecraft
 7. Click "Generate Engine Resources"
@@ -22,9 +21,10 @@ A major goal of MC2D is to be 100% compatible with existing minecraft resource p
 
 ## Note:
 In no way am I a good java programmer, this is a rewrite of the entire project. Almost all the code here is probably going to be completely different from any of the original code.
-And finally, one of my major downfalls as a person. This project has a lifespan, I will work on it for a bit, however, I will eventually stop working on it. So if you are somehow actually interested in seeing this project finish. Feel free to harass me to work on it.
+And finally, one of my major downfalls as a person. This project has a lifespan, I will work on it for a bit, however, I will eventually stop working on it. So if you are actually interested in seeing this project finish. Feel free to harass me to work on it.
 
 ## Goals
+- (Major) Similarity to Minetest
 - To in a way follow a proper structure based loosely on the way Fabric and Forge handle Minecraft mappings.
 - Have an infinite map.
 - Use regular minecraft resource packs for compatibility with already existing creations.
@@ -40,7 +40,7 @@ Minecraft2D has some of the following dependencies:
 - slf4j
 - JsonJava (org.json)
 
-The render engine used by MC2D is built on Swing and AWT. The engine attempts to solve speed issues caused by these libraries by running all rendering tasks in a separate thread.
+The render engine used by MC2D is built on Swing and AWT. The engine attempts to solve speed issues caused by these libraries by running all rendering tasks in a separate thread. A major future goal is to switch to openGL based rendering for the speed and modability benefits.
 
 ## Mod Loader Information
 The mod loader will have some limitations that may later get solved.
